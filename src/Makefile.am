@@ -15,14 +15,23 @@ AM_LIBTOOLFLAGS = --preserve-dup-deps
 PTHREAD_FLAGS = $(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
 EXTRA_LIBRARIES =
 
+lib_LTLIBRARIES =
+noinst_LTLIBRARIES =
+
+bin_PROGRAMS =
+noinst_PROGRAMS =
+TESTS =
+BENCHMARKS =
+
 BITCOIN_INCLUDES=-I$(builddir) -I$(srcdir)/$(MINISKETCH_INCLUDE_DIR_INT) -I$(srcdir)/secp256k1/include -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT) $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
 
 LIBBITCOIN_NODE=libgroestlcoin_node.a
 LIBBITCOIN_COMMON=libgroestlcoin_common.a
 LIBBITCOIN_CONSENSUS=libgroestlcoin_consensus.a
 LIBBITCOIN_CLI=libgroestlcoin_cli.a
+LIBBITCOIN_KERNEL=libgroestlcoin_kernel.a
 LIBBITCOIN_UTIL=libgroestlcoin_util.a
-LIBBITCOIN_CRYPTO_BASE=crypto/libgroestlcoin_crypto_base.a
+LIBBITCOIN_CRYPTO_BASE=crypto/libgroestlcoin_crypto_base.la
 LIBBITCOINQT=qt/libgroestlcoinqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
@@ -32,28 +41,32 @@ endif
 if BUILD_BITCOIN_LIBS
 LIBBITCOINCONSENSUS=libgroestlcoinconsensus.la
 endif
+if BUILD_BITCOIN_KERNEL_LIB
+LIBBITCOINKERNEL=libgroestlcoinkernel.la
+endif
 if ENABLE_WALLET
 LIBBITCOIN_WALLET=libgroestlcoin_wallet.a
 LIBBITCOIN_WALLET_TOOL=libgroestlcoin_wallet_tool.a
 endif
 
-LIBBITCOIN_CRYPTO= $(LIBBITCOIN_CRYPTO_BASE)
+LIBBITCOIN_CRYPTO = $(LIBBITCOIN_CRYPTO_BASE)
 if ENABLE_SSE41
-LIBBITCOIN_CRYPTO_SSE41 = crypto/libgroestlcoin_crypto_sse41.a
+LIBBITCOIN_CRYPTO_SSE41 = crypto/libgroestlcoin_crypto_sse41.la
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_SSE41)
 endif
 if ENABLE_AVX2
-LIBBITCOIN_CRYPTO_AVX2 = crypto/libgroestlcoin_crypto_avx2.a
+LIBBITCOIN_CRYPTO_AVX2 = crypto/libgroestlcoin_crypto_avx2.la
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_AVX2)
 endif
 if ENABLE_X86_SHANI
-LIBBITCOIN_CRYPTO_X86_SHANI = crypto/libgroestlcoin_crypto_x86_shani.a
+LIBBITCOIN_CRYPTO_X86_SHANI = crypto/libgroestlcoin_crypto_x86_shani.la
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_X86_SHANI)
 endif
 if ENABLE_ARM_SHANI
-LIBBITCOIN_CRYPTO_ARM_SHANI = crypto/libgroestlcoin_crypto_arm_shani.a
+LIBBITCOIN_CRYPTO_ARM_SHANI = crypto/libgroestlcoin_crypto_arm_shani.la
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_ARM_SHANI)
 endif
+noinst_LTLIBRARIES += $(LIBBITCOIN_CRYPTO)
 
 $(LIBSECP256K1): $(wildcard secp256k1/src/*.h) $(wildcard secp256k1/src/*.c) $(wildcard secp256k1/include/*)
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
@@ -61,7 +74,6 @@ $(LIBSECP256K1): $(wildcard secp256k1/src/*.h) $(wildcard secp256k1/src/*.c) $(w
 # Make is not made aware of per-object dependencies to avoid limiting building parallelization
 # But to build the less dependent modules first, we manually select their order here:
 EXTRA_LIBRARIES += \
-  $(LIBBITCOIN_CRYPTO) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_CONSENSUS) \
@@ -71,14 +83,6 @@ EXTRA_LIBRARIES += \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_WALLET_TOOL) \
   $(LIBBITCOIN_ZMQ)
-
-lib_LTLIBRARIES = $(LIBBITCOINCONSENSUS)
-noinst_LTLIBRARIES =
-
-bin_PROGRAMS =
-noinst_PROGRAMS =
-TESTS =
-BENCHMARKS =
 
 if BUILD_BITCOIND
   bin_PROGRAMS += groestlcoind
@@ -385,6 +389,7 @@ libgroestlcoin_node_a_SOURCES = \
   rpc/rawtransaction.cpp \
   rpc/server.cpp \
   rpc/server_util.cpp \
+  rpc/signmessage.cpp \
   rpc/txoutproof.cpp \
   script/sigcache.cpp \
   shutdown.cpp \
@@ -467,9 +472,16 @@ libgroestlcoin_wallet_tool_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
-crypto_libgroestlcoin_crypto_base_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libgroestlcoin_crypto_base_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libgroestlcoin_crypto_base_a_SOURCES = \
+crypto_libgroestlcoin_crypto_base_la_CPPFLAGS = $(AM_CPPFLAGS)
+
+# Specify -static in both CXXFLAGS and LDFLAGS so libtool will only build a
+# static version of this library. We don't need a dynamic version, and a dynamic
+# version can't be used on windows anyway because the library doesn't currently
+# export DLL symbols.
+crypto_libgroestlcoin_crypto_base_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -static
+crypto_libgroestlcoin_crypto_base_la_LDFLAGS = $(AM_LDFLAGS) -static
+
+crypto_libgroestlcoin_crypto_base_la_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
   crypto/chacha_poly_aead.h \
@@ -501,32 +513,44 @@ crypto_libgroestlcoin_crypto_base_a_SOURCES = \
   crypto/siphash.h
 
 if USE_ASM
-crypto_libgroestlcoin_crypto_base_a_SOURCES += crypto/sha256_sse4.cpp
+crypto_libgroestlcoin_crypto_base_la_SOURCES += crypto/sha256_sse4.cpp
 endif
 
-crypto_libgroestlcoin_crypto_sse41_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libgroestlcoin_crypto_sse41_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libgroestlcoin_crypto_sse41_a_CXXFLAGS += $(SSE41_CXXFLAGS)
-crypto_libgroestlcoin_crypto_sse41_a_CPPFLAGS += -DENABLE_SSE41
-crypto_libgroestlcoin_crypto_sse41_a_SOURCES = crypto/sha256_sse41.cpp
+# See explanation for -static in crypto_libgroestlcoin_crypto_base_la's LDFLAGS and
+# CXXFLAGS above
+crypto_libgroestlcoin_crypto_sse41_la_LDFLAGS = $(AM_LDFLAGS) -static
+crypto_libgroestlcoin_crypto_sse41_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -static
+crypto_libgroestlcoin_crypto_sse41_la_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libgroestlcoin_crypto_sse41_la_CXXFLAGS += $(SSE41_CXXFLAGS)
+crypto_libgroestlcoin_crypto_sse41_la_CPPFLAGS += -DENABLE_SSE41
+crypto_libgroestlcoin_crypto_sse41_la_SOURCES = crypto/sha256_sse41.cpp
 
-crypto_libgroestlcoin_crypto_avx2_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libgroestlcoin_crypto_avx2_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libgroestlcoin_crypto_avx2_a_CXXFLAGS += $(AVX2_CXXFLAGS)
-crypto_libgroestlcoin_crypto_avx2_a_CPPFLAGS += -DENABLE_AVX2
-crypto_libgroestlcoin_crypto_avx2_a_SOURCES = crypto/sha256_avx2.cpp
+# See explanation for -static in crypto_libgroestlcoin_crypto_base_la's LDFLAGS and
+# CXXFLAGS above
+crypto_libgroestlcoin_crypto_avx2_la_LDFLAGS = $(AM_LDFLAGS) -static
+crypto_libgroestlcoin_crypto_avx2_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -static
+crypto_libgroestlcoin_crypto_avx2_la_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libgroestlcoin_crypto_avx2_la_CXXFLAGS += $(AVX2_CXXFLAGS)
+crypto_libgroestlcoin_crypto_avx2_la_CPPFLAGS += -DENABLE_AVX2
+crypto_libgroestlcoin_crypto_avx2_la_SOURCES = crypto/sha256_avx2.cpp
 
-crypto_libgroestlcoin_crypto_x86_shani_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libgroestlcoin_crypto_x86_shani_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libgroestlcoin_crypto_x86_shani_a_CXXFLAGS += $(X86_SHANI_CXXFLAGS)
-crypto_libgroestlcoin_crypto_x86_shani_a_CPPFLAGS += -DENABLE_X86_SHANI
-crypto_libgroestlcoin_crypto_x86_shani_a_SOURCES = crypto/sha256_x86_shani.cpp
+# See explanation for -static in crypto_libgroestlcoin_crypto_base_la's LDFLAGS and
+# CXXFLAGS above
+crypto_libgroestlcoin_crypto_x86_shani_la_LDFLAGS = $(AM_LDFLAGS) -static
+crypto_libgroestlcoin_crypto_x86_shani_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -static
+crypto_libgroestlcoin_crypto_x86_shani_la_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libgroestlcoin_crypto_x86_shani_la_CXXFLAGS += $(X86_SHANI_CXXFLAGS)
+crypto_libgroestlcoin_crypto_x86_shani_la_CPPFLAGS += -DENABLE_X86_SHANI
+crypto_libgroestlcoin_crypto_x86_shani_la_SOURCES = crypto/sha256_x86_shani.cpp
 
-crypto_libgroestlcoin_crypto_arm_shani_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libgroestlcoin_crypto_arm_shani_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libgroestlcoin_crypto_arm_shani_a_CXXFLAGS += $(ARM_SHANI_CXXFLAGS)
-crypto_libgroestlcoin_crypto_arm_shani_a_CPPFLAGS += -DENABLE_ARM_SHANI
-crypto_libgroestlcoin_crypto_arm_shani_a_SOURCES = crypto/sha256_arm_shani.cpp
+# See explanation for -static in crypto_libgroestlcoin_crypto_base_la's LDFLAGS and
+# CXXFLAGS above
+crypto_libgroestlcoin_crypto_arm_shani_la_LDFLAGS = $(AM_LDFLAGS) -static
+crypto_libgroestlcoin_crypto_arm_shani_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -static
+crypto_libgroestlcoin_crypto_arm_shani_la_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libgroestlcoin_crypto_arm_shani_la_CXXFLAGS += $(ARM_SHANI_CXXFLAGS)
+crypto_libgroestlcoin_crypto_arm_shani_la_CPPFLAGS += -DENABLE_ARM_SHANI
+crypto_libgroestlcoin_crypto_arm_shani_la_SOURCES = crypto/sha256_arm_shani.cpp
 
 # consensus: shared between all executables that validate any consensus rules.
 libgroestlcoin_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
@@ -688,7 +712,6 @@ groestlcoin_bin_ldadd = \
   $(LIBBITCOIN_CONSENSUS) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBLEVELDB) \
-  $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
@@ -787,7 +810,48 @@ groestlcoin_util_LDADD = \
 #
 
 # groestlcoin-chainstate binary #
-groestlcoin_chainstate_SOURCES = \
+groestlcoin_chainstate_SOURCES = groestlcoin-chainstate.cpp
+groestlcoin_chainstate_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+groestlcoin_chainstate_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+
+# $(LIBTOOL_APP_LDFLAGS) deliberately omitted here so that we can test linking
+# groestlcoin-chainstate against libgroestlcoinkernel as a shared or static library by
+# setting --{en,dis}able-shared.
+groestlcoin_chainstate_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(PTHREAD_FLAGS)
+groestlcoin_chainstate_LDADD = $(LIBBITCOINKERNEL)
+#
+
+# groestlcoinkernel library #
+if BUILD_BITCOIN_KERNEL_LIB
+lib_LTLIBRARIES += $(LIBBITCOINKERNEL)
+
+libgroestlcoinkernel_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS) $(PTHREAD_FLAGS)
+libgroestlcoinkernel_la_LIBADD = $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) $(LIBSECP256K1)
+libgroestlcoinkernel_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT)
+
+# libgroestlcoinkernel requires default symbol visibility, explicitly specify that
+# here so that things still work even when user configures with
+#   --enable-reduce-exports
+#
+# Note this is a quick hack that will be removed as we incrementally define what
+# to export from the library.
+libgroestlcoinkernel_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -fvisibility=default
+
+# TODO: For now, Specify -static in both CXXFLAGS and LDFLAGS when building for
+#       windows targets so libtool will only build a static version of this
+#       library. There are unresolved problems when building dll's for mingw-w64
+#       and attempting to statically embed libstdc++, libpthread, etc.
+if TARGET_WINDOWS
+libgroestlcoinkernel_la_LDFLAGS += -static
+libgroestlcoinkernel_la_CXXFLAGS += -static
+endif
+
+# TODO: libgroestlcoinkernel is a work in progress consensus engine library, as more
+#       and more modules are decoupled from the consensus engine, this list will
+#       shrink to only those which are absolutely necessary. For example, things
+#       like index/*.cpp will be removed.
+libgroestlcoinkernel_la_SOURCES = \
+  kernel/groestlcoinkernel.cpp \
   arith_uint256.cpp \
   blockfilter.cpp \
   chain.cpp \
@@ -869,26 +933,19 @@ groestlcoin_chainstate_SOURCES = \
   validationinterface.cpp \
   versionbits.cpp \
   warnings.cpp
-groestlcoin_chainstate_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-groestlcoin_chainstate_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-groestlcoin_chainstate_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
-groestlcoin_chainstate_LDADD = \
-  $(LIBBITCOIN_CRYPTO) \
-  $(LIBUNIVALUE) \
-  $(LIBSECP256K1) \
-  $(LIBLEVELDB) \
-  $(LIBLEVELDB_SSE42) \
-  $(LIBMEMENV)
 
 # Required for obj/build.h to be generated first.
 # More details: https://www.gnu.org/software/automake/manual/html_node/Built-Sources-Example.html
-groestlcoin_chainstate-clientversion.$(OBJEXT): obj/build.h
+libgroestlcoinkernel_la-clientversion.l$(OBJEXT): obj/build.h
+endif # BUILD_BITCOIN_KERNEL_LIB
 #
 
 # groestlcoinconsensus library #
 if BUILD_BITCOIN_LIBS
+lib_LTLIBRARIES += $(LIBBITCOINCONSENSUS)
+
 include_HEADERS = script/groestlcoinconsensus.h
-libgroestlcoinconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libgroestlcoin_crypto_base_a_SOURCES) $(libgroestlcoin_consensus_a_SOURCES)
+libgroestlcoinconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libgroestlcoin_crypto_base_la_SOURCES) $(libgroestlcoin_consensus_a_SOURCES)
 
 libgroestlcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
 libgroestlcoinconsensus_la_LIBADD = $(LIBSECP256K1)
