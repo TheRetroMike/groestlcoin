@@ -508,7 +508,7 @@ fs::path static StartupShortcutPath()
         return GetSpecialFolderPath(CSIDL_STARTUP) / "Groestlcoin.lnk";
     if (chain == CBaseChainParams::TESTNET) // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
         return GetSpecialFolderPath(CSIDL_STARTUP) / "Groestlcoin (testnet).lnk";
-    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("Groestlcoin (%s).lnk", chain);
+    return GetSpecialFolderPath(CSIDL_STARTUP) / fs::u8path(strprintf("Groestlcoin (%s).lnk", chain));
 }
 
 bool GetStartOnSystemStartup()
@@ -589,7 +589,7 @@ fs::path static GetAutostartFilePath()
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN)
         return GetAutostartDir() / "groestlcoin.desktop";
-    return GetAutostartDir() / strprintf("groestlcoin-%s.desktop", chain);
+    return GetAutostartDir() / fs::u8path(strprintf("groestlcoin-%s.desktop", chain));
 }
 
 bool GetStartOnSystemStartup()
