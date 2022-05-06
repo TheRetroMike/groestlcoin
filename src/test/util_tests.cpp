@@ -198,6 +198,24 @@ BOOST_AUTO_TEST_CASE(util_HexStr)
         BOOST_CHECK_EQUAL(HexStr(in_s), out_exp);
         BOOST_CHECK_EQUAL(HexStr(in_b), out_exp);
     }
+
+    {
+        auto input = std::string();
+        for (size_t i=0; i<256; ++i) {
+            input.push_back(static_cast<char>(i));
+        }
+
+        auto hex = HexStr(input);
+        BOOST_TEST_REQUIRE(hex.size() == 512);
+        static constexpr auto hexmap = std::string_view("0123456789abcdef");
+        for (size_t i = 0; i < 256; ++i) {
+            auto upper = hexmap.find(hex[i * 2]);
+            auto lower = hexmap.find(hex[i * 2 + 1]);
+            BOOST_TEST_REQUIRE(upper != std::string_view::npos);
+            BOOST_TEST_REQUIRE(lower != std::string_view::npos);
+            BOOST_TEST_REQUIRE(i == upper*16 + lower);
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE(span_write_bytes)
@@ -2395,6 +2413,19 @@ BOOST_AUTO_TEST_CASE(test_SplitString)
         std::vector<std::string> result = SplitString("AAA", 'a');
         BOOST_CHECK_EQUAL(result.size(), 1);
         BOOST_CHECK_EQUAL(result[0], "AAA");
+    }
+
+    // multiple split characters
+    {
+        using V = std::vector<std::string>;
+        BOOST_TEST(SplitString("a,b.c:d;e", ",;") == V({"a", "b.c:d", "e"}));
+        BOOST_TEST(SplitString("a,b.c:d;e", ",;:.") == V({"a", "b", "c", "d", "e"}));
+        BOOST_TEST(SplitString("a,b.c:d;e", "") == V({"a,b.c:d;e"}));
+        BOOST_TEST(SplitString("aaa", "bcdefg") == V({"aaa"}));
+        BOOST_TEST(SplitString("x\0a,b"s, "\0"s) == V({"x", "a,b"}));
+        BOOST_TEST(SplitString("x\0a,b"s, '\0') == V({"x", "a,b"}));
+        BOOST_TEST(SplitString("x\0a,b"s, "\0,"s) == V({"x", "a", "b"}));
+        BOOST_TEST(SplitString("abcdefg", "bcd") == V({"a", "", "", "efg"}));
     }
 }
 
