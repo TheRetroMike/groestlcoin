@@ -32,16 +32,14 @@ The algorithm was written as a candidate for sha3
 
 https://bitcointalk.org/index.php?topic=525926.0
 
-Further information about Groestlcoin Core is available in the [doc folder](/doc).
-
-What is Groestlcoin?
+What is Groestlcoin Core?
 -----------------
 
-Groestlcoin is an experimental new digital currency that enables instant payments to
-anyone, anywhere in the world. Groestlcoin uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. Groestlcoin Core is the name of open source
-software which enables the use of this currency.
+Groestlcoin Core connects to the Groestlcoin peer-to-peer network to download and fully
+validate blocks and transactions. It also includes a wallet and graphical user
+interface, which can be optionally built.
+
+Further information about Groestlcoin Core is available in the [doc folder](/doc).
 
 License
 -------
