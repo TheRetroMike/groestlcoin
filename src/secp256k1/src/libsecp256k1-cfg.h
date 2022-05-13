@@ -33,7 +33,7 @@
 
 #pragma warning(disable: 4146 4242 4244 4505)
 
-//GRS
+// GRS
 #define ENABLE_MODULE_ECDH
 //#define ENABLE_MODULE_SCHNORR
 #define ENABLE_MODULE_RECOVERY

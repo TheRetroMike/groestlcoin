@@ -33,7 +33,7 @@
 
 static bool fCreateBlank;
 static std::map<std::string,UniValue> registers;
-#define CONTINUE_EXECUTION 1 //GRS
+#define CONTINUE_EXECUTION 1 // GRS
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
 

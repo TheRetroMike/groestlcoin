@@ -79,7 +79,7 @@ std::string FormatSubVersion(const std::string& name, int nClientVersion, const 
 
 std::string CopyrightHolders(const std::string& strPrefix)
 {
-  std::string prefix2014 = strPrefix;					//GRS
+  std::string prefix2014 = strPrefix; // GRS
   size_t index2009 = strPrefix.find("2009");
   if (index2009 != std::string::npos)
   prefix2014.replace(index2009, 4, "2014");

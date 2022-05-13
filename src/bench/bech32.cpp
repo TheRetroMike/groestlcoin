@@ -25,7 +25,7 @@ static void Bech32Encode(benchmark::Bench& bench)
 
 static void Bech32Decode(benchmark::Bench& bench)
 {
-    std::string addr = "grs1qkallence7tjawwvy0dwt4twc62qjgaw8f4vlhyd006d99f09"; //GRS
+    std::string addr = "grs1qkallence7tjawwvy0dwt4twc62qjgaw8f4vlhyd006d99f09"; // GRS
     bench.batch(addr.size()).unit("byte").run([&] {
         bech32::Decode(addr);
     });

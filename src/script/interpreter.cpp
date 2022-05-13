@@ -1590,7 +1590,7 @@ uint256 SignatureHash(const CScript& scriptCode, const T& txTo, unsigned int nIn
         } else if ((nHashType & 0x1f) == SIGHASH_SINGLE && nIn < txTo.vout.size()) {
             CHashWriter ss(SER_GETHASH, 0);
             ss << txTo.vout[nIn];
-            hashOutputs = ss.GetHash(); //GRS uses single-SHA256
+            hashOutputs = ss.GetHash(); // GRS uses single-SHA256
         }
 
         CHashWriter ss(SER_GETHASH, 0);
@@ -1613,7 +1613,7 @@ uint256 SignatureHash(const CScript& scriptCode, const T& txTo, unsigned int nIn
         // Sighash type
         ss << nHashType;
 
-        return ss.GetHash(); //GRS uses single-SHA256
+        return ss.GetHash(); // GRS uses single-SHA256
     }
 
     // Check for invalid use of SIGHASH_SINGLE
@@ -1630,7 +1630,7 @@ uint256 SignatureHash(const CScript& scriptCode, const T& txTo, unsigned int nIn
     // Serialize and hash
     CHashWriter ss(SER_GETHASH, 0);
     ss << txTmp << nHashType;
-    return ss.GetHash(); //GRS uses single-SHA256
+    return ss.GetHash(); // GRS uses single-SHA256
 }
 
 template <class T>

@@ -2154,10 +2154,10 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
         }
     }
 
-	//GRS
-	int32_t nVersion = block.nVersion;
-	if (nVersion == 112)
-		nVersion = 1;
+    // GRS
+    int32_t nVersion = block.nVersion;
+    if (nVersion == 112)
+      nVersion = 1;
 
     // Enforce BIP68 (sequence locks)
     int nLockTimeFlags = 0;
@@ -3462,8 +3462,8 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
 
     // Check proof of work
     const Consensus::Params& consensusParams = chainman.GetConsensus();
-    //GRS, GetNextWorkRequired() is non-deterministic for nHeight<100000
-    if (pindexPrev->nHeight >= (100000 - 1) && block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams)
+    // GRS, GetNextWorkRequired() is non-deterministic for nHeight<100000
+    if (pindexPrev->nHeight >= (100000 - 1) && block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
 
     // Check against checkpoints
@@ -3482,10 +3482,10 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast())
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "time-too-old", "block's timestamp is too early");
 
-	//GRS
+    // GRS
     int32_t nVersion = block.nVersion;
     if (nVersion == 112)
-        nVersion = 1;
+      nVersion = 1;
 
     // Check timestamp
     if (block.GetBlockTime() > nAdjustedTime + MAX_FUTURE_BLOCK_TIME)
@@ -3530,10 +3530,10 @@ static bool ContextualCheckBlock(const CBlock& block, BlockValidationState& stat
         }
     }
 
-	//GRS
-	int32_t nVersion = block.nVersion;
-	if (nVersion == 112)
-		nVersion = 1;
+    // GRS
+    int32_t nVersion = block.nVersion;
+    if (nVersion == 112)
+      nVersion = 1;
 
     // Enforce rule that the coinbase starts with serialized block height
     if (DeploymentActiveAfter(pindexPrev, chainman, Consensus::DEPLOYMENT_HEIGHTINCB))
