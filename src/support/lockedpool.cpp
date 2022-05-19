@@ -283,9 +283,8 @@ LockedPool::LockedPool(std::unique_ptr<LockedPageAllocator> allocator_in, Lockin
 {
 }
 
-LockedPool::~LockedPool()
-{
-}
+LockedPool::~LockedPool() = default;
+
 void* LockedPool::alloc(size_t size)
 {
     std::lock_guard<std::mutex> lock(mutex);
