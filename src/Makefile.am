@@ -173,6 +173,7 @@ BITCOIN_CORE_H = \
   interfaces/ipc.h \
   interfaces/node.h \
   interfaces/wallet.h \
+  kernel/chainstatemanager_opts.h \
   key.h \
   key_io.h \
   logging.h \
@@ -883,7 +884,6 @@ libgroestlcoinkernel_la_SOURCES = \
   init/common.cpp \
   key.cpp \
   logging.cpp \
-  netaddress.cpp \
   node/blockstorage.cpp \
   node/chainstate.cpp \
   node/coinstats.cpp \
@@ -913,11 +913,9 @@ libgroestlcoinkernel_la_SOURCES = \
   support/lockedpool.cpp \
   sync.cpp \
   threadinterrupt.cpp \
-  timedata.cpp \
   txdb.cpp \
   txmempool.cpp \
   uint256.cpp \
-  util/asmap.cpp \
   util/bytevectorhash.cpp \
   util/check.cpp \
   util/getuniquepath.cpp \
