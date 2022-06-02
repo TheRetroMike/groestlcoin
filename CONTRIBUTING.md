@@ -173,7 +173,7 @@ pull request to pull request.
 
 When a pull request conflicts with the target branch, you may be asked to rebase it on top of the current target branch.
 
-    git fetch https://github.com/bitcoin/bitcoin  # Fetch the latest upstream commit
+    git fetch https://github.com/groestlcoin/groestlcoin  # Fetch the latest upstream commit
     git rebase FETCH_HEAD  # Rebuild commits on top of the new base
 
 This project aims to have a clean git history, where code changes are only made in non-merge commits. This simplifies
