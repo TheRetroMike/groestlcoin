@@ -173,7 +173,9 @@ BITCOIN_CORE_H = \
   interfaces/node.h \
   interfaces/wallet.h \
   kernel/chainstatemanager_opts.h \
+  kernel/checks.h \
   kernel/coinstats.h \
+  kernel/context.h \
   key.h \
   key_io.h \
   logging.h \
@@ -359,7 +361,9 @@ libgroestlcoin_node_a_SOURCES = \
   index/coinstatsindex.cpp \
   index/txindex.cpp \
   init.cpp \
+  kernel/checks.cpp \
   kernel/coinstats.cpp \
+  kernel/context.cpp \
   mapport.cpp \
   net.cpp \
   netgroup.cpp \
@@ -873,8 +877,9 @@ libgroestlcoinkernel_la_SOURCES = \
   groestlcoin-chainstate.cpp \
   groestlcoin-hash.cpp \
   hash.cpp \
-  init/common.cpp \
+  kernel/checks.cpp \
   kernel/coinstats.cpp \
+  kernel/context.cpp \
   key.cpp \
   logging.cpp \
   node/blockstorage.cpp \
