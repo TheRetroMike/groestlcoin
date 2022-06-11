@@ -9,7 +9,10 @@
 #include <consensus/amount.h>
 #include <serialize.h>
 
+
+#include <cstdint>
 #include <string>
+#include <type_traits>
 
 const std::string CURRENCY_UNIT = "GRS"; // GRS One formatted unit
 const std::string CURRENCY_ATOM = "gro"; // GRS One indivisible minimum value unit
