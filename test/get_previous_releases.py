@@ -82,7 +82,7 @@ def download_binary(tag, args) -> int:
         bin_path = 'Groestlcoin/groestlcoin/releases/download/v{}/test.{}'.format(
             match.group(1), match.group(2))
     platform = args.platform
-    if tag < "v23" and platform in ["x86_64-apple-darwin", "aarch64-apple-darwin"]:
+    if tag < "v23" and platform in ["x86_64-apple-darwin", "arm64-apple-darwin"]:
         platform = "osx64"
     tarball = 'groestlcoin-{tag}-{platform}.tar.gz'.format(
         tag=tag[1:], platform=platform)
@@ -190,7 +190,7 @@ def check_host(args) -> int:
             'aarch64-*-linux*': 'aarch64-linux-gnu',
             'x86_64-*-linux*': 'x86_64-linux-gnu',
             'x86_64-apple-darwin*': 'x86_64-apple-darwin',
-            'aarch64-apple-darwin*': 'aarch64-apple-darwin',
+            'aarch64-apple-darwin*': 'arm64-apple-darwin',
         }
         args.platform = ''
         for pattern, target in platforms.items():
