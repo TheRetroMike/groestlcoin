@@ -44,9 +44,8 @@ src/obj
 share/setup.nsi
 share/qt/Info.plist
 
-src/univalue/gen
-
 src/*.vcxproj.user
+
 src/qt/*.moc
 src/qt/moc_*.cpp
 src/qt/ui_*.h
