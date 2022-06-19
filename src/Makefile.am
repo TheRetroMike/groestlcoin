@@ -29,7 +29,6 @@ LIBBITCOIN_NODE=libgroestlcoin_node.a
 LIBBITCOIN_COMMON=libgroestlcoin_common.a
 LIBBITCOIN_CONSENSUS=libgroestlcoin_consensus.a
 LIBBITCOIN_CLI=libgroestlcoin_cli.a
-LIBBITCOIN_KERNEL=libgroestlcoin_kernel.a
 LIBBITCOIN_UTIL=libgroestlcoin_util.a
 LIBBITCOIN_CRYPTO_BASE=crypto/libgroestlcoin_crypto_base.la
 LIBBITCOINQT=qt/libgroestlcoinqt.a
