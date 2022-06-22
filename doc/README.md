@@ -60,10 +60,10 @@ The Groestlcoin repo's [root README](/README.md) contains relevant information o
 - [BIPS](bips.md)
 - [Dnsseed Policy](dnsseed-policy.md)
 - [Benchmarking](benchmarking.md)
+- [Internal Design Docs](design/)
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)
-- [Assumeutxo design](assumeutxo.md)
 - [groestlcoin.conf Configuration File](groestlcoin-conf.md)
 - [CJDNS Support](cjdns.md)
 - [Files](files.md)

@@ -268,22 +268,16 @@ A list of additional configure flags can be displayed with:
 
 Setup and Build Example: Arch Linux
 -----------------------------------
-This example lists the steps necessary to setup and build a command line only, non-wallet distribution of the latest changes on Arch Linux:
+This example lists the steps necessary to setup and build a command line only distribution of the latest changes on Arch Linux:
 
-    pacman -S git base-devel boost libevent python
+    pacman --sync --needed autoconf automake boost gcc git libevent libtool make pkgconf python sqlite
     git clone https://github.com/groestlcoin/groestlcoin.git
     cd groestlcoin/
     ./autogen.sh
-    ./configure --disable-wallet --without-gui --without-miniupnpc
-    make check
+    ./configure
+    ./src/groestlcoind
 
-Note:
-Enabling wallet support requires either compiling against a Berkeley DB newer than 5.3 (package `db`) using `--with-incompatible-bdb`,
-or building and depending on a local version of Berkeley DB 5.3. The readily available Arch Linux packages are currently built using
-[PKGBUILD](https://github.com/Groestlcoin/arch-groestlcoin/blob/main/PKGBUILD).
-As mentioned above, when maintaining portability of the wallet between the standard Groestlcoin Core distributions and independently built
-node software is desired, Berkeley DB 5.3 must be used.
-
+If you intend to work with legacy Berkeley DB wallets, see [Berkeley DB](#berkeley-db) section.
 
 ARM Cross-compilation
 -------------------
