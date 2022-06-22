@@ -21,7 +21,7 @@
 #include <util/system.h>
 
 #if defined(HAVE_CONSENSUS_LIB)
-#include <script/bitcoinconsensus.h>
+#include <script/groestlcoinconsensus.h>
 #endif
 
 #include <cstdint>
