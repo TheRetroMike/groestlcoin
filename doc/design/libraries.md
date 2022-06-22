@@ -9,11 +9,11 @@
 | *libbitcoin_kernel*      | Consensus engine and support library used for validation by *libbitcoin_node* and also exposed as a [shared library](../shared-libraries.md). |
 | *libbitcoinqt*           | GUI functionality used by *groestlcoin-qt* and *groestlcoin-gui* executables |
 | *libbitcoin_ipc*         | IPC functionality used by *groestlcoin-node*, *groestlcoin-wallet*, *groestlcoin-gui* executables to communicate when [`--enable-multiprocess`](multiprocess.md) is used. |
-| *libbitcoin_node*        | P2P and RPC server functionality used by *coind* and *coin-qt* executables. |
+| *libbitcoin_node*        | P2P and RPC server functionality used by *groestlcoind* and *groestlcoin-qt* executables. |
 | *libbitcoin_util*        | Home for common functionality shared by different executables and libraries. Similar to *libbitcoin_common*, but lower-level (see [Dependencies](#dependencies)). |
-| *libbitcoin_wallet*      | Wallet functionality used by *coind* and *coin-wallet* executables. |
-| *libbitcoin_wallet_tool* | Lower-level wallet functionality used by *coin-wallet* executable. |
-| *libbitcoin_zmq*         | [ZeroMQ](../zmq.md) functionality used by *coind* and *coin-qt* executables. |
+| *libbitcoin_wallet*      | Wallet functionality used by *groestlcoind* and *groestlcoin-wallet* executables. |
+| *libbitcoin_wallet_tool* | Lower-level wallet functionality used by *groestlcoin-wallet* executable. |
+| *libbitcoin_zmq*         | [ZeroMQ](../zmq.md) functionality used by *groestlcoind* and *groestlcoin-qt* executables. |
 
 ## Conventions
 
