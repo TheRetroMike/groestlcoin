@@ -859,8 +859,7 @@ endif
 
 # TODO: libgroestlcoinkernel is a work in progress consensus engine library, as more
 #       and more modules are decoupled from the consensus engine, this list will
-#       shrink to only those which are absolutely necessary. For example, things
-#       like index/*.cpp will be removed.
+#       shrink to only those which are absolutely necessary.
 libgroestlcoinkernel_la_SOURCES = \
   kernel/groestlcoinkernel.cpp \
   arith_uint256.cpp \
