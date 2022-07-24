@@ -12,5 +12,5 @@ export PACKAGES="clang llvm python3 libevent-dev bsdmainutils libboost-dev libsq
 export NO_DEPENDS=1
 export GOAL="install"
 # Temporarily pin dwarf 4, until valgrind can understand clang's dwarf 5
-export GROESTLCOIN_CONFIG="--enable-fuzz --with-sanitizers=fuzzer CC=clang CXX=clang++ CXXFLAGS='-fdebug-default-version=4'"
+export GROESTLCOIN_CONFIG="--enable-fuzz --with-sanitizers=fuzzer CC=clang CXX=clang++ CFLAGS='-gdwarf-4' CXXFLAGS='-gdwarf-4'"
 export CCACHE_SIZE=200M
