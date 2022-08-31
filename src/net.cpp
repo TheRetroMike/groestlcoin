@@ -798,7 +798,8 @@ CNetMessage V1TransportDeserializer::GetMessage(const std::chrono::microseconds 
     return msg;
 }
 
-void V1TransportSerializer::prepareForTransport(CSerializedNetMsg& msg, std::vector<unsigned char>& header) {
+void V1TransportSerializer::prepareForTransport(CSerializedNetMsg& msg, std::vector<unsigned char>& header) const
+{
     // create dbl-groestl512 checksum
     uint256 hash = XCoin::HashMessage(XCoin::ConstBuf(msg.data)); // GRS
     // create dbl-sha256 checksum
@@ -2725,7 +2726,9 @@ CNode::CNode(NodeId idIn,
              ConnectionType conn_type_in,
              bool inbound_onion,
              std::unique_ptr<i2p::sam::Session>&& i2p_sam_session)
-    : m_sock{sock},
+    : m_deserializer{std::make_unique<V1TransportDeserializer>(V1TransportDeserializer(Params(), idIn, SER_NETWORK, INIT_PROTO_VERSION))},
+      m_serializer{std::make_unique<V1TransportSerializer>(V1TransportSerializer())},
+      m_sock{sock},
       m_connected{GetTime<std::chrono::seconds>()},
       addr{addrIn},
       addrBind{addrBindIn},
@@ -2748,9 +2751,6 @@ CNode::CNode(NodeId idIn,
     } else {
         LogPrint(BCLog::NET, "Added connection peer=%d\n", id);
     }
-
-    m_deserializer = std::make_unique<V1TransportDeserializer>(V1TransportDeserializer(Params(), id, SER_NETWORK, INIT_PROTO_VERSION));
-    m_serializer = std::make_unique<V1TransportSerializer>(V1TransportSerializer());
 }
 
 bool CConnman::NodeFullyConnected(const CNode* pnode)

@@ -153,6 +153,7 @@ BITCOIN_CORE_H = \
   fs.h \
   groestlcoin.h \
   grs-config.h \
+  headerssync.h \
   httprpc.h \
   httpserver.h \
   i2p.h \
@@ -268,6 +269,7 @@ BITCOIN_CORE_H = \
   undo.h \
   util/asmap.h \
   util/bip32.h \
+  util/bitdeque.h \
   util/bytevectorhash.h \
   util/check.h \
   util/epochguard.h \
@@ -363,6 +365,7 @@ libgroestlcoin_node_a_SOURCES = \
   dbwrapper.cpp \
   deploymentstatus.cpp \
   flatfile.cpp \
+  headerssync.cpp \
   httprpc.cpp \
   httpserver.cpp \
   i2p.cpp \
