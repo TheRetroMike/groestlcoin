@@ -314,7 +314,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
 <context>
     <name>BitcoinApplication</name>
     <message>
-        <location filename="../bitcoin.cpp" line="+286"/>
+        <location filename="../bitcoin.cpp" line="+288"/>
         <source>Settings file %1 might be corrupt or invalid.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -418,12 +418,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+429"/>
+        <location line="+439"/>
         <source>Proxy is &lt;b&gt;enabled&lt;/b&gt;: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1150"/>
+        <location line="-1160"/>
         <source>Send coins to a Bitcoin address</source>
         <translation>Send coins to a Bitcoin address</translation>
     </message>
@@ -543,7 +543,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+58"/>
         <source>Synchronizing with network…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -568,7 +568,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-823"/>
+        <location line="-833"/>
         <source>Request payments (generates QR codes and bitcoin: URIs)</source>
         <translation>Request payments (generates QR codes and bitcoin: URIs)</translation>
     </message>
@@ -588,7 +588,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location line="+739"/>
+        <location line="+749"/>
         <source>Processed %n block(s) of transaction history.</source>
         <translation>
             <numerusform>Processed %n block of transaction history.</numerusform>
@@ -636,7 +636,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation>Up to date</translation>
     </message>
     <message>
-        <location line="-808"/>
+        <location line="-818"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
@@ -830,7 +830,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+159"/>
+        <location line="+17"/>
+        <source>Pre-syncing Headers (%1%)…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+152"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1514,7 +1519,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
     <message>
         <location line="+7"/>
         <location line="+26"/>
-        <location filename="../modaloverlay.cpp" line="+152"/>
+        <location filename="../modaloverlay.cpp" line="+155"/>
         <source>Unknown…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1555,13 +1560,18 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modaloverlay.cpp" line="-118"/>
+        <location filename="../modaloverlay.cpp" line="-121"/>
         <source>%1 is currently syncing.  It will download headers and blocks from peers and validate them until reaching the tip of the block chain.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+127"/>
         <source>Unknown. Syncing Headers (%1, %2%)…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Unknown. Pre-syncing Headers (%1, %2%)…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2182,7 +2192,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../overviewpage.cpp" line="+186"/>
+        <location filename="../overviewpage.cpp" line="+185"/>
         <source>Privacy mode activated for the Overview tab. To unmask the values, uncheck Settings-&gt;Mask values.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2686,7 +2696,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modaloverlay.cpp" line="-35"/>
+        <location filename="../modaloverlay.cpp" line="-40"/>
         <source>unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3624,7 +3634,7 @@ For more information on using this console, type %6.
     <name>SendCoinsDialog</name>
     <message>
         <location filename="../forms/sendcoinsdialog.ui" line="+14"/>
-        <location filename="../sendcoinsdialog.cpp" line="+759"/>
+        <location filename="../sendcoinsdialog.cpp" line="+757"/>
         <source>Send Coins</source>
         <translation>Send Coins</translation>
     </message>
@@ -3811,7 +3821,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
         <translation>S&amp;end</translation>
     </message>
     <message>
-        <location filename="../sendcoinsdialog.cpp" line="-660"/>
+        <location filename="../sendcoinsdialog.cpp" line="-658"/>
         <source>Copy quantity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3846,7 +3856,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+74"/>
         <source>%1 (%2 blocks)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5043,7 +5053,7 @@ Go to File &gt; Open Wallet to load a wallet.
 <context>
     <name>WalletModel</name>
     <message>
-        <location filename="../walletmodel.cpp" line="+221"/>
+        <location filename="../walletmodel.cpp" line="+232"/>
         <source>Send Coins</source>
         <translation type="unfinished">Send Coins</translation>
     </message>
@@ -5951,6 +5961,11 @@ Go to File &gt; Open Wallet to load a wallet.
     <message>
         <location line="+1"/>
         <source>Unable to create the PID file &apos;%s&apos;: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Unable to find UTXO for external input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
