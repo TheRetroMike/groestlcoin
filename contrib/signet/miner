@@ -308,8 +308,8 @@ def do_generate(args):
             return 1
         my_blocks = (start-1, stop, total)
 
-    if args.max_interval < 960:
-        logging.error("--max-interval must be at least 960 (16 minutes)")
+    if args.max_interval < 96:
+        logging.error("--max-interval must be at least 96 (1.6 minutes)")
         return 1
 
     ultimate_target = nbits_to_target(int(args.nbits,16))
