@@ -935,7 +935,6 @@ libgroestlcoinkernel_la_SOURCES = \
   txdb.cpp \
   txmempool.cpp \
   uint256.cpp \
-  util/bytevectorhash.cpp \
   util/check.cpp \
   util/getuniquepath.cpp \
   util/hasher.cpp \
