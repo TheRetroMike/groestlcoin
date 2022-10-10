@@ -133,6 +133,7 @@ BITCOIN_CORE_H = \
   clientversion.h \
   coins.h \
   common/bloom.h \
+  common/run_command.h \
   compat/assumptions.h \
   compat/byteswap.h \
   compat/compat.h \
@@ -621,13 +622,14 @@ libgroestlcoin_consensus_a_SOURCES = \
   version.h
 
 # common: shared between groestlcoind, and groestlcoin-qt and non-server tools
-libgroestlcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libgroestlcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFLAGS)
 libgroestlcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libgroestlcoin_common_a_SOURCES = \
   base58.cpp \
   bech32.cpp \
   coins.cpp \
   common/bloom.cpp \
+  common/run_command.cpp \
   compressor.cpp \
   core_read.cpp \
   core_write.cpp \
