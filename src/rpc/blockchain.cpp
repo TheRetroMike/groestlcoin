@@ -2238,7 +2238,7 @@ static RPCHelpMan scanblocks()
 {
     return RPCHelpMan{"scanblocks",
         "\nReturn relevant blockhashes for given descriptors.\n"
-        "This call may take several minutes. Make sure to use no RPC timeout (bitcoin-cli -rpcclienttimeout=0)",
+        "This call may take several minutes. Make sure to use no RPC timeout (groestlcoin-cli -rpcclienttimeout=0)",
         {
             scan_action_arg_desc,
             scan_objects_arg_desc,
@@ -2262,11 +2262,11 @@ static RPCHelpMan scanblocks()
             scan_result_abort,
         },
         RPCExamples{
-            HelpExampleCli("scanblocks", "start '[\"addr(bcrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4d0wwte)\"]' 300000") +
-            HelpExampleCli("scanblocks", "start '[\"addr(bcrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4d0wwte)\"]' 100 150 basic") +
+            HelpExampleCli("scanblocks", "start '[\"addr(grsrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4t9z8d8)\"]' 300000") +
+            HelpExampleCli("scanblocks", "start '[\"addr(grsrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4t9z8d8)\"]' 100 150 basic") +
             HelpExampleCli("scanblocks", "status") +
-            HelpExampleRpc("scanblocks", "\"start\", [\"addr(bcrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4d0wwte)\"], 300000") +
-            HelpExampleRpc("scanblocks", "\"start\", [\"addr(bcrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4d0wwte)\"], 100, 150, \"basic\"") +
+            HelpExampleRpc("scanblocks", "\"start\", [\"addr(grsrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4t9z8d8)\"], 300000") +
+            HelpExampleRpc("scanblocks", "\"start\", [\"addr(grsrt1q4u4nsgk6ug0sqz7r3rj9tykjxrsl0yy4t9z8d8)\"], 100, 150, \"basic\"") +
             HelpExampleRpc("scanblocks", "\"status\"")
         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
