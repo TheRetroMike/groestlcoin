@@ -164,11 +164,11 @@ jobs:
         run: ${{ matrix.postinstall }}
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: SDK cache
         if: ${{ matrix.sdk }}
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: sdk
         with:
@@ -184,7 +184,7 @@ jobs:
           tar -C depends/SDKs -xf depends/sdk-sources/Xcode-${{ matrix.sdk }}-extracted-SDK-with-libcxx-headers.tar.gz
 
       - name: Dependency cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: depends
         with:
@@ -210,7 +210,7 @@ jobs:
         run: make -C src check-symbols
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: groestlcoin-${{ github.sha }}-${{ matrix.name }}
           path: |
@@ -220,6 +220,6 @@ jobs:
           retention-days: 7
 
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: groestlcoin-${{ github.sha }}-${{ matrix.name }}
