@@ -35,7 +35,7 @@
 
 ```mermaid
 
-%%{ init : { "flowchart" : { "curve" : "linear" }}}%%
+%%{ init : { "flowchart" : { "curve" : "basis" }}}%%
 
 graph TD;
 
@@ -51,18 +51,18 @@ groestlcoin-qt[groestlcoin-qt]-->libbitcoin_wallet;
 groestlcoin-wallet[groestlcoin-wallet]-->libbitcoin_wallet;
 groestlcoin-wallet[groestlcoin-wallet]-->libbitcoin_wallet_tool;
 
-libbitcoin_cli-->libbitcoin_common;
 libbitcoin_cli-->libbitcoin_util;
+libbitcoin_cli-->libbitcoin_common;
 
-libbitcoin_common-->libbitcoin_util;
 libbitcoin_common-->libbitcoin_consensus;
+libbitcoin_common-->libbitcoin_util;
 
 libbitcoin_kernel-->libbitcoin_consensus;
 libbitcoin_kernel-->libbitcoin_util;
 
-libbitcoin_node-->libbitcoin_common;
 libbitcoin_node-->libbitcoin_consensus;
 libbitcoin_node-->libbitcoin_kernel;
+libbitcoin_node-->libbitcoin_common;
 libbitcoin_node-->libbitcoin_util;
 
 libbitcoinqt-->libbitcoin_common;
@@ -71,8 +71,8 @@ libbitcoinqt-->libbitcoin_util;
 libbitcoin_wallet-->libbitcoin_common;
 libbitcoin_wallet-->libbitcoin_util;
 
-libbitcoin_wallet_tool-->libbitcoin_util;
 libbitcoin_wallet_tool-->libbitcoin_wallet;
+libbitcoin_wallet_tool-->libbitcoin_util;
 
 classDef bold stroke-width:2px, font-weight:bold, font-size: smaller;
 class groestlcoin-qt,groestlcoind,groestlcoin-cli,groestlcoin-wallet bold
