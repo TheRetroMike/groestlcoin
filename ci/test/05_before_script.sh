@@ -11,6 +11,7 @@ if [ "$CI_OS_NAME" == "macos" ]; then
   echo > "${HOME}/Library/Application Support/Groestlcoin"
 else
   CI_EXEC echo \> \$HOME/.groestlcoin
+  CI_EXEC_ROOT echo \> \$HOME/.groestlcoin
 fi
 
 CI_EXEC mkdir -p "${DEPENDS_DIR}/SDKs" "${DEPENDS_DIR}/sdk-sources"
