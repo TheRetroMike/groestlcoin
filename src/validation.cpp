@@ -1462,7 +1462,8 @@ PackageMempoolAcceptResult ProcessNewPackage(Chainstate& active_chainstate, CTxM
     return result;
 }
 
-/*!!!GRS
+// GRS GetBlockSubsidy is in groestlcoin.cpp defined 
+/*
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
