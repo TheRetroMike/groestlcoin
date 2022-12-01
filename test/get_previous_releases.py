@@ -121,7 +121,7 @@ def download_binary(tag, args) -> int:
     tarballHash = hasher.hexdigest()
 
     if tarballHash not in SHA256_SUMS or SHA256_SUMS[tarballHash]['tarball'] != tarball:
-        if tarball in SHA256_SUMS.values():
+        if tarball in [v['tarball'] for v in SHA256_SUMS.values()]:
             print("Checksum did not match")
             return 1
 
@@ -245,11 +245,10 @@ if __name__ == '__main__':
                         help='download release binary.')
     parser.add_argument('-t', '--target-dir', action='store',
                         help='target directory.', default='releases')
-    parser.add_argument('tags', nargs='*', default=set(
-                            [v['tag'] for v in SHA256_SUMS.values()]
-                        ),
+    all_tags = sorted([*set([v['tag'] for v in SHA256_SUMS.values()])])
+    parser.add_argument('tags', nargs='*', default=all_tags,
                         help='release tags. e.g.: v2.18.2 v2.20.1 '
-                        '(if not specified, the full list needed for'
+                        '(if not specified, the full list needed for '
                         'backwards compatibility tests will be used)'
                         )
     args = parser.parse_args()
