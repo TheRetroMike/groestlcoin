@@ -1,8 +1,8 @@
 # Disable files from being included in completions by default
-complete --command bitcoin-qt --no-files
+complete --command groestlcoin-qt --no-files
 
 # Extract options
-function __fish_bitcoinqt_get_options
+function __fish_groestlcoinqt_get_options
     argparse 'nofiles' -- $argv
     set --local cmd (commandline -opc)[1]
     set --local options
@@ -21,15 +21,14 @@ end
 
 # Add options with file completion
 complete \
-    --command bitcoin-qt \
-    --arguments "(__fish_bitcoinqt_get_options)"
+    --command groestlcoin-qt \
+    --arguments "(__fish_groestlcoinqt_get_options)"
 # Enable file completions only if the commandline now contains a `*.=` style option
-complete -c bitcoin-qt \
+complete -c groestlcoin-qt \
     --condition 'string match --regex -- ".*=" (commandline -pt)' \
     --force-files
 
 # Add options without file completion
 complete \
-    --command bitcoin-qt \
-    --arguments "(__fish_bitcoinqt_get_options --nofiles)"
-
+    --command groestlcoin-qt \
+    --arguments "(__fish_groestlcoinqt_get_options --nofiles)"
