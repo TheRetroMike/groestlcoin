@@ -179,6 +179,7 @@ BITCOIN_CORE_H = \
   kernel/checks.h \
   kernel/coinstats.h \
   kernel/context.h \
+  kernel/mempool_entry.h \
   kernel/mempool_limits.h \
   kernel/mempool_options.h \
   kernel/mempool_persist.h \
@@ -267,7 +268,6 @@ BITCOIN_CORE_H = \
   torcontrol.h \
   txdb.h \
   txmempool.h \
-  txmempool_entry.h \
   txorphanage.h \
   txrequest.h \
   undo.h \
@@ -637,6 +637,7 @@ libgroestlcoin_common_a_SOURCES = \
   bech32.cpp \
   coins.cpp \
   common/bloom.cpp \
+  common/interfaces.cpp \
   common/run_command.cpp \
   compressor.cpp \
   core_read.cpp \
@@ -676,16 +677,13 @@ endif
 #
 
 # util #
-libgroestlcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFLAGS)
+libgroestlcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libgroestlcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libgroestlcoin_util_a_SOURCES = \
   support/lockedpool.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
   fs.cpp \
-  interfaces/echo.cpp \
-  interfaces/handler.cpp \
-  interfaces/init.cpp \
   logging.cpp \
   random.cpp \
   randomenv.cpp \
