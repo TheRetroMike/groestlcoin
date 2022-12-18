@@ -1,4 +1,3 @@
-<<<<<<<< HEAD:doc/release-notes/release-notes-24.0.1.md
 24.0.1 Release Notes
 ====================
 
@@ -269,9 +268,3 @@ Thanks to everyone who directly contributed to this release.
 
 As well as to everyone that helped with translations on
 [Transifex](https://www.transifex.com/bitcoin/bitcoin/).
-========
-Due to last-minute issues (#26616), 24.0, although tagged, was never fully
-announced or released.
-
-See the release notes for 24.0.1 instead.
->>>>>>>> upstream/master:doc/release-notes/release-notes-24.0.md
