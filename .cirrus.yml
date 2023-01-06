@@ -23,6 +23,7 @@ base_template: &BASE_TEMPLATE
     - if [ "$CIRRUS_PR" = "" ]; then exit 0; fi
     - git fetch $CIRRUS_REPO_CLONE_URL "pull/${CIRRUS_PR}/merge"
     - git checkout FETCH_HEAD  # Use merged changes to detect silent merge conflicts
+                               # Also, the merge commit is used to lint COMMIT_RANGE="HEAD~..HEAD"
 
 main_template: &MAIN_TEMPLATE
   timeout_in: 120m  # https://cirrus-ci.org/faq/#instance-timed-out
@@ -95,10 +96,10 @@ task:
     FILE_ENV: "./ci/test/00_setup_env_native_qt5.sh"
 
 task:
-  name: '[TSan, depends] [bookworm]'
+  name: '[TSan, depends, gui] [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
-    image: debian:bookworm
+    image: ubuntu:jammy
     cpu: 6  # Increase CPU and Memory to avoid timeout
     memory: 24G
   env:
