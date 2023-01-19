@@ -8,10 +8,10 @@ Dockerfile:
 
 ```sh
 cd ./ci/lint
-docker build -t bitcoin-linter .
+docker build -t groestlcoin-linter .
 
-cd /root/of/bitcoin/repo
-docker run --rm -v $(pwd):/bitcoin -it bitcoin-linter
+cd /root/of/groestlcoin/repo
+docker run --rm -v $(pwd):/groestlcoin -it groestlcoin-linter
 ```
 
 After building the container once, you can simply run the last command any time you
