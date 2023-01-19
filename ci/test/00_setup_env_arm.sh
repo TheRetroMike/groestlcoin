@@ -18,7 +18,7 @@ if [ -n "$QEMU_USER_CMD" ]; then
 fi
 export CONTAINER_NAME=ci_arm_linux
 # Use debian to avoid 404 apt errors when cross compiling
-export DOCKER_NAME_TAG="debian:bullseye"
+export CI_IMAGE_NAME_TAG="debian:bullseye"
 export USE_BUSY_BOX=true
 export GOAL="install"
 # -Wno-psabi is to disable ABI warnings: "note: parameter passing for argument of type ... changed in GCC 7.1"

@@ -18,6 +18,6 @@ if [ -n "$QEMU_USER_CMD" ]; then
 fi
 # Use debian to avoid 404 apt errors
 export CONTAINER_NAME=ci_s390x
-export DOCKER_NAME_TAG="debian:bookworm"
+export CI_IMAGE_NAME_TAG="debian:bookworm"
 export GOAL="install"
 export GROESTLCOIN_CONFIG="--enable-reduce-exports --disable-gui-tests"  # GUI tests disabled for now, see https://github.com/bitcoin/bitcoin/issues/23730

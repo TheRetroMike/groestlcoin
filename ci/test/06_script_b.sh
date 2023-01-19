@@ -21,3 +21,8 @@ fi
 if [ "$RUN_SECURITY_TESTS" = "true" ]; then
   CI_EXEC make test-security-check
 fi
+
+if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
+  echo "Stop and remove CI container by ID"
+  docker container kill "${CI_CONTAINER_ID}"
+fi

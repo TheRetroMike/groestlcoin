@@ -30,23 +30,6 @@ std::string GetAllOutputTypes()
     return Join(ret, ", ");
 }
 
-void RPCTypeCheck(const UniValue& params,
-                  const std::list<UniValueType>& typesExpected,
-                  bool fAllowNull)
-{
-    unsigned int i = 0;
-    for (const UniValueType& t : typesExpected) {
-        if (params.size() <= i)
-            break;
-
-        const UniValue& v = params[i];
-        if (!(fAllowNull && v.isNull())) {
-            RPCTypeCheckArgument(v, t);
-        }
-        i++;
-    }
-}
-
 void RPCTypeCheckArgument(const UniValue& value, const UniValueType& typeExpected)
 {
     if (!typeExpected.typeAny && value.type() != typeExpected.type) {
@@ -405,6 +388,7 @@ struct Sections {
         const auto indent = std::string(current_indent, ' ');
         const auto indent_next = std::string(current_indent + 2, ' ');
         const bool push_name{outer_type == OuterType::OBJ}; // Dictionary keys must have a name
+        const bool is_top_level_arg{outer_type == OuterType::NONE}; // True on the first recursion
 
         switch (arg.m_type) {
         case RPCArg::Type::STR_HEX:
@@ -413,7 +397,7 @@ struct Sections {
         case RPCArg::Type::AMOUNT:
         case RPCArg::Type::RANGE:
         case RPCArg::Type::BOOL: {
-            if (outer_type == OuterType::NONE) return; // Nothing more to do for non-recursive types on first recursion
+            if (is_top_level_arg) return; // Nothing more to do for non-recursive types on first recursion
             auto left = indent;
             if (arg.m_opts.type_str.size() != 0 && push_name) {
                 left += "\"" + arg.GetName() + "\": " + arg.m_opts.type_str.at(0);
@@ -421,12 +405,12 @@ struct Sections {
                 left += push_name ? arg.ToStringObj(/*oneline=*/false) : arg.ToString(/*oneline=*/false);
             }
             left += ",";
-            PushSection({left, arg.ToDescriptionString()});
+            PushSection({left, arg.ToDescriptionString(/*is_named_arg=*/push_name)});
             break;
         }
         case RPCArg::Type::OBJ:
         case RPCArg::Type::OBJ_USER_KEYS: {
-            const auto right = outer_type == OuterType::NONE ? "" : arg.ToDescriptionString();
+            const auto right = is_top_level_arg ? "" : arg.ToDescriptionString(/*is_named_arg=*/push_name);
             PushSection({indent + (push_name ? "\"" + arg.GetName() + "\": " : "") + "{", right});
             for (const auto& arg_inner : arg.m_inner) {
                 Push(arg_inner, current_indent + 2, OuterType::OBJ);
@@ -434,20 +418,20 @@ struct Sections {
             if (arg.m_type != RPCArg::Type::OBJ) {
                 PushSection({indent_next + "...", ""});
             }
-            PushSection({indent + "}" + (outer_type != OuterType::NONE ? "," : ""), ""});
+            PushSection({indent + "}" + (is_top_level_arg ? "" : ","), ""});
             break;
         }
         case RPCArg::Type::ARR: {
             auto left = indent;
             left += push_name ? "\"" + arg.GetName() + "\": " : "";
             left += "[";
-            const auto right = outer_type == OuterType::NONE ? "" : arg.ToDescriptionString();
+            const auto right = is_top_level_arg ? "" : arg.ToDescriptionString(/*is_named_arg=*/push_name);
             PushSection({left, right});
             for (const auto& arg_inner : arg.m_inner) {
                 Push(arg_inner, current_indent + 2, OuterType::ARR);
             }
             PushSection({indent_next + "...", ""});
-            PushSection({indent + "]" + (outer_type != OuterType::NONE ? "," : ""), ""});
+            PushSection({indent + "]" + (is_top_level_arg ? "" : ","), ""});
             break;
         }
         } // no default case, so the compiler can warn about missing cases
@@ -579,6 +563,9 @@ UniValue RPCHelpMan::HandleRequest(const JSONRPCRequest& request) const
     if (request.mode == JSONRPCRequest::GET_HELP || !IsValidNumArgs(request.params.size())) {
         throw std::runtime_error(ToString());
     }
+    for (size_t i{0}; i < m_args.size(); ++i) {
+        m_args.at(i).MatchesType(request.params[i]);
+    }
     UniValue ret = m_fun(*this, request);
     if (gArgs.GetBoolArg("-rpcdoccheck", DEFAULT_RPC_DOC_CHECK)) {
         CHECK_NONFATAL(std::any_of(m_results.m_results.begin(), m_results.m_results.end(), [&ret](const RPCResult& res) { return res.MatchesType(ret); }));
@@ -641,7 +628,7 @@ std::string RPCHelpMan::ToString() const
         if (i == 0) ret += "\nArguments:\n";
 
         // Push named argument name and description
-        sections.m_sections.emplace_back(::ToString(i + 1) + ". " + arg.GetFirstName(), arg.ToDescriptionString());
+        sections.m_sections.emplace_back(::ToString(i + 1) + ". " + arg.GetFirstName(), arg.ToDescriptionString(/*is_named_arg=*/true));
         sections.m_max_pad = std::max(sections.m_max_pad, sections.m_sections.back().m_left.size());
 
         // Recursively push nested args
@@ -677,6 +664,44 @@ UniValue RPCHelpMan::GetArgMap() const
     return arr;
 }
 
+void RPCArg::MatchesType(const UniValue& request) const
+{
+    if (m_opts.skip_type_check) return;
+    if (IsOptional() && request.isNull()) return;
+    switch (m_type) {
+    case Type::STR_HEX:
+    case Type::STR: {
+        RPCTypeCheckArgument(request, UniValue::VSTR);
+        return;
+    }
+    case Type::NUM: {
+        RPCTypeCheckArgument(request, UniValue::VNUM);
+        return;
+    }
+    case Type::AMOUNT: {
+        // VNUM or VSTR, checked inside AmountFromValue()
+        return;
+    }
+    case Type::RANGE: {
+        // VNUM or VARR, checked inside ParseRange()
+        return;
+    }
+    case Type::BOOL: {
+        RPCTypeCheckArgument(request, UniValue::VBOOL);
+        return;
+    }
+    case Type::OBJ:
+    case Type::OBJ_USER_KEYS: {
+        RPCTypeCheckArgument(request, UniValue::VOBJ);
+        return;
+    }
+    case Type::ARR: {
+        RPCTypeCheckArgument(request, UniValue::VARR);
+        return;
+    }
+    } // no default case, so the compiler can warn about missing cases
+}
+
 std::string RPCArg::GetFirstName() const
 {
     return m_names.substr(0, m_names.find("|"));
@@ -697,7 +722,7 @@ bool RPCArg::IsOptional() const
     }
 }
 
-std::string RPCArg::ToDescriptionString() const
+std::string RPCArg::ToDescriptionString(bool is_named_arg) const
 {
     std::string ret;
     ret += "(";
@@ -743,12 +768,10 @@ std::string RPCArg::ToDescriptionString() const
         ret += ", optional, default=" + std::get<RPCArg::Default>(m_fallback).write();
     } else {
         switch (std::get<RPCArg::Optional>(m_fallback)) {
+        case RPCArg::Optional::OMITTED_NAMED_ARG: // Deprecated alias for OMITTED, can be removed
         case RPCArg::Optional::OMITTED: {
+            if (is_named_arg) ret += ", optional"; // Default value is "null" in dicts. Otherwise,
             // nothing to do. Element is treated as if not present and has no default value
-            break;
-        }
-        case RPCArg::Optional::OMITTED_NAMED_ARG: {
-            ret += ", optional"; // Default value is "null"
             break;
         }
         case RPCArg::Optional::NO: {

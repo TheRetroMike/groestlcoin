@@ -303,14 +303,8 @@ void DebugMessageHandler(QtMsgType type, const QMessageLogContext& context, cons
 static int qt_argc = 1;
 static const char* qt_argv = "groestlcoin-qt";
 
-BitcoinApplication::BitcoinApplication():
-    QApplication(qt_argc, const_cast<char **>(&qt_argv)),
-    optionsModel(nullptr),
-    clientModel(nullptr),
-    window(nullptr),
-    pollShutdownTimer(nullptr),
-    returnValue(0),
-    platformStyle(nullptr)
+BitcoinApplication::BitcoinApplication()
+    : QApplication(qt_argc, const_cast<char**>(&qt_argv))
 {
     // Qt runs setlocale(LC_ALL, "") on initialization.
     RegisterMetaTypes();
@@ -523,7 +517,7 @@ void BitcoinApplication::initializeResult(bool success, interfaces::BlockAndHead
 
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
-        // bitcoin: URIs or payment requests:
+        // groestlcoin: URIs or payment requests:
         if (paymentServer) {
             connect(paymentServer, &PaymentServer::receivedPaymentRequest, window, &BitcoinGUI::handlePaymentRequest);
             connect(window, &BitcoinGUI::receivedURI, paymentServer, &PaymentServer::handleURIOrFile);
@@ -671,29 +665,30 @@ int GuiMain(int argc, char* argv[])
     // Gracefully exit if the user cancels
     if (!Intro::showIfNeeded(did_show_intro, prune_MiB)) return EXIT_SUCCESS;
 
-    /// 6. Determine availability of data directory and parse groestlcoin.conf
-    /// - Do not call gArgs.GetDataDirNet() before this step finishes
+    /// 6a. Determine availability of data directory
     if (!CheckDataDirOption()) {
         InitError(strprintf(Untranslated("Specified data directory \"%s\" does not exist.\n"), gArgs.GetArg("-datadir", "")));
         QMessageBox::critical(nullptr, PACKAGE_NAME,
             QObject::tr("Error: Specified data directory \"%1\" does not exist.").arg(QString::fromStdString(gArgs.GetArg("-datadir", ""))));
         return EXIT_FAILURE;
     }
-    if (!gArgs.ReadConfigFiles(error, true)) {
-        InitError(strprintf(Untranslated("Error reading configuration file: %s\n"), error));
-        QMessageBox::critical(nullptr, PACKAGE_NAME,
-            QObject::tr("Error: Cannot parse configuration file: %1.").arg(QString::fromStdString(error)));
-        return EXIT_FAILURE;
-    }
-
-    /// 7. Determine network (and switch to network specific options)
-    // - Do not call Params() before this step
-    // - Do this after parsing the configuration file, as the network can be switched there
-    // - QSettings() will use the new application name after this, resulting in network-specific settings
-    // - Needs to be done before createOptionsModel
-
-    // Check for chain settings (Params() calls are only valid after this clause)
     try {
+        /// 6b. Parse groestlcoin.conf
+        /// - Do not call gArgs.GetDataDirNet() before this step finishes
+        if (!gArgs.ReadConfigFiles(error, true)) {
+            InitError(strprintf(Untranslated("Error reading configuration file: %s\n"), error));
+            QMessageBox::critical(nullptr, PACKAGE_NAME,
+                QObject::tr("Error: Cannot parse configuration file: %1.").arg(QString::fromStdString(error)));
+            return EXIT_FAILURE;
+        }
+
+        /// 7. Determine network (and switch to network specific options)
+        // - Do not call Params() before this step
+        // - Do this after parsing the configuration file, as the network can be switched there
+        // - QSettings() will use the new application name after this, resulting in network-specific settings
+        // - Needs to be done before createOptionsModel
+
+        // Check for chain settings (Params() calls are only valid after this clause)
         SelectParams(gArgs.GetChainName());
     } catch(std::exception &e) {
         InitError(Untranslated(strprintf("%s\n", e.what())));
@@ -727,7 +722,7 @@ int GuiMain(int argc, char* argv[])
         exit(EXIT_SUCCESS);
 
     // Start up the payment server early, too, so impatient users that click on
-    // bitcoin: links repeatedly have their payment requests routed to this process:
+    // groestlcoin: links repeatedly have their payment requests routed to this process:
     if (WalletModel::isWalletEnabled()) {
         app.createPaymentServer();
     }
