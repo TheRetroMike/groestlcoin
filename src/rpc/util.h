@@ -154,18 +154,14 @@ struct RPCArg {
         /** Required arg */
         NO,
         /**
-         * The arg is optional for one of two reasons:
-         *
-         * Optional arg that is a named argument and has a default value of
-         * `null`.
-         *
-         * Optional argument with default value omitted because they are
-         * implicitly clear. That is, elements in an array may not
-         * exist by default.
+         * Optional argument for which the default value is omitted from
+         * help text for one of two reasons:
+         * - It's a named argument and has a default value of `null`.
+         * - Its default value is implicitly clear. That is, elements in an
+         *    array may not exist by default.
          * When possible, the default value should be specified.
          */
         OMITTED,
-        OMITTED_NAMED_ARG, // Deprecated alias for OMITTED, can be removed
     };
     /** Hint for default value */
     using DefaultHint = std::string;
@@ -324,8 +320,10 @@ struct RPCResult {
     std::string ToStringObj() const;
     /** Return the description string, including the result type. */
     std::string ToDescriptionString() const;
-    /** Check whether the result JSON type matches. */
-    bool MatchesType(const UniValue& result) const;
+    /** Check whether the result JSON type matches.
+     * Returns true if type matches, or object describing error(s) if not.
+     */
+    UniValue MatchesType(const UniValue& result) const;
 
 private:
     void CheckInnerDoc() const;
