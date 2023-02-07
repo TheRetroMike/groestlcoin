@@ -68,9 +68,9 @@ controlled by group membership.
 
 NOTE: When using the systemd .service file, the creation of the aforementioned
 directories and the setting of their permissions is automatically handled by
-systemd. Directories are given a permission of 710, giving the bitcoin group
+systemd. Directories are given a permission of 710, giving the groestlcoin group
 access to files under it _if_ the files themselves give permission to the
-bitcoin group to do so. This does not allow
+groestlcoin group to do so. This does not allow
 for the listing of files under the directory.
 
 NOTE: It is not currently possible to override `datadir` in
