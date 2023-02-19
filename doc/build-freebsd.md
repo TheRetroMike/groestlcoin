@@ -36,13 +36,30 @@ pkg install sqlite3
 ```
 
 ###### Legacy Wallet Support
-`db5` is only required to support legacy wallets.
-Skip if you don't intend to use legacy wallets.
+BerkeleyDB is only required if legacy wallet support is required.
 
-```bash
-pkg install db5
+It is required to use Berkeley DB 5.3. You **cannot** use the BerkeleyDB library
+from ports. However, you can build DB 5.3 yourself [using depends](/depends).
+
 ```
----
+gmake -C depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1
+```
+
+When the build is complete, the Berkeley DB installation location will be displayed:
+
+```
+to: /path/to/groestlcoin/depends/x86_64-unknown-freebsd[release-number]
+```
+
+Finally, set `BDB_PREFIX` to this path according to your shell:
+
+```
+csh: setenv BDB_PREFIX [path displayed above]
+```
+
+```
+sh/bash: export BDB_PREFIX=[path displayed above]
+```
 
 #### GUI Dependencies
 ###### Qt5
@@ -95,8 +112,8 @@ This enables support for both wallet types and disables the GUI, assuming
 ```bash
 ./autogen.sh
 ./configure --with-gui=no \
-    BDB_LIBS="-ldb_cxx-5" \
-    BDB_CFLAGS="-I/usr/local/include/db5" \
+    BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-5.3" \
+    BDB_CFLAGS="-I${BDB_PREFIX}/include" \
     MAKE=gmake
 ```
 

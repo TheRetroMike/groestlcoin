@@ -1060,6 +1060,7 @@ bool AppInitParameterInteraction(const ArgsManager& args, bool use_syscall_sandb
     {
         ChainstateManager::Options chainman_opts_dummy{
             .chainparams = chainparams,
+            .datadir = args.GetDataDirNet(),
         };
         if (const auto error{ApplyArgsManOptions(args, chainman_opts_dummy)}) {
             return InitError(*error);
@@ -1458,6 +1459,7 @@ bool AppInitMain(NodeContext& node, interfaces::BlockAndHeaderTipInfo* tip_info)
     bool fReindexChainState = args.GetBoolArg("-reindex-chainstate", false);
     ChainstateManager::Options chainman_opts{
         .chainparams = chainparams,
+        .datadir = args.GetDataDirNet(),
         .adjusted_time_callback = GetAdjustedTime,
     };
     Assert(!ApplyArgsManOptions(args, chainman_opts)); // no error can happen, already checked in AppInitParameterInteraction
@@ -1812,7 +1814,7 @@ bool AppInitMain(NodeContext& node, interfaces::BlockAndHeaderTipInfo* tip_info)
         if (connOptions.onion_binds.size() > 1) {
             InitWarning(strprintf(_("More than one onion bind address is provided. Using %s "
                                     "for the automatically created Tor onion service."),
-                                  onion_service_target.ToStringIPPort()));
+                                  onion_service_target.ToStringAddrPort()));
         }
         StartTorControl(onion_service_target);
     }
@@ -1838,6 +1840,13 @@ bool AppInitMain(NodeContext& node, interfaces::BlockAndHeaderTipInfo* tip_info)
         const auto connect = args.GetArgs("-connect");
         if (connect.size() != 1 || connect[0] != "0") {
             connOptions.m_specified_outgoing = connect;
+        }
+        if (!connOptions.m_specified_outgoing.empty() && !connOptions.vSeedNodes.empty()) {
+            LogPrintf("-seednode is ignored when -connect is used\n");
+        }
+
+        if (args.IsArgSet("-dnsseed") && args.GetBoolArg("-dnsseed", DEFAULT_DNSSEED) && args.IsArgSet("-proxy")) {
+            LogPrintf("-dnsseed is ignored when -connect is used and -proxy is specified\n");
         }
     }
 

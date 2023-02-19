@@ -65,6 +65,15 @@ SHA256_SUMS = {
     "5dfbd033c31bf974301c0f4cb4bc3bd91783a8233f79ddc9e4e788ddd3de46dd": {"tag": "v23.0", "tarball": "groestlcoin-23.0-riscv64-linux-gnu.tar.gz"},
     "ff80c843a29c515e052972019915fa302584b0c045ca69ee3a1572013743d385": {"tag": "v23.0", "tarball": "groestlcoin-23.0-x86_64-apple-darwin.tar.gz"},
     "46ab078422d0d2aaf5b89ac9603cb61a6ebf6c26a73b9440365a4df5f9bce7de": {"tag": "v23.0", "tarball": "groestlcoin-23.0-x86_64-linux-gnu.tar.gz"},
+
+    "ca316c369728348406778c30b2b567bb2ede1ebcc87fb0305c0bed3dacae762b": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-aarch64-linux-gnu.tar.gz"},
+    "28299bc5eccbf715c9b876467da7c12cd8b5261753ed614a7d3a81c9da79dcb8": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-arm-linux-gnueabihf.tar.gz"},
+    "569d3519b5855f7576452c8b666eb26cec175296bfa685f311652e3e718ab49d": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-arm64-apple-darwin.tar.gz"},
+    "6aad23f3b7f1c80a8834f5c36b8e43cc6786cac4cad1e42bdae604a9d90b82ca": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-powerpc64-linux-gnu.tar.gz"},
+    "08b1e015b2719c5bc45a3dd62c335185a428fd0e54b70ba886403e7255a11e35": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-powerpc64le-linux-gnu.tar.gz"},
+    "9372153a559ae034176c7cdd51a231a4d3afa1ab3b5f53b4769d7fa7b1beff96": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-riscv64-linux-gnu.tar.gz"},
+    "8a99765cd01686b81480dc29ee70aa5619d429402685f164e2a4b0b4d592ac10": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-x86_64-apple-darwin.tar.gz"},
+    "4b69743190e2697d7b7772bf6f63cde595d590ff6664abf15a7201dab2a6098b": {"tag": "v24.0.1", "tarball": "groestlcoin-24.0.1-x86_64-linux-gnu.tar.gz"},
 }
 
 

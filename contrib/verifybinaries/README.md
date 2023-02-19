@@ -1,16 +1,5 @@
 ### Verify Binaries
 
-#### Preparation:
-
-Make sure you obtain the proper release signing key and verify the fingerprint with several independent sources.
-
-```sh
-$ gpg --fingerprint "jackielove4u"
-pub   4096R/36C2E964 2025-06-24 [expires: YYYY-MM-DD]
-      Key fingerprint = 287A E4CA 1187 C68C 08B4 9CB2 D11B D4F3 3F1D B499
-uid                  jackielove4u <jackielove4u@hotmail.com>
-```
-
 #### Usage:
 
 This script attempts to download the signature file `SHA256SUMS.asc` from https://github.com/Groestlcoin/groestlcoin/releases.
