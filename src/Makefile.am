@@ -860,11 +860,12 @@ groestlcoin_chainstate_SOURCES = groestlcoin-chainstate.cpp
 groestlcoin_chainstate_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFLAGS)
 groestlcoin_chainstate_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-# $(LIBTOOL_APP_LDFLAGS) deliberately omitted here so that we can test linking
-# groestlcoin-chainstate against libgroestlcoinkernel as a shared or static library by
-# setting --{en,dis}able-shared.
-groestlcoin_chainstate_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(PTHREAD_FLAGS)
+groestlcoin_chainstate_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(PTHREAD_FLAGS) $(LIBTOOL_APP_LDFLAGS) -static
 groestlcoin_chainstate_LDADD = $(LIBBITCOINKERNEL)
+
+# libtool is unable to calculate this indirect dependency, presumably because it's a subproject.
+# libsecp256k1 only needs to be linked in when libgroestlcoinkernel is static.
+groestlcoin_chainstate_LDADD += $(LIBSECP256K1)
 #
 
 # groestlcoinkernel library #
@@ -882,15 +883,6 @@ libgroestlcoinkernel_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/
 # Note this is a quick hack that will be removed as we incrementally define what
 # to export from the library.
 libgroestlcoinkernel_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -fvisibility=default
-
-# TODO: For now, Specify -static in both CXXFLAGS and LDFLAGS when building for
-#       windows targets so libtool will only build a static version of this
-#       library. There are unresolved problems when building dll's for mingw-w64
-#       and attempting to statically embed libstdc++, libpthread, etc.
-if TARGET_WINDOWS
-libgroestlcoinkernel_la_LDFLAGS += -static
-libgroestlcoinkernel_la_CXXFLAGS += -static
-endif
 
 # TODO: libgroestlcoinkernel is a work in progress consensus engine library, as more
 #       and more modules are decoupled from the consensus engine, this list will
