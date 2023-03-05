@@ -37,26 +37,26 @@ jobs:
           - name: linux-32-bit
             host: i686-pc-linux-gnu
             os: ubuntu-22.04
-            packages: g++-multilib
+            packages: ""
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: linux-64-bit
             host: x86_64-pc-linux-gnu
             os: ubuntu-22.04
-            packages: python3
+            packages: ""
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: windows-64-bit
             host: x86_64-w64-mingw32
             arch: "i386"
             os: ubuntu-22.04
-            packages: nsis g++-mingw-w64-x86-64 build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git wine-binfmt wine64 wine32
+            packages: build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis g++-mingw-w64-x86-64-posix wine-binfmt wine64 wine32
             postinstall: |
               sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
               sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
@@ -83,7 +83,7 @@ jobs:
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: linux-arm-64-bit
             host: aarch64-linux-gnu
@@ -92,7 +92,7 @@ jobs:
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: linux-power-64-bit
             host: powerpc64-linux-gnu
@@ -101,7 +101,7 @@ jobs:
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: linux-power-le-64-bit
             host: powerpc64le-linux-gnu
@@ -110,7 +110,7 @@ jobs:
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: linux-riscv-64-bit
             host: riscv64-linux-gnu
@@ -119,7 +119,7 @@ jobs:
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
           - name: linux-s390x
             host: s390x-linux-gnu
@@ -128,7 +128,7 @@ jobs:
             check-security: false
             check-symbols: false
             dep-opts: ""
-            config-opts: "--enable-glibc-back-compat LDFLAGS=-static-libstdc++"
+            config-opts: "LDFLAGS=-static-libstdc++"
             goal: install
 
     runs-on: ${{ matrix.os }}
@@ -145,7 +145,7 @@ jobs:
       - name: Install packages
         run: |
           sudo apt-get update
-          sudo apt-get install make automake cmake curl g++-multilib libtool binutils-gold bsdmainutils pkg-config python3 patch bison
+          sudo apt-get install make automake cmake curl g++-multilib libtool binutils bsdmainutils pkg-config python3 patch bison
           sudo apt-get install ${{ matrix.packages }}
 
       - name: Post install
