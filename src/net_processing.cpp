@@ -2439,8 +2439,6 @@ arith_uint256 PeerManagerImpl::GetAntiDoSWorkThreshold()
 void PeerManagerImpl::HandleFewUnconnectingHeaders(CNode& pfrom, Peer& peer,
         const std::vector<CBlockHeader>& headers)
 {
-    const CNetMsgMaker msgMaker(pfrom.GetCommonVersion());
-
     LOCK(cs_main);
     CNodeState *nodestate = State(pfrom.GetId());
 
@@ -4887,7 +4885,7 @@ bool PeerManagerImpl::ProcessMessages(CNode* pfrom, std::atomic<bool>& interrupt
     // Don't bother if send buffer is too full to respond anyway
     if (pfrom->fPauseSend) return false;
 
-    auto poll_result{pfrom->PollMessage(m_connman.GetReceiveFloodSize())};
+    auto poll_result{pfrom->PollMessage()};
     if (!poll_result) {
         // No message to process
         return false;
@@ -4938,7 +4936,6 @@ void PeerManagerImpl::ConsiderEviction(CNode& pto, Peer& peer, std::chrono::seco
     AssertLockHeld(cs_main);
 
     CNodeState &state = *State(pto.GetId());
-    const CNetMsgMaker msgMaker(pto.GetCommonVersion());
 
     if (!state.m_chain_sync.m_protect && pto.IsOutboundOrBlockRelayConn() && state.fSyncStarted) {
         // This is an outbound peer subject to disconnection if they don't
