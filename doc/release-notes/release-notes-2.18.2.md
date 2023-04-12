@@ -116,7 +116,7 @@ systemd init file
 
 The systemd init file (`contrib/init/groestlcoind.service`) has been changed
 to use `/var/lib/groestlcoind` as the data directory instead of
-`~groestlcoin/.groestlcoin`. This change makes Bitcoin Core more consistent with
+`~groestlcoin/.groestlcoin`. This change makes Groestlcoin Core more consistent with
 other services, and makes the systemd init config more consistent with
 existing Upstart and OpenRC configs.
 
@@ -500,7 +500,7 @@ Wallet
   software. Instead such wallets will be completely unloaded and
   reloaded to achieve the same effect.
 
-- A sub-project of Bitcoin Core now provides Hardware Wallet Interaction
+- A sub-project of Groestlcoin Core now provides Hardware Wallet Interaction
   (HWI) scripts that allow command-line users to use several popular
   hardware key management devices with Groestlcoin Core.  See their [project
   page](https://github.com/bitcoin-core/HWI#readme) for details.
