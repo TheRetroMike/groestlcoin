@@ -750,8 +750,8 @@ case $host in
            AX_CHECK_PREPROC_FLAG([-Xclang -internal-isystem/usr/local/include], [CORE_CPPFLAGS="$CORE_CPPFLAGS -Xclang -internal-isystem/usr/local/include"], [], [$CXXFLAG_WERROR])
          fi
 
-         if test "$use_bdb" != "no" && $BREW list --versions berkeley-db@5.3 >/dev/null && test "$BDB_CFLAGS" = "" && test "$BDB_LIBS" = ""; then
-           bdb_prefix=$($BREW --prefix berkeley-db@5.3 2>/dev/null)
+         if test "$use_bdb" != "no" && $BREW list --versions berkeley-db@5 >/dev/null && test "$BDB_CFLAGS" = "" && test "$BDB_LIBS" = ""; then
+           bdb_prefix=$($BREW --prefix berkeley-db@5 2>/dev/null)
            dnl This must precede the call to BITCOIN_FIND_BDB53 below.
            BDB_CFLAGS="-I$bdb_prefix/include"
            BDB_LIBS="-L$bdb_prefix/lib -ldb_cxx-5.3"

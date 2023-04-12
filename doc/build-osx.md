@@ -80,8 +80,7 @@ install anything.
 Skip if you don't intend to use legacy wallets.
 
 ``` bash
-brew tap zeroc-ice/tap
-brew install zeroc-ice/tap/berkeley-db@5.3
+brew install berkeley-db@5
 ```
 ---
 
