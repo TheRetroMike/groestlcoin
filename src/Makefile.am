@@ -133,6 +133,7 @@ BITCOIN_CORE_H = \
   checkqueue.h \
   clientversion.h \
   coins.h \
+  common/args.h \
   common/bloom.h \
   common/init.h \
   common/run_command.h \
@@ -264,6 +265,7 @@ BITCOIN_CORE_H = \
   sphlib/sph_types.h \
   sphlib/sph_groestl.h \
   streams.h \
+  support/allocators/pool.h \
   support/allocators/secure.h \
   support/allocators/zeroafterfree.h \
   support/cleanse.h \
@@ -650,7 +652,9 @@ libgroestlcoin_common_a_SOURCES = \
   base58.cpp \
   bech32.cpp \
   coins.cpp \
+  common/args.cpp \
   common/bloom.cpp \
+  common/config.cpp \
   common/init.cpp \
   common/interfaces.cpp \
   common/run_command.cpp \
@@ -905,6 +909,8 @@ libgroestlcoinkernel_la_SOURCES = \
   chainparamsbase.cpp \
   clientversion.cpp \
   coins.cpp \
+  common/args.cpp \
+  common/config.cpp \
   compressor.cpp \
   consensus/merkle.cpp \
   consensus/tx_check.cpp \
