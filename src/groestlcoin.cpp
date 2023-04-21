@@ -14,11 +14,13 @@
 #include <chainparams.h>
 
 #include <chainparamsseeds.h>
+#include <common/args.h>
 #include <consensus/merkle.h>
 #include <deploymentinfo.h>
 #include <hash.h> // for signet block challenge hash
+#include <logging.h>
 #include <script/interpreter.h>
-#include <util/system.h>
+#include <util/string.h>
 
 #include <assert.h>
 #include <memory>
