@@ -91,7 +91,7 @@ task:
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: debian:buster
+      CI_IMAGE_NAME_TAG: ubuntu:focal
       FILE_ENV: "./ci/test/00_setup_env_native_qt5.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
