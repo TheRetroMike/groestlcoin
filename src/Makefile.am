@@ -284,6 +284,7 @@ BITCOIN_CORE_H = \
   util/bip32.h \
   util/bitdeque.h \
   util/bytevectorhash.h \
+  util/chaintype.h \
   util/check.h \
   util/epochguard.h \
   util/error.h \
@@ -712,6 +713,7 @@ libgroestlcoin_util_a_SOURCES = \
   util/asmap.cpp \
   util/bip32.cpp \
   util/bytevectorhash.cpp \
+  util/chaintype.cpp \
   util/check.cpp \
   util/error.cpp \
   util/exception.cpp \
@@ -963,6 +965,7 @@ libgroestlcoinkernel_la_SOURCES = \
   txdb.cpp \
   txmempool.cpp \
   uint256.cpp \
+  util/chaintype.cpp \
   util/check.cpp \
   util/exception.cpp \
   util/fs.cpp \
