@@ -74,26 +74,3 @@ CI_EXEC rsync --archive --stats --human-readable /ro_base/ "${BASE_ROOT_DIR}" ||
 CI_EXEC git config --global --add safe.directory \"*\"
 
 CI_EXEC mkdir -p "${BINS_SCRATCH_DIR}"
-
-if [ "$CI_OS_NAME" == "macos" ]; then
-  top -l 1 -s 0 | awk ' /PhysMem/ {print}'
-  echo "Number of CPUs: $(sysctl -n hw.logicalcpu)"
-else
-  CI_EXEC free -m -h
-  CI_EXEC echo "Number of CPUs \(nproc\):" \$\(nproc\)
-  CI_EXEC echo "$(lscpu | grep Endian)"
-fi
-CI_EXEC echo "Free disk space:"
-CI_EXEC df -h
-
-CI_EXEC mkdir -p "${BASE_SCRATCH_DIR}/sanitizer-output/"
-
-if [ "$USE_BUSY_BOX" = "true" ]; then
-  echo "Setup to use BusyBox utils"
-  # tar excluded for now because it requires passing in the exact archive type in ./depends (fixed in later BusyBox version)
-  # ar excluded for now because it does not recognize the -q option in ./depends (unknown if fixed)
-  # shellcheck disable=SC1010
-  CI_EXEC for util in \$\(busybox --list \| grep -v "^ar$" \| grep -v "^tar$" \)\; do ln -s \$\(command -v busybox\) "${BINS_SCRATCH_DIR}/\$util"\; done
-  # Print BusyBox version
-  CI_EXEC patch --help
-fi
