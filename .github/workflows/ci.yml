@@ -137,10 +137,9 @@ jobs:
       - name: Add architecture
         if: ${{ matrix.arch }}
         run: |
+          sudo eatmydata apt-get install ppa-purge
+          sudo eatmydata ppa-purge -y ppa:ubuntu-toolchain-r/test
           sudo dpkg --add-architecture "${{ matrix.arch }}"
-          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
-          sudo apt-get update -qq
-          sudo apt-get remove -qq libmono* moby* mono* nginx* php* libgdiplus libpcre2-posix3 libzip4
 
       - name: Install packages
         run: |
