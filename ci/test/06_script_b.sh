@@ -19,19 +19,6 @@ fi
 echo "Free disk space:"
 df -h
 
-if [ "$RUN_FUZZ_TESTS" = "true" ]; then
-  export DIR_FUZZ_IN=${DIR_QA_ASSETS}/fuzz_seed_corpus/
-  if [ ! -d "$DIR_FUZZ_IN" ]; then
-    git clone --depth=1 https://github.com/bitcoin-core/qa-assets "${DIR_QA_ASSETS}"
-  fi
-elif [ "$RUN_UNIT_TESTS" = "true" ] || [ "$RUN_UNIT_TESTS_SEQUENTIAL" = "true" ]; then
-  export DIR_UNIT_TEST_DATA=${DIR_QA_ASSETS}/unit_test_data/
-  if [ ! -d "$DIR_UNIT_TEST_DATA" ]; then
-    mkdir -p "$DIR_UNIT_TEST_DATA"
-    curl --location --fail https://github.com/bitcoin-core/qa-assets/raw/main/unit_test_data/script_assets_test.json -o "${DIR_UNIT_TEST_DATA}/script_assets_test.json"
-  fi
-fi
-
 mkdir -p "${BASE_SCRATCH_DIR}/sanitizer-output/"
 
 if [ "$USE_BUSY_BOX" = "true" ]; then
@@ -45,9 +32,9 @@ fi
 
 # Make sure default datadir does not exist and is never read by creating a dummy file
 if [ "$CI_OS_NAME" == "macos" ]; then
-  echo > "${HOME}/Library/Application Support/Bitcoin"
+  echo > "${HOME}/Library/Application Support/Groestlcoin"
 else
-  echo > "${HOME}/.bitcoin"
+  echo > "${HOME}/.groestlcoin"
 fi
 
 if [ -z "$NO_DEPENDS" ]; then
@@ -65,12 +52,12 @@ if [ "$DOWNLOAD_PREVIOUS_RELEASES" = "true" ]; then
   test/get_previous_releases.py -b -t "$PREVIOUS_RELEASES_DIR"
 fi
 
-BITCOIN_CONFIG_ALL="--enable-suppress-external-warnings --disable-dependency-tracking"
+GROESTLCOIN_CONFIG_ALL="--enable-suppress-external-warnings --disable-dependency-tracking"
 if [ -z "$NO_DEPENDS" ]; then
-  BITCOIN_CONFIG_ALL="${BITCOIN_CONFIG_ALL} CONFIG_SITE=$DEPENDS_DIR/$HOST/share/config.site"
+  GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} CONFIG_SITE=$DEPENDS_DIR/$HOST/share/config.site"
 fi
 if [ -z "$NO_WERROR" ]; then
-  BITCOIN_CONFIG_ALL="${BITCOIN_CONFIG_ALL} --enable-werror"
+  GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} --enable-werror"
 fi
 
 ccache --zero-stats --max-size="${CCACHE_SIZE}"
@@ -79,13 +66,13 @@ PRINT_CCACHE_STATISTICS="ccache --version | head -n 1 && ccache --show-stats"
 if [ -n "$ANDROID_TOOLS_URL" ]; then
   make distclean || true
   ./autogen.sh
-  bash -c "./configure $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG" || ( (cat config.log) && false)
+  bash -c "./configure $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
   make "${MAKEJOBS}" && cd src/qt && ANDROID_HOME=${ANDROID_HOME} ANDROID_NDK_HOME=${ANDROID_NDK_HOME} make apk
   bash -c "${PRINT_CCACHE_STATISTICS}"
   exit 0
 fi
 
-BITCOIN_CONFIG_ALL="${BITCOIN_CONFIG_ALL} --enable-external-signer --prefix=$BASE_OUTDIR"
+GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} --enable-external-signer --prefix=$BASE_OUTDIR"
 
 if [ -n "$CONFIG_SHELL" ]; then
   "$CONFIG_SHELL" -c "./autogen.sh"
@@ -96,13 +83,13 @@ fi
 mkdir -p "${BASE_BUILD_DIR}"
 cd "${BASE_BUILD_DIR}"
 
-bash -c "${BASE_ROOT_DIR}/configure --cache-file=config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG" || ( (cat config.log) && false)
+bash -c "${BASE_ROOT_DIR}/configure --cache-file=config.cache $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
 
 make distdir VERSION="$HOST"
 
-cd "${BASE_BUILD_DIR}/bitcoin-$HOST"
+cd "${BASE_BUILD_DIR}/groestlcoin-$HOST"
 
-bash -c "./configure --cache-file=../config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG" || ( (cat config.log) && false)
+bash -c "./configure --cache-file=../config.cache $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
 
 set -o errtrace
 trap 'bash -c "cat ${BASE_SCRATCH_DIR}/sanitizer-output/* 2> /dev/null"' ERR
