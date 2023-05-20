@@ -13,7 +13,7 @@ if [ "$CI_OS_NAME" == "macos" ]; then
   echo "Number of CPUs: $(sysctl -n hw.logicalcpu)"
 else
   free -m -h
-  echo "Number of CPUs \(nproc\):" \$\(nproc\)
+  echo "Number of CPUs (nproc): $(nproc)"
   lscpu | grep Endian
 fi
 echo "Free disk space:"
@@ -39,10 +39,7 @@ fi
 
 if [ -z "$NO_DEPENDS" ]; then
   if [[ $CI_IMAGE_NAME_TAG == *centos* ]]; then
-    # CentOS has problems building the depends if the config shell is not explicitly set
-    # (i.e. for libevent a Makefile with an empty SHELL variable is generated, leading to
-    #  an error as the first command is executed)
-    SHELL_OPTS="LC_ALL=en_US.UTF-8 CONFIG_SHELL=/bin/dash"
+    SHELL_OPTS="CONFIG_SHELL=/bin/dash"
   else
     SHELL_OPTS="CONFIG_SHELL="
   fi
@@ -90,9 +87,6 @@ make distdir VERSION="$HOST"
 cd "${BASE_BUILD_DIR}/groestlcoin-$HOST"
 
 bash -c "./configure --cache-file=../config.cache $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
-
-set -o errtrace
-trap 'bash -c "cat ${BASE_SCRATCH_DIR}/sanitizer-output/* 2> /dev/null"' ERR
 
 if [[ ${USE_MEMORY_SANITIZER} == "true" ]]; then
   # MemorySanitizer (MSAN) does not support tracking memory initialization done by
