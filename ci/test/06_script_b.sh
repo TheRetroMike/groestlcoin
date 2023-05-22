@@ -88,14 +88,6 @@ cd "${BASE_BUILD_DIR}/groestlcoin-$HOST"
 
 bash -c "./configure --cache-file=../config.cache $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
 
-if [[ ${USE_MEMORY_SANITIZER} == "true" ]]; then
-  # MemorySanitizer (MSAN) does not support tracking memory initialization done by
-  # using the Linux getrandom syscall. Avoid using getrandom by undefining
-  # HAVE_SYS_GETRANDOM. See https://github.com/google/sanitizers/issues/852 for
-  # details.
-  grep -v HAVE_SYS_GETRANDOM src/config/bitcoin-config.h > src/config/bitcoin-config.h.tmp && mv src/config/bitcoin-config.h.tmp src/config/bitcoin-config.h
-fi
-
 if [[ "${RUN_TIDY}" == "true" ]]; then
   MAYBE_BEAR="bear --config src/.bear-tidy-config"
   MAYBE_TOKEN="--"
@@ -119,8 +111,4 @@ if [ -n "$QEMU_USER_CMD" ]; then
   make "$MAKEJOBS" -C src/secp256k1 VERBOSE=1
   #make "$MAKEJOBS" -C src minisketch/test VERBOSE=1
   "${BASE_ROOT_DIR}/ci/test/wrap-qemu.sh"
-fi
-
-if [ "$RUN_SECURITY_TESTS" = "true" ]; then
-  make test-security-check
 fi
