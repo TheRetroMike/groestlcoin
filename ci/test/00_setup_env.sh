@@ -6,6 +6,8 @@
 
 export LC_ALL=C.UTF-8
 
+set -ex
+
 # The root dir.
 # The ci system copies this folder.
 BASE_ROOT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../../ >/dev/null 2>&1 && pwd )
@@ -34,8 +36,6 @@ export HOST=${HOST:-$("$BASE_ROOT_DIR/depends/config.guess")}
 # Whether to prefer BusyBox over GNU utilities
 export USE_BUSY_BOX=${USE_BUSY_BOX:-false}
 
-export CONTAINER_NAME=${CONTAINER_NAME:-ci_unnamed}
-export CI_IMAGE_NAME_TAG=${CI_IMAGE_NAME_TAG:-ubuntu:20.04}
 # Randomize test order.
 # See https://www.boost.org/doc/libs/1_71_0/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/random.html
 export BOOST_TEST_RANDOM=${BOOST_TEST_RANDOM:-1}
