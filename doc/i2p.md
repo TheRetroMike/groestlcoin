@@ -109,7 +109,7 @@ incoming I2P connections (`-i2pacceptincoming`):
 To see which I2P peers your node is connected to, use `groestlcoin-cli -netinfo 4`
 or the `getpeerinfo` RPC (e.g. `groestlcoin-cli getpeerinfo`).
 
-You can use the `getnodeaddresses` RPC to fetch a number of I2P peers known to your node; run `bitcoin-cli help getnodeaddresses` for details.
+You can use the `getnodeaddresses` RPC to fetch a number of I2P peers known to your node; run `groestlcoin-cli help getnodeaddresses` for details.
 
 ## Compatibility
 
