@@ -384,6 +384,7 @@ libgroestlcoin_node_a_SOURCES = \
   dbwrapper.cpp \
   deploymentstatus.cpp \
   flatfile.cpp \
+  groestlcoin.cpp \
   headerssync.cpp \
   httprpc.cpp \
   httpserver.cpp \
@@ -660,6 +661,7 @@ libgroestlcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libgroestlcoin_common_a_SOURCES = \
   base58.cpp \
   bech32.cpp \
+  chainparams.cpp \
   coins.cpp \
   common/args.cpp \
   common/bloom.cpp \

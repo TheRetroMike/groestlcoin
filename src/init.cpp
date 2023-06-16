@@ -663,20 +663,6 @@ static void StartupNotify(const ArgsManager& args)
 
 static bool AppInitServers(NodeContext& node)
 {
-    // ********************************************************* Step 1: setup
-#ifdef _MSC_VER
-#ifndef WIN32
-	signal(SIGINT, HandleSIGTERM);		//!!!P
-	signal(SIGBREAK, HandleSIGTERM);
-#else
-    SetConsoleCtrlHandler(consoleCtrlHandler, true);
-#endif
-
-    // Turn off Microsoft heap dump noise
-    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_WARN, CreateFileA("NUL", GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0));
-#endif
-
     const ArgsManager& args = *Assert(node.args);
     RPCServer::OnStarted(&OnRPCStarted);
     RPCServer::OnStopped(&OnRPCStopped);

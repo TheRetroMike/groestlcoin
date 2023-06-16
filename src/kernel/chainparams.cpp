@@ -163,19 +163,13 @@ public:
         m_is_test_chain = false;
         m_is_mockable_chain = false;
 
-        #ifdef _MSC_VER //!!!
-        checkpointData = CCheckpointData{
-          #else
-          checkpointData = (CCheckpointData) {
-            #endif
+        checkpointData = {
             {
-              {28888, uint256S("0x00000000000228ce19f55cf0c45e04c7aa5a6a873ed23902b3654c3c49884502")},
-              {58888, uint256S("0x0000000000dd85f4d5471febeb174a3f3f1598ab0af6616e9f266b56272274ef")},
-              {111111, uint256S("0x00000000013de206275ee83f93bee57622335e422acbf126a37020484c6e113c")},
-              {1000000, uint256S("0x000000000df8560f2612d5f28b52ed1cf81b0f87ac0c9c7242cbcf721ca6854a")},
-              {2000000, uint256S("0x00000000000434d5b8d1c3308df7b6e3fd773657dfb28f5dd2f70854ef94cc66")},
-              {2372000, uint256S("0x000000000000117a4710e01e4f86d883ca491b96efa0b4f2139c4d49a9437f10")},
-              {2785000, uint256S("0x00000000000013811b5078b06f3b98aaad29b94f09d047144e473de35f481474")},
+                {28888, uint256S("0x00000000000228ce19f55cf0c45e04c7aa5a6a873ed23902b3654c3c49884502")},
+                {58888, uint256S("0x0000000000dd85f4d5471febeb174a3f3f1598ab0af6616e9f266b56272274ef")},
+                {111111, uint256S("0x00000000013de206275ee83f93bee57622335e422acbf126a37020484c6e113c")},
+                {1000000, uint256S("0x000000000df8560f2612d5f28b52ed1cf81b0f87ac0c9c7242cbcf721ca6854a")},
+                {2000000, uint256S("0x00000000000434d5b8d1c3308df7b6e3fd773657dfb28f5dd2f70854ef94cc66")},
             }
         };
 
@@ -267,16 +261,9 @@ public:
         m_is_test_chain = true;
         m_is_mockable_chain = false;
 
-        #ifdef _MSC_VER
-        checkpointData = CCheckpointData{
-          #else
-          checkpointData = (CCheckpointData) {
-            #endif
+        checkpointData = {
             {
-              {0		, uint256S("0x000000ffbb50fc9898cdd36ec163e6ba23230164c0052a28876255b7dcf2cd36")},
-              { 50000 , uint256S("0x00000081951486bb535f8cffec8ac0641bd24b814f89641f6cc2cad737f18950")},
-              { 887766 , uint256S("0x000000cc069338b7cd182dbf3e98dedd80c9ce85f26b78daaec0a6c964ffa501")},
-              { 1341000 , uint256S("0x00000022fb2732f1c237f9d90e5070e57500b19e9c65f51a2fb920b6580fc219")},
+                { 50000 , uint256S("0x00000081951486bb535f8cffec8ac0641bd24b814f89641f6cc2cad737f18950")},
             }
         };
 
@@ -489,13 +476,9 @@ public:
         m_is_test_chain = true;
         m_is_mockable_chain = true;
 
-        #ifdef _MSC_VER
-        checkpointData = CCheckpointData{
-          #else
-          checkpointData = (CCheckpointData) {
-            #endif
+        checkpointData = {
             {
-              {0, uint256S("0x000000ffbb50fc9898cdd36ec163e6ba23230164c0052a28876255b7dcf2cd36")},
+                {0, uint256S("0x000000ffbb50fc9898cdd36ec163e6ba23230164c0052a28876255b7dcf2cd36")},
             }
         };
 
