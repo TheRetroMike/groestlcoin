@@ -2,27 +2,12 @@
 
 #define UCFG_DEFINE_NDEBUG 0
 
-#define PACKAGE_NAME "Groestlcoin Core"
-
-#define CLIENT_VERSION_MAJOR 25
-#define CLIENT_VERSION_MINOR 0
-#define CLIENT_VERSION_REVISION 0
-#define CLIENT_VERSION_BUILD 0
-
-#define CLIENT_VERSION_IS_RELEASE true
-
-#define COPYRIGHT_YEAR 2023
-
+//  Check if this can be removed
 #define BUILD_DESC "v25.0.0"
-
-#define COPYRIGHT_HOLDERS "The %s developers"
-#define COPYRIGHT_HOLDERS_FINAL "The Groestlcoin Core developers"
-#define COPYRIGHT_HOLDERS_SUBSTITUTION "Groestlcoin Core"
 
 #if defined(_MSC_VER) && !defined(RC_COMPILER)
 #	include <vc-inc.h>
 #endif
-
 
 #pragma warning(disable: 4018 4101 4146 4242 4244 4267 4290 4334 4717 4789 4800 4804)
 
@@ -49,13 +34,3 @@
 #define HAVE_WORKING_BOOST_SLEEP_FOR 1
 
 #define BOOST_ASIO_ERROR_CATEGORY_NOEXCEPT noexcept
-
-#define QT_STATIC
-#define MINIUPNP_STATICLIB
-
-#define ENABLE_WALLET
-#define USE_QRCODE
-#define USE_UPNP 1
-
-#define ENABLE_ZMQ 1
-#define ZMQ_STATIC

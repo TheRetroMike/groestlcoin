@@ -121,7 +121,7 @@ releases
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_groestlcoin.coverage/
 total.coverage/
 fuzz.coverage/
 coverage_percent.txt
@@ -140,7 +140,7 @@ test/.mypy_cache/
 
 /doc/doxygen/
 
-libbitcoinconsensus.pc
+libgroestlcoinconsensus.pc
 contrib/devtools/split-debug.sh
 
 # Output from running db5 installation
