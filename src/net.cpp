@@ -38,16 +38,10 @@
 #include <memory>
 #ifdef WIN32
 #include <string.h>
-#else
-#include <fcntl.h>
 #endif
 
 #if HAVE_DECL_GETIFADDRS && HAVE_DECL_FREEIFADDRS
 #include <ifaddrs.h>
-#endif
-
-#ifdef USE_POLL
-#include <poll.h>
 #endif
 
 #include <algorithm>
@@ -1853,7 +1847,7 @@ void CConnman::ThreadOpenConnections(const std::vector<std::string> connect)
 
             // Require outbound IPv4/IPv6 connections, other than feelers, to be to distinct network groups
             if (!fFeeler && outbound_ipv46_peer_netgroups.count(m_netgroupman.GetGroup(addr))) {
-                break;
+                continue;
             }
 
             // if we selected an invalid or local address, restart
@@ -2936,13 +2930,13 @@ void CaptureMessageToFile(const CAddress& addr,
     AutoFile f{fsbridge::fopen(path, "ab")};
 
     ser_writedata64(f, now.count());
-    f.write(MakeByteSpan(msg_type));
+    f << Span{msg_type};
     for (auto i = msg_type.length(); i < CMessageHeader::COMMAND_SIZE; ++i) {
         f << uint8_t{'\0'};
     }
     uint32_t size = data.size();
     ser_writedata32(f, size);
-    f.write(AsBytes(data));
+    f << data;
 }
 
 std::function<void(const CAddress& addr,
