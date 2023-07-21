@@ -965,7 +965,6 @@ libgroestlcoinkernel_la_SOURCES = \
   script/script_error.cpp \
   script/sigcache.cpp \
   script/standard.cpp \
-  shutdown.cpp \
   signet.cpp \
   sphlib/groestl.cpp \
   support/cleanse.cpp \

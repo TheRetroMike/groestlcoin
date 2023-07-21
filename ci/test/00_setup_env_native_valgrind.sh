@@ -12,4 +12,4 @@ export PACKAGES="valgrind clang llvm libclang-rt-dev python3-zmq libevent-dev li
 export NO_DEPENDS=1
 export GOAL="install"
 # Temporarily pin dwarf 4, until using Valgrind 3.20 or later
-export GROESTLCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no CC=clang CXX=clang++ CFLAGS='-gdwarf-4' CXXFLAGS='-gdwarf-4'"  # TODO enable GUI
+export GROESTLCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no CC='clang -gdwarf-4' CXX='clang++ -gdwarf-4'"  # TODO enable GUI
