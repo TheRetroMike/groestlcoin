@@ -226,6 +226,7 @@ BITCOIN_CORE_H = \
   node/miner.h \
   node/mini_miner.h \
   node/minisketchwrapper.h \
+  node/peerman_args.h \
   node/psbt.h \
   node/transaction.h \
   node/txreconciliation.h \
@@ -425,6 +426,7 @@ libgroestlcoin_node_a_SOURCES = \
   node/miner.cpp \
   node/mini_miner.cpp \
   node/minisketchwrapper.cpp \
+  node/peerman_args.cpp \
   node/psbt.cpp \
   node/transaction.cpp \
   node/txreconciliation.cpp \
@@ -903,8 +905,8 @@ if BUILD_BITCOIN_KERNEL_LIB
 lib_LTLIBRARIES += $(LIBBITCOINKERNEL)
 
 libgroestlcoinkernel_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS) $(PTHREAD_FLAGS)
-libgroestlcoinkernel_la_LIBADD = $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) $(LIBSECP256K1)
-libgroestlcoinkernel_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT)
+libgroestlcoinkernel_la_LIBADD = $(LIBBITCOIN_CRYPTO) $(LIBLEVELDB) $(LIBMEMENV) $(LIBSECP256K1)
+libgroestlcoinkernel_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
 
 # libgroestlcoinkernel requires default symbol visibility, explicitly specify that
 # here so that things still work even when user configures with
