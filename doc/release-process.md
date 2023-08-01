@@ -12,7 +12,7 @@ Release Process
 
 ### Before every major and minor release
 
-* Update [bips.md](bips.md) to account for changes since the last release (don't forget to bump the version number on the first line).
+* Update [bips.md](bips.md) to account for changes since the last release.
 * Update version in `configure.ac` (don't forget to set `CLIENT_VERSION_RC` to `0`).
 * Update manpages (see previous section)
 * Write release notes (see "Write the release notes" below).
@@ -49,7 +49,7 @@ Release Process
 
 To tag the version (or release candidate) in git, use the `make-tag.py` script from [groestlcoin-maintainer-tools](https://github.com/groestlcoin/groestlcoin-maintainer-tools). From the root of the repository run:
 
-    ../groestlcoin-maintainer-tools/make-tag.py v(new version, e.g. 23.0)
+    ../groestlcoin-maintainer-tools/make-tag.py v(new version, e.g. 25.0)
 
 This will perform a few last-minute consistency checks in the build system files, and if they pass, create a signed tag.
 
@@ -74,7 +74,7 @@ Checkout the Groestlcoin Core version you'd like to build:
 ```sh
 pushd ./groestlcoin
 SIGNER='(your builder key, ie jackielove4u, hashengineering, etc)'
-VERSION='(new version without v-prefix, e.g. 24.0)'
+VERSION='(new version without v-prefix, e.g. 25.0)'
 git fetch origin "v${VERSION}"
 git checkout "v${VERSION}"
 popd
@@ -109,9 +109,10 @@ Follow the relevant Guix README.md sections:
 pushd ./guix.sigs
 git add "${VERSION}/${SIGNER}"/noncodesigned.SHA256SUMS{,.asc}
 git commit -m "Add attestations by ${SIGNER} for ${VERSION} non-codesigned"
-git push  # Assuming you can push to the guix.sigs tree
 popd
 ```
+
+Then open a Pull Request to the [guix.sigs repository](https://github.com/Groestlcoin/guix.sigs).
 
 ## Codesigning
 
@@ -167,9 +168,10 @@ popd
 pushd ./guix.sigs
 git add "${VERSION}/${SIGNER}"/all.SHA256SUMS{,.asc}
 git commit -m "Add attestations by ${SIGNER} for ${VERSION} codesigned"
-git push  # Assuming you can push to the guix.sigs tree
 popd
 ```
+
+Then open a Pull Request to the [guix.sigs repository](https://github.com/Groestlcoin/guix.sigs).
 
 ## After 3 or more people have guix-built and their results match
 

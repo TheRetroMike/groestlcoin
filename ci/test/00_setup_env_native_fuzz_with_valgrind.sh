@@ -13,4 +13,4 @@ export NO_DEPENDS=1
 export GOAL="install"
 # Temporarily pin dwarf 4, until using Valgrind 3.20 or later
 export GROESTLCOIN_CONFIG="--enable-fuzz --with-sanitizers=fuzzer CC='clang -gdwarf-4' CXX='clang++ -gdwarf-4'"
-export CCACHE_SIZE=200M
+export CCACHE_MAXSIZE=200M

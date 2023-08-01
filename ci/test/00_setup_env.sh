@@ -44,7 +44,7 @@ export USE_BUSY_BOX=${USE_BUSY_BOX:-false}
 export BOOST_TEST_RANDOM=${BOOST_TEST_RANDOM:-1}
 # See man 7 debconf
 export DEBIAN_FRONTEND=noninteractive
-export CCACHE_SIZE=${CCACHE_SIZE:-100M}
+export CCACHE_MAXSIZE=${CCACHE_MAXSIZE:-100M}
 export CCACHE_TEMPDIR=${CCACHE_TEMPDIR:-/tmp/.ccache-temp}
 export CCACHE_COMPRESS=${CCACHE_COMPRESS:-1}
 # The cache dir.

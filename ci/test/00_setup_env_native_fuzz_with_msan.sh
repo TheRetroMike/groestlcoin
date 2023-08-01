@@ -19,4 +19,4 @@ export DEP_OPTS="NO_BDB=1 NO_QT=1 CC=clang CXX=clang++ CFLAGS='${MSAN_FLAGS}' CX
 export GOAL="install"
 export GROESTLCOIN_CONFIG="--enable-fuzz --with-sanitizers=fuzzer,memory --disable-hardening --with-asm=no CFLAGS='${MSAN_FLAGS}' CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE' CXXFLAGS='${MSAN_AND_LIBCXX_FLAGS}'"
 export USE_MEMORY_SANITIZER="true"
-export CCACHE_SIZE=250M
+export CCACHE_MAXSIZE=250M
