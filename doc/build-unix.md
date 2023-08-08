@@ -55,7 +55,8 @@ SQLite is required for the descriptor wallet:
     sudo apt install libsqlite3-dev
 
 Berkeley DB is only required for the legacy wallet. Ubuntu and Debian have their own `libdb5.3`, `libdb5.3-dev` and `libdb5.3++-dev` packages,
-these will install Berkeley DB 5.3. If you do not care about wallet compatibility, pass `--with-incompatible-bdb` to configure. Otherwise, you can build Berkeley DB [yourself](#berkeley-db).
+these will install Berkeley DB 5.3. If you do not care about wallet compatibility, pass
+ `--with-incompatible-bdb` to configure. Otherwise, you can build Berkeley DB [yourself](#berkeley-db).
 
 To build Groestlcoin Core without wallet, see [*Disable-wallet mode*](#disable-wallet-mode)
 
@@ -109,11 +110,7 @@ SQLite is required for the descriptor wallet:
 
     sudo dnf install sqlite-devel
 
-Berkeley DB is required for the legacy wallet:
-
-    sudo dnf install libdb libdb-cxx-devel
-
-Berkeley DB is only required for the legacy wallet. Newer Fedora releases have only `libdb-devel` and `libdb-cxx-devel` packages, these will install
+Berkeley DB is only required for the legacy wallet. Fedora releases have only `libdb-devel` and `libdb-cxx-devel` packages, these will install
 Berkeley DB 5.3. If you do not care about wallet compatibility, pass `--with-incompatible-bdb` to configure. Otherwise, you can build Berkeley DB [yourself](#berkeley-db).
 
 To build Groestlcoin Core without wallet, see [*Disable-wallet mode*](#disable-wallet-mode)
