@@ -117,6 +117,7 @@ endif
 .PHONY: FORCE check-symbols check-security
 # groestlcoin core #
 BITCOIN_CORE_H = \
+  addresstype.h \
   addrdb.h \
   addrman.h \
   addrman_impl.h \
@@ -124,6 +125,7 @@ BITCOIN_CORE_H = \
   banman.h \
   base58.h \
   bech32.h \
+  bip324.h \
   blockencodings.h \
   blockfilter.h \
   chain.h \
@@ -266,7 +268,7 @@ BITCOIN_CORE_H = \
   script/sigcache.h \
   script/sign.h \
   script/signingprovider.h \
-  script/standard.h \
+  script/solver.h \
   shutdown.h \
   signet.h \
   sphlib/sph_types.h \
@@ -379,6 +381,7 @@ libgroestlcoin_node_a_SOURCES = \
   addrdb.cpp \
   addrman.cpp \
   banman.cpp \
+  bip324.cpp \
   blockencodings.cpp \
   blockfilter.cpp \
   chain.cpp \
@@ -550,10 +553,10 @@ crypto_libgroestlcoin_crypto_base_la_LDFLAGS = $(AM_LDFLAGS) -static
 crypto_libgroestlcoin_crypto_base_la_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
-  crypto/chacha_poly_aead.h \
-  crypto/chacha_poly_aead.cpp \
   crypto/chacha20.h \
   crypto/chacha20.cpp \
+  crypto/chacha20poly1305.h \
+  crypto/chacha20poly1305.cpp \
   crypto/common.h \
   crypto/hkdf_sha256_32.cpp \
   crypto/hkdf_sha256_32.h \
@@ -663,6 +666,7 @@ libgroestlcoin_consensus_a_SOURCES = \
 libgroestlcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFLAGS)
 libgroestlcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libgroestlcoin_common_a_SOURCES = \
+  addresstype.cpp \
   base58.cpp \
   bech32.cpp \
   chainparams.cpp \
@@ -704,7 +708,7 @@ libgroestlcoin_common_a_SOURCES = \
   script/miniscript.cpp \
   script/sign.cpp \
   script/signingprovider.cpp \
-  script/standard.cpp \
+  script/solver.cpp \
   warnings.cpp \
   $(BITCOIN_CORE_H)
 
@@ -967,7 +971,7 @@ libgroestlcoinkernel_la_SOURCES = \
   script/script.cpp \
   script/script_error.cpp \
   script/sigcache.cpp \
-  script/standard.cpp \
+  script/solver.cpp \
   signet.cpp \
   sphlib/groestl.cpp \
   streams.cpp \
