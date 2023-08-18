@@ -84,9 +84,6 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
 task:
   name: 'ARM [no unit tests, no functional tests] [bullseye]'
   << : *GLOBAL_TASK_TEMPLATE
-  persistent_worker:
-    labels:
-      type: arm64  # Use arm64 worker to sidestep qemu and avoid a slow CI: https://github.com/bitcoin/bitcoin/pull/28087#issuecomment-1649399453
   env:
     FILE_ENV: "./ci/test/00_setup_env_arm.sh"
 
@@ -116,9 +113,6 @@ task:
   previous_releases_cache:
     folder: "releases"
   << : *GLOBAL_TASK_TEMPLATE
-  persistent_worker:
-    labels:
-      type: small
   env:
     FILE_ENV: "./ci/test/00_setup_env_native_qt5.sh"
 
@@ -152,9 +146,6 @@ task:
     # so any settings will need to be written to the settings env file:
     - sed -i "s|\${CIRRUS_CI}|true|g" ./ci/test/00_setup_env_native_asan.sh
   << : *GLOBAL_TASK_TEMPLATE
-  persistent_worker:
-    labels:
-      type: lunar  # Must use the lunar-specific worker (needed for USDT functional tests)
   env:
     FILE_ENV: "./ci/test/00_setup_env_native_asan.sh"
 
