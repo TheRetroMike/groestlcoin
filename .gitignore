@@ -79,7 +79,7 @@ src/qt/groestlcoin-qt.includes
 
 *.log
 *.trs
-*.dmg
+*.zip
 
 *.json.h
 *.raw.h
