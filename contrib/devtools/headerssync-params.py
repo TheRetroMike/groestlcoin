@@ -18,7 +18,7 @@ TIME = datetime(2026, 10, 5)
 BLOCK_INTERVAL = timedelta(seconds=60)
 
 # The number of headers corresponding to the minchainwork parameter. [headers]
-MINCHAINWORK_HEADERS = 4555555
+MINCHAINWORK_HEADERS = 4794500
 
 # Combined processing bandwidth from all attackers to one victim. [bit/s]
 # 6 Gbit/s is approximately the speed at which a single thread of a Ryzen 5950X CPU thread can hash
