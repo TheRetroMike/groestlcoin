@@ -10,10 +10,7 @@
 
 uint256 CBlockHeader::GetHash() const
 {
-	XCoin::CGroestlHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);	// GRS
-	ss << *this; // GRS
-	return ss.GetHash(); // GRS
-	// return SerializeHash(*this);
+    return (XCoin::CGroestlHashWriter{PROTOCOL_VERSION} << *this).GetHash(); // GRS
 }
 
 std::string CBlock::ToString() const
