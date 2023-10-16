@@ -110,7 +110,8 @@ class TestNode():
         if self.descriptors is None:
             self.args.append("-disablewallet")
 
-        if use_valgrind:
+        # Use valgrind, expect for previous release binaries
+        if use_valgrind and version is None:
             default_suppressions_file = Path(__file__).parents[3] / "contrib" / "valgrind.supp"
             suppressions_file = os.getenv("VALGRIND_SUPPRESSIONS_FILE",
                                           default_suppressions_file)
@@ -447,6 +448,9 @@ class TestNode():
     def assert_debug_log(self, expected_msgs, unexpected_msgs=None, timeout=2):
         if unexpected_msgs is None:
             unexpected_msgs = []
+        assert_equal(type(expected_msgs), list)
+        assert_equal(type(unexpected_msgs), list)
+
         time_end = time.time() + timeout * self.timeout_factor
         prev_size = self.debug_log_size(encoding="utf-8")  # Must use same encoding that is used to read() below
 
