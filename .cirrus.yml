@@ -93,13 +93,13 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '[TSan, depends, gui] [lunar]'
+  name: '[TSan, depends, gui] [mantic]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     cpu: 4
     memory: 16G  # The default memory is too small, so double everything
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:lunar
+      CI_IMAGE_NAME_TAG: ubuntu:mantic
       FILE_ENV: "./ci/test/00_setup_env_native_tsan.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
@@ -124,7 +124,7 @@ task:
   # Images can be found here: https://cloud.google.com/compute/docs/images/os-details
   compute_engine_instance:
     image_project: ubuntu-os-cloud
-    image: family/ubuntu-2304-amd64 # https://cirrus-ci.org/guide/custom-vms/#custom-compute-engine-vms
+    image: family/ubuntu-2310-amd64 # https://cirrus-ci.org/guide/custom-vms/#custom-compute-engine-vms
     cpu: 4
     disk: 100
     memory: 12G
