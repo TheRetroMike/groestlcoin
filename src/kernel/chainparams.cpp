@@ -368,6 +368,10 @@ public:
 
         vFixedSeeds.clear();
 
+        m_assumeutxo_data = {
+            // TODO to be specified in a future patch.
+        };
+
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
