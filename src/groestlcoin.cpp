@@ -11,6 +11,7 @@
 #include <crypto/sha256.h>
 #include <chainparams.h>
 #include <consensus/merkle.h>
+#include <climits>
 
 using namespace std;
 
