@@ -81,13 +81,13 @@ task:
     PACKAGE_MANAGER_INSTALL: "yum install -y"
 
 task:
-  name: '[previous releases, qt5 dev package and depends packages, DEBUG] [focal]'
+  name: '[previous releases, qt5 dev package and depends packages, DEBUG] [jammy]'
   previous_releases_cache:
     folder: "releases"
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:focal
+      CI_IMAGE_NAME_TAG: ubuntu:jammy
       FILE_ENV: "./ci/test/00_setup_env_native_qt5.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
@@ -135,23 +135,23 @@ task:
     MAKEJOBS: "-j4"  # Avoid excessive memory use
 
 task:
-  name: '[multiprocess, i686, DEBUG] [focal]'
+  name: '[multiprocess, i686, DEBUG] [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     cpu: 4
     memory: 16G  # The default memory is too small, so double everything
     docker_arguments:
-      CI_IMAGE_NAME_TAG: "docker.io/amd64/ubuntu:focal"
+      CI_IMAGE_NAME_TAG: "docker.io/amd64/ubuntu:jammy"
       FILE_ENV: "./ci/test/00_setup_env_i686_multiprocess.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '[no wallet, libgroestlcoinkernel] [focal]'
+  name: '[no wallet, libgroestlcoinkernel] [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:focal
+      CI_IMAGE_NAME_TAG: ubuntu:jammy
       FILE_ENV: "./ci/test/00_setup_env_native_nowallet_libgroestlcoinkernel.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
