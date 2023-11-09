@@ -50,7 +50,7 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
   << : *MAIN_TEMPLATE
 
 task:
-  name: 'ARM [no unit tests, no functional tests] [bullseye]'
+  name: 'ARM, no unit tests, no functional tests [bullseye]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
@@ -60,7 +60,7 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'Win64 [no unit tests, no gui tests, no boost::process, no functional tests] [jammy]'
+  name: 'Win64, no unit tests, no gui tests, no functional tests] [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
@@ -70,7 +70,7 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '32-bit + dash [gui] [CentOS 9]'
+  name: '32-bit CentOS, dash, gui [CentOS 9]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
@@ -81,7 +81,7 @@ task:
     PACKAGE_MANAGER_INSTALL: "yum install -y"
 
 task:
-  name: '[previous releases, qt5 dev package and depends packages, DEBUG] [jammy]'
+  name: 'previous releases, qt5 dev package and depends packages, DEBUG [jammy]'
   previous_releases_cache:
     folder: "releases"
   << : *GLOBAL_TASK_TEMPLATE
@@ -93,7 +93,7 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '[TSan, depends, gui] [mantic]'
+  name: 'TSan, depends, gui [mantic]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     cpu: 4
@@ -105,7 +105,7 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '[MSan, depends] [jammy]'
+  name: 'MSan, depends [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
@@ -135,7 +135,7 @@ task:
     MAKEJOBS: "-j4"  # Avoid excessive memory use
 
 task:
-  name: '[multiprocess, i686, DEBUG] [jammy]'
+  name: 'multiprocess, i686, DEBUG [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     cpu: 4
@@ -147,7 +147,7 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '[no wallet, libgroestlcoinkernel] [jammy]'
+  name: 'no wallet, libgroestlcoinkernel [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
@@ -157,7 +157,7 @@ task:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'macOS 11.0 [gui, no tests] [jammy]'
+  name: 'macOS-cross 11.0, gui, no tests [jammy]'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
