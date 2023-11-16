@@ -10,7 +10,7 @@
 
 uint256 CBlockHeader::GetHash() const
 {
-    return (XCoin::GroestlHashWriter{} << *this).GetHash(); // GRS
+    return (XCoin::GroestlHasher{} << *this).GetHash(); // GRS
 }
 
 std::string CBlock::ToString() const

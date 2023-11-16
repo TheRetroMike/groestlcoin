@@ -75,11 +75,9 @@ class CGroestlHashWriter
 {
 private:
 	GroestlHasher ctx;
-
 	const int nVersion;
 public:
-
-	CGroestlHashWriter(int nVersionIn) : nVersion(nVersionIn) {}
+	CGroestlHashWriter(int nVersionIn) : nVersion{nVersionIn} {}
 
 	int GetVersion() const { return nVersion; }
 
@@ -105,7 +103,6 @@ public:
 
 	template<typename T>
 	CGroestlHashWriter& operator<<(const T& obj) {
-		// Serialize to this stream
 		::Serialize(*this, obj);
 		return (*this);
 	}
