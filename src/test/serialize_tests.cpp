@@ -36,7 +36,7 @@ public:
         READWRITE(obj.boolval);
         READWRITE(obj.stringval);
         READWRITE(obj.charstrval);
-        READWRITE(obj.txval);
+        READWRITE(TX_WITH_WITNESS(obj.txval));
     }
 
     bool operator==(const CSerializeMethodsTestSingle& rhs) const
@@ -56,7 +56,7 @@ public:
 
     SERIALIZE_METHODS(CSerializeMethodsTestMany, obj)
     {
-        READWRITE(obj.intval, obj.boolval, obj.stringval, obj.charstrval, obj.txval);
+        READWRITE(obj.intval, obj.boolval, obj.stringval, obj.charstrval, TX_WITH_WITNESS(obj.txval));
     }
 };
 
@@ -85,6 +85,8 @@ BOOST_AUTO_TEST_CASE(sizes)
     BOOST_CHECK_EQUAL(GetSerializeSize(int64_t(0), 0), 8U);
     BOOST_CHECK_EQUAL(GetSerializeSize(uint64_t(0), 0), 8U);
     BOOST_CHECK_EQUAL(GetSerializeSize(bool(0), 0), 1U);
+    BOOST_CHECK_EQUAL(GetSerializeSize(std::array<uint8_t, 1>{0}, 0), 1U);
+    BOOST_CHECK_EQUAL(GetSerializeSize(std::array<uint8_t, 2>{0, 0}, 0), 2U);
 }
 
 BOOST_AUTO_TEST_CASE(varints)
@@ -179,6 +181,16 @@ BOOST_AUTO_TEST_CASE(vector_bool)
     BOOST_CHECK((HashWriter{} << vec1).GetHash() == (HashWriter{} << vec2).GetHash());
 }
 
+BOOST_AUTO_TEST_CASE(array)
+{
+    std::array<uint8_t, 32> array1{1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1};
+    DataStream ds;
+    ds << array1;
+    std::array<uint8_t, 32> array2;
+    ds >> array2;
+    BOOST_CHECK(array1 == array2);
+}
+
 BOOST_AUTO_TEST_CASE(noncanonical)
 {
     // Write some non-canonical CompactSize encodings, and
@@ -228,7 +240,7 @@ BOOST_AUTO_TEST_CASE(class_methods)
     CSerializeMethodsTestMany methodtest2(intval, boolval, stringval, charstrval, tx_ref);
     CSerializeMethodsTestSingle methodtest3;
     CSerializeMethodsTestMany methodtest4;
-    CDataStream ss(SER_DISK, PROTOCOL_VERSION);
+    DataStream ss;
     BOOST_CHECK(methodtest1 == methodtest2);
     ss << methodtest1;
     ss >> methodtest4;
@@ -238,8 +250,8 @@ BOOST_AUTO_TEST_CASE(class_methods)
     BOOST_CHECK(methodtest2 == methodtest3);
     BOOST_CHECK(methodtest3 == methodtest4);
 
-    CDataStream ss2{SER_DISK, PROTOCOL_VERSION};
-    ss2 << intval << boolval << stringval << charstrval << txval;
+    DataStream ss2;
+    ss2 << intval << boolval << stringval << charstrval << TX_WITH_WITNESS(txval);
     ss2 >> methodtest3;
     BOOST_CHECK(methodtest3 == methodtest4);
     {
