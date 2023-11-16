@@ -6,6 +6,7 @@
 #include <primitives/block.h>
 
 #include <hash.h>
+#include <groestlcoin.h> // GRS
 #include <tinyformat.h>
 
 uint256 CBlockHeader::GetHash() const
