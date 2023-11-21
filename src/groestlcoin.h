@@ -71,41 +71,42 @@ public:
 	GroestlHasher& operator=(GroestlHasher&& x);
 };
 
-class CGroestlHashWriter
+/** A writer stream (for serialization) that computes a 256-bit hash. */
+class GroestlHashWriter
 {
 private:
-	GroestlHasher ctx;
-	const int nVersion;
+    GroestlHasher ctx;
+
 public:
-	CGroestlHashWriter(int nVersionIn) : nVersion{nVersionIn} {}
-
-	int GetVersion() const { return nVersion; }
-
-	void write(Span<const std::byte> src)
-	{
-       ctx.Write(UCharCast(src.data()), src.size());
-	}
-
-	// invalidates the object
-	uint256 GetHash() {
-		uint256 result;
-		ctx.Finalize(result);
-		return result;
-	}
-
-	/**
-     * Returns the first 64 bits from the resulting hash.
-     */
-    inline uint64_t GetCheapHash() {
-        uint256 result = GetHash();
-        return ReadLE64(result.begin());
+    void write(Span<const std::byte> src)
+    {
+        ctx.Write(UCharCast(src.data()), src.size());
     }
 
-	template<typename T>
-	CGroestlHashWriter& operator<<(const T& obj) {
-		::Serialize(*this, obj);
-		return (*this);
-	}
+    /** Compute the hash of all data written to this object.
+     *
+     * Invalidates this object.
+     */
+    uint256 GetHash() {
+        uint256 result;
+	ctx.Finalize(result);
+	return result;
+    }
+
+     /**
+      * Returns the first 64 bits from the resulting hash.
+      */
+     inline uint64_t GetCheapHash() {
+         uint256 result = GetHash();
+         return ReadLE64(result.begin());
+     }
+
+     template <typename T>
+     GroestlHashWriter& operator<<(const T& obj)
+     {
+          ::Serialize(*this, obj);
+	  return *this;
+     }
 };
 
 
