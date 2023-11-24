@@ -14,4 +14,3 @@ export DEP_OPTS="DEBUG=1 MULTIPROCESS=1"
 export GOAL="install"
 export GROESTLCOIN_CONFIG="--enable-debug CC='clang -m32' CXX='clang++ -m32' \
 LDFLAGS='--rtlib=compiler-rt -lgcc_s' CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE'"
-export NO_WERROR=1  # Temporary workaround to avoid -Wdeprecated-declarations from KJ
