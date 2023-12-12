@@ -96,18 +96,8 @@ case $host in
   ;;
 esac
 
-AC_ARG_ENABLE([c++20],
-  [AS_HELP_STRING([--enable-c++20],
-  [enable compilation in c++20 mode (disabled by default)])],
-  [use_cxx20=$enableval],
-  [use_cxx20=no])
-
-dnl Require C++17 compiler (no GNU extensions)
-if test "$use_cxx20" = "no"; then
-AX_CXX_COMPILE_STDCXX([17], [noext], [mandatory])
-else
+dnl Require C++20 compiler (no GNU extensions)
 AX_CXX_COMPILE_STDCXX([20], [noext], [mandatory])
-fi
 
 dnl Unless the user specified OBJCXX, force it to be the same as CXX. This ensures
 dnl that we get the same -std flags for both.
@@ -446,8 +436,8 @@ if test "$CXXFLAGS_overridden" = "no"; then
   AX_CHECK_COMPILE_FLAG([-Wlogical-op], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Wlogical-op"], [], [$CXXFLAG_WERROR])
   AX_CHECK_COMPILE_FLAG([-Woverloaded-virtual], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Woverloaded-virtual"], [], [$CXXFLAG_WERROR])
   AX_CHECK_COMPILE_FLAG([-Wsuggest-override], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Wsuggest-override"], [], [$CXXFLAG_WERROR])
-  AX_CHECK_COMPILE_FLAG([-Wunreachable-code-loop-increment], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Wunreachable-code-loop-increment"], [], [$CXXFLAG_WERROR])
   AX_CHECK_COMPILE_FLAG([-Wimplicit-fallthrough], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Wimplicit-fallthrough"], [], [$CXXFLAG_WERROR])
+  AX_CHECK_COMPILE_FLAG([-Wunreachable-code], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Wunreachable-code"], [], [$CXXFLAG_WERROR])
 
   if test "$suppress_external_warnings" != "no" ; then
     AX_CHECK_COMPILE_FLAG([-Wdocumentation], [WARN_CXXFLAGS="$WARN_CXXFLAGS -Wdocumentation"], [], [$CXXFLAG_WERROR])

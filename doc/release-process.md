@@ -5,10 +5,10 @@ Release Process
 
 ### Before every release candidate
 
-* Update translations see [translation_process.md](https://github.com/bitcoin/bitcoin/blob/master/doc/translation_process.md#synchronising-translations).
+* Update translations see [translation_process.md](https://github.com/groestlcoin/groestlcoin/blob/master/doc/translation_process.md#synchronising-translations).
 * Update release candidate version in `configure.ac` (`CLIENT_VERSION_RC`).
 * Update manpages (after rebuilding the binaries), see [gen-manpages.py](https://github.com/groestlcoin/groestlcoin/blob/master/contrib/devtools/README.md#gen-manpagespy).
-* Update groestlcoin.conf and commit, see [gen-bitcoin-conf.sh](https://github.com/groestlcoin/groestlcoin/blob/master/contrib/devtools/README.md#gen-groestlcoin-confsh).
+* Update groestlcoin.conf and commit, see [gen-groestlcoin-conf.sh](https://github.com/groestlcoin/groestlcoin/blob/master/contrib/devtools/README.md#gen-groestlcoin-confsh).
 
 ### Before every major and minor release
 
@@ -21,14 +21,14 @@ Release Process
 
 * On both the master branch and the new release branch:
   - update `CLIENT_VERSION_MAJOR` in [`configure.ac`](../configure.ac)
-* On the new release branch in [`configure.ac`](../configure.ac)(see [this commit](https://github.com/bitcoin/bitcoin/commit/742f7dd)):
+* On the new release branch in [`configure.ac`](../configure.ac):
   - set `CLIENT_VERSION_MINOR` to `0`
   - set `CLIENT_VERSION_BUILD` to `0`
   - set `CLIENT_VERSION_IS_RELEASE` to `true`
 
 #### Before branch-off
 
-* Update hardcoded [seeds](/contrib/seeds/README.md), see [this pull request](https://github.com/bitcoin/bitcoin/pull/27488) for an example.
+* Update hardcoded [seeds](/contrib/seeds/README.md).
 * Update the following variables in [`src/kernel/chainparams.cpp`](/src/kernel/chainparams.cpp) for mainnet, testnet, and signet:
   - `m_assumed_blockchain_size` and `m_assumed_chain_state_size` with the current size plus some overhead (see
     [this](#how-to-calculate-assumed-blockchain-and-chain-state-size) for information on how to calculate them).
