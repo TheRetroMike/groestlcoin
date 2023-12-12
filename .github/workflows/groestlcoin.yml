@@ -75,7 +75,7 @@ jobs:
             dep-opts: ""
             config-opts: ""
             goal: deploy
-            sdk: 12.2-12B45b
+            sdk: 15.0-15A240d
           - name: linux-arm-32-bit
             host: arm-linux-gnueabihf
             os: ubuntu-22.04

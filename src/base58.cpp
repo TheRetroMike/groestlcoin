@@ -5,6 +5,7 @@
 #include <base58.h>
 
 #include <hash.h>
+#include <groestlcoin.h>
 #include <uint256.h>
 #include <util/strencodings.h>
 #include <util/string.h>

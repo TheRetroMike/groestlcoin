@@ -8,6 +8,7 @@
 #define BITCOIN_PUBKEY_H
 
 #include <hash.h>
+#include <groestlcoin.h>
 #include <serialize.h>
 #include <span.h>
 #include <uint256.h>
