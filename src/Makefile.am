@@ -51,7 +51,7 @@ endif
 
 LIBBITCOIN_CRYPTO = $(LIBBITCOIN_CRYPTO_BASE)
 if USE_ASM
-LIBBITCOIN_CRYPTO_SSE4 = crypto/libbitcoin_crypto_sse4.la
+LIBBITCOIN_CRYPTO_SSE4 = crypto/libgroestlcoin_crypto_sse4.la
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_SSE4)
 endif
 if ENABLE_SSE41
