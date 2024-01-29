@@ -12,5 +12,5 @@ export PACKAGES="clang llvm libclang-rt-dev libevent-dev libboost-dev libsqlite3
 export NO_DEPENDS=1
 export GOAL="install"
 # Temporarily pin dwarf 4, until using Valgrind 3.20 or later
-export GROESTLCOIN_CONFIG="--enable-fuzz --with-sanitizers=fuzzer CC='clang -gdwarf-4' CXX='clang++ -gdwarf-4'"
+export GROESTLCOIN_CONFIG="--enable-fuzz --with-sanitizers=fuzzer CC=clang CXX=clang++ CFLAGS=-gdwarf-4 CXXFLAGS=-gdwarf-4"
 export CCACHE_MAXSIZE=200M
