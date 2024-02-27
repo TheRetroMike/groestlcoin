@@ -20,7 +20,7 @@ persistent_worker_template: &PERSISTENT_WORKER_TEMPLATE
 base_template: &BASE_TEMPLATE
   merge_base_script:
     # Unconditionally install git (used in fingerprint_script).
-    - bash -c "$PACKAGE_MANAGER_INSTALL git"
+    - git --version || bash -c "$PACKAGE_MANAGER_INSTALL git"
     - if [ "$CIRRUS_PR" = "" ]; then exit 0; fi
     - git fetch --depth=1 $CIRRUS_REPO_CLONE_URL "pull/${CIRRUS_PR}/merge"
     - git checkout FETCH_HEAD  # Use merged changes to detect silent merge conflicts
