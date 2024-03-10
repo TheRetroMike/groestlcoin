@@ -308,6 +308,7 @@ BASE_SCRIPTS = [
     'wallet_crosschain.py',
     'mining_basic.py',
     'feature_signet.py',
+    'p2p_mutated_blocks.py',
     'wallet_implicitsegwit.py --legacy-wallet',
     'rpc_named_arguments.py',
     'feature_startupnotify.py',
@@ -472,7 +473,7 @@ def main():
     if not enable_bitcoind:
         print("No functional tests to run.")
         print("Rerun ./configure with --with-daemon and then make")
-        sys.exit(0)
+        sys.exit(1)
 
     # Build list of tests
     test_list = []
@@ -521,7 +522,7 @@ def main():
     if not test_list:
         print("No valid test scripts specified. Check that your test is in one "
               "of the test lists in test_runner.py, or run test_runner.py with no arguments to run all tests")
-        sys.exit(0)
+        sys.exit(1)
 
     if args.help:
         # Print help for test_runner.py, then print help of the first script (with args removed) and exit.
