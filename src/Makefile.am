@@ -39,9 +39,6 @@ LIBSECP256K1=secp256k1/libsecp256k1.la
 if ENABLE_ZMQ
 LIBBITCOIN_ZMQ=libgroestlcoin_zmq.a
 endif
-if BUILD_BITCOIN_LIBS
-LIBBITCOINCONSENSUS=libgroestlcoinconsensus.la
-endif
 if BUILD_BITCOIN_KERNEL_LIB
 LIBBITCOINKERNEL=libgroestlcoinkernel.la
 endif
@@ -653,7 +650,6 @@ libgroestlcoin_consensus_a_SOURCES = \
   primitives/transaction.h \
   pubkey.cpp \
   pubkey.h \
-  script/groestlcoinconsensus.cpp \
   script/interpreter.cpp \
   script/interpreter.h \
   script/script.cpp \
@@ -1017,21 +1013,6 @@ libgroestlcoinkernel_la_SOURCES = \
 # More details: https://www.gnu.org/software/automake/manual/html_node/Built-Sources-Example.html
 libgroestlcoinkernel_la-clientversion.l$(OBJEXT): obj/build.h
 endif # BUILD_BITCOIN_KERNEL_LIB
-#
-
-# groestlcoinconsensus library #
-if BUILD_BITCOIN_LIBS
-lib_LTLIBRARIES += $(LIBBITCOINCONSENSUS)
-
-include_HEADERS = script/groestlcoinconsensus.h
-libgroestlcoinconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libgroestlcoin_crypto_base_la_SOURCES) $(libgroestlcoin_consensus_a_SOURCES)
-
-libgroestlcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libgroestlcoinconsensus_la_LIBADD = $(LIBSECP256K1)
-libgroestlcoinconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL -DDISABLE_OPTIMIZED_SHA256
-libgroestlcoinconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-
-endif
 #
 
 CTAES_DIST =  crypto/ctaes/bench.c

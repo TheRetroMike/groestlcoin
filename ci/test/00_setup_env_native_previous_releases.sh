@@ -13,5 +13,5 @@ export PACKAGES="gcc-11 g++-11 python3-zmq"
 export DEP_OPTS="NO_UPNP=1 NO_NATPMP=1 DEBUG=1 CC=gcc-11 CXX=g++-11"
 export GOAL="install"
 export DOWNLOAD_PREVIOUS_RELEASES="true"
-export GROESTLCOIN_CONFIG="--enable-zmq --with-libs=no --with-gui=qt5 --enable-reduce-exports --enable-debug \
+export GROESTLCOIN_CONFIG="--enable-zmq --with-gui=qt5 --enable-reduce-exports --enable-debug \
 CFLAGS=\"-g0 -O2 -funsigned-char\" CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE' CXXFLAGS=\"-g0 -O2 -funsigned-char\""

@@ -141,7 +141,6 @@ test/lint/test_runner/target/
 
 /doc/doxygen/
 
-libgroestlcoinconsensus.pc
 contrib/devtools/split-debug.sh
 
 # Output from running db5 installation
@@ -150,7 +149,6 @@ db5/
 # clang-check
 *.plist
 
-osx_volname
 dist/
 
 /guix-build-*

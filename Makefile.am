@@ -14,11 +14,6 @@ endif
 .PHONY: deploy FORCE
 .INTERMEDIATE: $(COVERAGE_INFO)
 
-if BUILD_BITCOIN_LIBS
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libgroestlcoinconsensus.pc
-endif
-
 GROESTLCOIND_BIN=$(top_builddir)/src/$(BITCOIN_DAEMON_NAME)$(EXEEXT)
 GROESTLCOIN_QT_BIN=$(top_builddir)/src/qt/$(BITCOIN_GUI_NAME)$(EXEEXT)
 GROESTLCOIN_TEST_BIN=$(top_builddir)/src/test/$(BITCOIN_TEST_NAME)$(EXEEXT)
@@ -116,9 +111,6 @@ $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings:
 OSX_APP_BUILT=$(OSX_APP)/Contents/PkgInfo $(OSX_APP)/Contents/Resources/empty.lproj \
   $(OSX_APP)/Contents/Resources/groestlcoin.icns $(OSX_APP)/Contents/Info.plist \
   $(OSX_APP)/Contents/MacOS/Groestlcoin-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
-
-osx_volname:
-	echo $(OSX_VOLNAME) >$@
 
 if BUILD_DARWIN
 $(OSX_ZIP): $(OSX_APP_BUILT) $(OSX_PACKAGING)
@@ -337,7 +329,7 @@ clean-docs:
 clean-local: clean-docs
 	rm -rf coverage_percent.txt test_groestlcoin.coverage/ total.coverage/ fuzz.coverage/ test/tmp/ cache/ $(OSX_APP)
 	rm -rf test/functional/__pycache__ test/functional/test_framework/__pycache__ test/cache share/rpcauth/__pycache__
-	rm -rf osx_volname dist/ test/lint/test_runner/target/ test/lint/__pycache__
+	rm -rf dist/ test/lint/test_runner/target/ test/lint/__pycache__
 
 test-security-check:
 if TARGET_DARWIN
