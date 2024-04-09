@@ -17,6 +17,6 @@ export PACKAGES="ninja-build"
 # BDB generates false-positives and will be removed in future
 export DEP_OPTS="DEBUG=1 NO_BDB=1 NO_QT=1 CC=clang CXX=clang++ CFLAGS='${MSAN_FLAGS}' CXXFLAGS='${MSAN_AND_LIBCXX_FLAGS}'"
 export GOAL="install"
-export GROESTLCOIN_CONFIG="--with-sanitizers=memory --disable-hardening --with-asm=no CFLAGS='${MSAN_FLAGS}' CXXFLAGS='${MSAN_AND_LIBCXX_FLAGS}'"
+export GROESTLCOIN_CONFIG="--with-sanitizers=memory --disable-hardening"
 export USE_MEMORY_SANITIZER="true"
 export CCACHE_MAXSIZE=250M
