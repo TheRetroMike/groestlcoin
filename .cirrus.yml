@@ -50,27 +50,27 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
   << : *MAIN_TEMPLATE
 
 task:
-  name: 'ARM, no unit tests, no functional tests [bullseye]'
+  name: 'ARM, no unit tests, no functional tests'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: debian:bullseye
+      CI_IMAGE_NAME_TAG: "docker.io/arm64v8/debian:bookworm"
       FILE_ENV: "./ci/test/00_setup_env_arm.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'Win64, no unit tests, no gui tests, no functional tests] [jammy]'
+  name: 'Win64, no unit tests, no gui tests, no functional tests'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:jammy
+      CI_IMAGE_NAME_TAG: "docker.io/amd64/debian:bookworm"
       FILE_ENV: "./ci/test/00_setup_env_win64.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: '32-bit CentOS, dash, gui [CentOS 9]'
+  name: '32-bit CentOS, dash, gui'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
@@ -81,35 +81,35 @@ task:
     PACKAGE_MANAGER_INSTALL: "yum install -y"
 
 task:
-  name: 'previous releases, depends DEBUG [jammy]'
+  name: 'previous releases, depends DEBUG'
   previous_releases_cache:
     folder: "releases"
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:jammy
+      CI_IMAGE_NAME_TAG: "docker.io/ubuntu:22.04"
       FILE_ENV: "./ci/test/00_setup_env_native_previous_releases.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'TSan, depends, gui [mantic]'
+  name: 'TSan, depends, gui'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     cpu: 4
     memory: 16G  # The default memory is too small, so double everything
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:mantic
+      CI_IMAGE_NAME_TAG: "docker.io/ubuntu:24.04"
       FILE_ENV: "./ci/test/00_setup_env_native_tsan.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'MSan, depends [jammy]'
+  name: 'MSan, depends'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:jammy
+      CI_IMAGE_NAME_TAG: "docker.io/ubuntu:24.04"
       FILE_ENV: "./ci/test/00_setup_env_native_msan.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
@@ -135,43 +135,43 @@ task:
     MAKEJOBS: "-j4"  # Avoid excessive memory use
 
 task:
-  name: 'multiprocess, i686, DEBUG [jammy]'
+  name: 'multiprocess, i686, DEBUG'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     cpu: 4
     memory: 16G  # The default memory is too small, so double everything
     docker_arguments:
-      CI_IMAGE_NAME_TAG: "docker.io/amd64/ubuntu:jammy"
+      CI_IMAGE_NAME_TAG: "docker.io/amd64/ubuntu:24.04"
       FILE_ENV: "./ci/test/00_setup_env_i686_multiprocess.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'no wallet, libgroestlcoinkernel [jammy]'
+  name: 'no wallet, libgroestlcoinkernel'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:jammy
+      CI_IMAGE_NAME_TAG: "docker.io/ubuntu:22.04"
       FILE_ENV: "./ci/test/00_setup_env_native_nowallet_libgroestlcoinkernel.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'macOS-cross, gui, no tests [jammy]'
+  name: 'macOS-cross, gui, no tests'
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:jammy
+      CI_IMAGE_NAME_TAG: "docker.io/ubuntu:22.04"
       FILE_ENV: "./ci/test/00_setup_env_mac_cross.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV
 
 task:
-  name: 'ARM64 Android APK [jammy]'
+  name: 'ARM64 Android APK'
   << : *CONTAINER_DEPENDS_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: ubuntu:jammy
+      CI_IMAGE_NAME_TAG: "docker.io/amd64/ubuntu:22.04"
       FILE_ENV: "./ci/test/00_setup_env_android.sh"
   android_sdk_cache:
     folder: "depends/SDKs/android"
