@@ -5,17 +5,17 @@ Release Process
 
 ### Before every release candidate
 
-* Update translations see [translation_process.md](https://github.com/groestlcoin/groestlcoin/blob/master/doc/translation_process.md#synchronising-translations).
 * Update release candidate version in `configure.ac` (`CLIENT_VERSION_RC`).
 * Update manpages (after rebuilding the binaries), see [gen-manpages.py](https://github.com/groestlcoin/groestlcoin/blob/master/contrib/devtools/README.md#gen-manpagespy).
-* Update groestlcoin.conf and commit, see [gen-groestlcoin-conf.sh](https://github.com/groestlcoin/groestlcoin/blob/master/contrib/devtools/README.md#gen-groestlcoin-confsh).
+* Update groestlcoin.conf and commit changes if they exist, see [gen-groestlcoin-conf.sh](https://github.com/groestlcoin/groestlcoin/blob/master/contrib/devtools/README.md#gen-groestlcoin-confsh).
 
 ### Before every major and minor release
 
 * Update [bips.md](bips.md) to account for changes since the last release.
 * Update version in `configure.ac` (don't forget to set `CLIENT_VERSION_RC` to `0`).
 * Update manpages (see previous section)
-* Write release notes (see "Write the release notes" below).
+* Write release notes (see "Write the release notes" below) in doc/release-notes.md. If necessary,
+  archive the previous release notes as doc/release-notes/release-notes-${VERSION}.md.
 
 ### Before every major release
 
@@ -28,6 +28,7 @@ Release Process
 
 #### Before branch-off
 
+* Update translations see [translation_process.md](https://github.com/groestlcoin/groestlcoin/blob/master/doc/translation_process.md#synchronising-translations).
 * Update hardcoded [seeds](/contrib/seeds/README.md).
 * Update the following variables in [`src/kernel/chainparams.cpp`](/src/kernel/chainparams.cpp) for mainnet, testnet, and signet:
   - `m_assumed_blockchain_size` and `m_assumed_chain_state_size` with the current size plus some overhead (see
@@ -129,12 +130,16 @@ Then open a Pull Request to the [guix.sigs repository](https://github.com/Groest
 
 ### macOS codesigner only: Create detached macOS signatures (assuming [signapple](https://github.com/achow101/signapple/) is installed and up to date with master branch)
 
+In the `guix-build-${VERSION}/output/x86_64-apple-darwin` and `guix-build-${VERSION}/output/arm64-apple-darwin` directories:
+
     tar xf groestlcoin-osx-unsigned.tar.gz
     ./detached-sig-create.sh /path/to/codesign.p12
     Enter the keychain password and authorize the signature
     signature-osx.tar.gz will be created
 
 ### Windows codesigner only: Create detached Windows signatures
+
+In the `guix-build-${VERSION}/output/x86_64-w64-mingw32` directory:
 
     tar xf groestlcoin-win-unsigned.tar.gz
     ./detached-sig-create.sh -key /path/to/codesign.key
@@ -143,18 +148,22 @@ Then open a Pull Request to the [guix.sigs repository](https://github.com/Groest
 
 ### Windows and macOS codesigners only: test code signatures
 It is advised to test that the code signature attaches properly prior to tagging by performing the `guix-codesign` step.
-However if this is done, once the release has been tagged in the groestlcoin-detached-sigs repo, the `guix-codesign` step must be performed again in order for the guix attestation to be valid when compared against the attestations of non-codesigner builds.
+However if this is done, once the release has been tagged in the groestlcoin-detached-sigs repo, the `guix-codesign` step must be performed again in order for the guix attestation to be valid when compared against the attestations of non-codesigner builds. The directories created by `guix-codesign` will need to be cleared prior to running `guix-codesign` again.
 
 ### Windows and macOS codesigners only: Commit the detached codesign payloads
 
 ```sh
 pushd ./groestlcoin-detached-sigs
-# checkout the appropriate branch for this release series
-rm -rf ./*
+# checkout or create the appropriate branch for this release series
+git checkout --orphan <branch>
+# if you are the macOS codesigner
+rm -rf osx
 tar xf signature-osx.tar.gz
+# if you are the windows codesigner
+rm -rf win
 tar xf signature-win.tar.gz
 git add -A
-git commit -m "point to ${VERSION}"
+git commit -m "<version>: {osx,win} signature for {rc,final}"
 git tag -s "v${VERSION}" HEAD
 git push the current branch and new tag
 popd
@@ -184,9 +193,9 @@ popd
 
 Then open a Pull Request to the [guix.sigs repository](https://github.com/Groestlcoin/guix.sigs).
 
-## After 3 or more people have guix-built and their results match
+## After 6 or more people have guix-built and their results match
 
-Combine the `all.SHA256SUMS.asc` file from all signers into `SHA256SUMS.asc`:
+After verifying signatures, combine the `all.SHA256SUMS.asc` file from all signers into `SHA256SUMS.asc`:
 
 ```bash
 cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
@@ -194,7 +203,8 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 
 - Update groestlcoin.org version
 
-- Update other repositories and websites for new version
+- Archive the release notes for the new version to `doc/release-notes/release-notes-${VERSION}.md`
+  (branch `master` and branch of the release).
 
 - Update packaging repo
 
