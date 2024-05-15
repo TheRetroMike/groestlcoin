@@ -13,5 +13,5 @@ export PACKAGES="llvm clang g++-multilib"
 export DEP_OPTS="DEBUG=1 MULTIPROCESS=1"
 export GOAL="install"
 export GROESTLCOIN_CONFIG="--enable-debug CC='clang -m32' CXX='clang++ -m32' \
-CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE'"
+CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE' CXXFLAGS='-Wno-error=documentation'"
 export GROESTLCOIND=groestlcoin-node  # Used in functional tests

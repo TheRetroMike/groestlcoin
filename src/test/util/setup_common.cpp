@@ -2,9 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
-#endif
+#include <config/bitcoin-config.h> // IWYU pragma: keep
 
 #include <test/util/setup_common.h>
 
@@ -185,6 +183,7 @@ BasicTestingSetup::BasicTestingSetup(const ChainType chainType, const std::vecto
     AppInitParameterInteraction(*m_node.args);
     LogInstance().StartLogging();
     m_node.kernel = std::make_unique<kernel::Context>();
+    m_node.ecc_context = std::make_unique<ECC_Context>();
     SetupEnvironment();
 
     ValidationCacheSizes validation_cache_sizes{};
@@ -202,6 +201,7 @@ BasicTestingSetup::BasicTestingSetup(const ChainType chainType, const std::vecto
 
 BasicTestingSetup::~BasicTestingSetup()
 {
+    m_node.ecc_context.reset();
     m_node.kernel.reset();
     SetMockTime(0s); // Reset mocktime for following tests
     LogInstance().DisconnectTestLogger();
@@ -552,9 +552,9 @@ void TestChain100Setup::MockMempoolMinFee(const CFeeRate& target_feerate)
     assert(m_node.mempool->size() == 0);
     // The target feerate cannot be too low...
     // ...otherwise the transaction's feerate will need to be negative.
-    assert(target_feerate > m_node.mempool->m_incremental_relay_feerate);
+    assert(target_feerate > m_node.mempool->m_opts.incremental_relay_feerate);
     // ...otherwise this is not meaningful. The feerate policy uses the maximum of both feerates.
-    assert(target_feerate > m_node.mempool->m_min_relay_feerate);
+    assert(target_feerate > m_node.mempool->m_opts.min_relay_feerate);
 
     // Manually create an invalid transaction. Manually set the fee in the CTxMemPoolEntry to
     // achieve the exact target feerate.
@@ -565,7 +565,7 @@ void TestChain100Setup::MockMempoolMinFee(const CFeeRate& target_feerate)
     LockPoints lp;
     // The new mempool min feerate is equal to the removed package's feerate + incremental feerate.
     const auto tx_fee = target_feerate.GetFee(GetVirtualTransactionSize(*tx)) -
-        m_node.mempool->m_incremental_relay_feerate.GetFee(GetVirtualTransactionSize(*tx));
+        m_node.mempool->m_opts.incremental_relay_feerate.GetFee(GetVirtualTransactionSize(*tx));
     m_node.mempool->addUnchecked(CTxMemPoolEntry(tx, /*fee=*/tx_fee,
                                                  /*time=*/0, /*entry_height=*/1, /*entry_sequence=*/0,
                                                  /*spends_coinbase=*/true, /*sigops_cost=*/1, lp));

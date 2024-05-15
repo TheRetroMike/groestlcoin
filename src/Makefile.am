@@ -953,7 +953,6 @@ libgroestlcoinkernel_la_SOURCES = \
   kernel/disconnected_transactions.cpp \
   kernel/mempool_persist.cpp \
   kernel/mempool_removal_reason.cpp \
-  key.cpp \
   logging.cpp \
   node/blockstorage.cpp \
   node/chainstate.cpp \
@@ -984,7 +983,6 @@ libgroestlcoinkernel_la_SOURCES = \
   txdb.cpp \
   txmempool.cpp \
   uint256.cpp \
-  util/batchpriority.cpp \
   util/chaintype.cpp \
   util/check.cpp \
   util/feefrac.cpp \

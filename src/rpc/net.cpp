@@ -29,7 +29,6 @@
 #include <util/time.h>
 #include <util/translation.h>
 #include <validation.h>
-#include <warnings.h>
 
 #include <optional>
 
@@ -657,7 +656,14 @@ static RPCHelpMan getnetworkinfo()
                                 {RPCResult::Type::NUM, "score", "relative score"},
                             }},
                         }},
-                        {RPCResult::Type::STR, "warnings", "any network and blockchain warnings"},
+                        (IsDeprecatedRPCEnabled("warnings") ?
+                            RPCResult{RPCResult::Type::STR, "warnings", "any network and blockchain warnings (DEPRECATED)"} :
+                            RPCResult{RPCResult::Type::ARR, "warnings", "any network and blockchain warnings (run with `-deprecatedrpc=warnings` to return the latest warning as a single string)",
+                            {
+                                {RPCResult::Type::STR, "", "warning"},
+                            }
+                            }
+                        ),
                     }
                 },
                 RPCExamples{
@@ -691,8 +697,8 @@ static RPCHelpMan getnetworkinfo()
     obj.pushKV("networks",      GetNetworksInfo());
     if (node.mempool) {
         // Those fields can be deprecated, to be replaced by the getmempoolinfo fields
-        obj.pushKV("relayfee", ValueFromAmount(node.mempool->m_min_relay_feerate.GetFeePerK()));
-        obj.pushKV("incrementalfee", ValueFromAmount(node.mempool->m_incremental_relay_feerate.GetFeePerK()));
+        obj.pushKV("relayfee", ValueFromAmount(node.mempool->m_opts.min_relay_feerate.GetFeePerK()));
+        obj.pushKV("incrementalfee", ValueFromAmount(node.mempool->m_opts.incremental_relay_feerate.GetFeePerK()));
     }
     UniValue localAddresses(UniValue::VARR);
     {
@@ -707,7 +713,7 @@ static RPCHelpMan getnetworkinfo()
         }
     }
     obj.pushKV("localaddresses", localAddresses);
-    obj.pushKV("warnings",       GetWarnings(false).original);
+    obj.pushKV("warnings", GetNodeWarnings(IsDeprecatedRPCEnabled("warnings")));
     return obj;
 },
     };
