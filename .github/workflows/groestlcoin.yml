@@ -56,7 +56,7 @@ jobs:
             host: x86_64-w64-mingw32
             arch: "i386"
             os: ubuntu-24.04
-            packages: build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis g++-mingw-w64-x86-64-posix wine-binfmt wine64 wine32
+            packages: build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis g++-mingw-w64-x86-64-posix wine-binfmt binfmt-support wine64 wine32
             postinstall: |
               sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
               sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
