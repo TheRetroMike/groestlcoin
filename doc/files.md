@@ -28,7 +28,7 @@ Platform | Data directory path
 ---------|--------------------
 Linux    | `$HOME/.groestlcoin/`
 macOS    | `$HOME/Library/Application Support/Groestlcoin/`
-Windows  | `%APPDATA%\Groestlcoin\` <sup>[\[1\]](#note1)</sup>
+Windows  | `%LOCALAPPDATA%\Groestlcoin\` <sup>[\[1\]](#note1)</sup>
 
 2. A custom data directory path can be specified with the `-datadir` option.
 

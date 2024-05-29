@@ -59,7 +59,7 @@ The `includeconf=<file>` option in the `groestlcoin.conf` file can be used to in
 
 Operating System | Data Directory | Example Path
 -- | -- | --
-Windows | `%APPDATA%\Groestlcoin\` | `C:\Users\username\AppData\Roaming\Groestlcoin\groestlcoin.conf`
+Windows | `%LOCALAPPDATA%\Groestlcoin\` | `C:\Users\username\AppData\Local\Groestlcoin\groestlcoin.conf`
 Linux | `$HOME/.groestlcoin/` | `/home/username/.groestlcoin/groestlcoin.conf`
 macOS | `$HOME/Library/Application Support/Groestlcoin/` | `/Users/username/Library/Application Support/Groestlcoin/groestlcoin.conf`
 
