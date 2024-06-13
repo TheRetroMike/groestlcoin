@@ -43,8 +43,8 @@ This allows for running groestlcoind without having to do any manual configurati
 `conf`, `pid`, and `wallet` accept relative paths which are interpreted as
 relative to the data directory. `wallet` *only* supports relative paths.
 
-For an example configuration file that describes the configuration settings,
-see `share/examples/groestlcoin.conf`.
+To generate an example configuration file that describes the configuration settings,
+see [contrib/devtools/README.md](../contrib/devtools/README.md#gen-groestlcoin-confsh).
 
 Paths
 ---------------------------------

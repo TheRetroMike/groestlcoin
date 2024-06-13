@@ -16,6 +16,7 @@
 #include <node/context.h>
 #include <node/psbt.h>
 #include <node/transaction.h>
+#include <node/types.h>
 #include <policy/packages.h>
 #include <policy/policy.h>
 #include <policy/rbf.h>
@@ -785,7 +786,7 @@ static RPCHelpMan signrawtransactionwithkey()
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "TX decode failed. Make sure the tx has at least one input.");
     }
 
-    FillableSigningProvider keystore;
+    FlatSigningProvider keystore;
     const UniValue& keys = request.params[1].get_array();
     for (unsigned int idx = 0; idx < keys.size(); ++idx) {
         UniValue k = keys[idx];
@@ -793,7 +794,11 @@ static RPCHelpMan signrawtransactionwithkey()
         if (!key.IsValid()) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
         }
-        keystore.AddKey(key);
+
+        CPubKey pubkey = key.GetPubKey();
+        CKeyID key_id = pubkey.GetID();
+        keystore.pubkeys.emplace(key_id, pubkey);
+        keystore.keys.emplace(key_id, key);
     }
 
     // Fetch previous transactions (inputs):
@@ -1485,9 +1490,8 @@ static RPCHelpMan combinepsbt()
     }
 
     PartiallySignedTransaction merged_psbt;
-    const TransactionError error = CombinePSBTs(merged_psbt, psbtxs);
-    if (error != TransactionError::OK) {
-        throw JSONRPCTransactionError(error);
+    if (!CombinePSBTs(merged_psbt, psbtxs)) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "PSBTs not compatible (different transactions)");
     }
 
     DataStream ssTx{};
@@ -1744,8 +1748,8 @@ static RPCHelpMan joinpsbts()
         }
         psbtxs.push_back(psbtx);
         // Choose the highest version number
-        if (static_cast<uint32_t>(psbtx.tx->nVersion) > best_version) {
-            best_version = static_cast<uint32_t>(psbtx.tx->nVersion);
+        if (psbtx.tx->version > best_version) {
+            best_version = psbtx.tx->version;
         }
         // Choose the lowest lock time
         if (psbtx.tx->nLockTime < best_locktime) {
@@ -1756,7 +1760,7 @@ static RPCHelpMan joinpsbts()
     // Create a blank psbt where everything will be added
     PartiallySignedTransaction merged_psbt;
     merged_psbt.tx = CMutableTransaction();
-    merged_psbt.tx->nVersion = static_cast<int32_t>(best_version);
+    merged_psbt.tx->version = best_version;
     merged_psbt.tx->nLockTime = best_locktime;
 
     // Merge
@@ -1791,7 +1795,7 @@ static RPCHelpMan joinpsbts()
 
     PartiallySignedTransaction shuffled_psbt;
     shuffled_psbt.tx = CMutableTransaction();
-    shuffled_psbt.tx->nVersion = merged_psbt.tx->nVersion;
+    shuffled_psbt.tx->version = merged_psbt.tx->version;
     shuffled_psbt.tx->nLockTime = merged_psbt.tx->nLockTime;
     for (int i : input_indices) {
         shuffled_psbt.AddInput(merged_psbt.tx->vin[i], merged_psbt.inputs[i]);
