@@ -25,7 +25,7 @@ def main():
     v = result['verified_binaries']
     assert result['good_trusted_sigs']
     assert len(v) == 1
-    assert v['bitcoin-22.0-x86_64-linux-gnu.tar.gz'] == '59ebd25dd82a51638b7a6bb914586201e67db67b919b2a1ff08925a7936d1b16'
+    assert v['groestlcoin-22.0-x86_64-linux-gnu.tar.gz'] == 'b30c5353dd3d9cfd7e8b31f29eac125925751165f690bacff57effd76560dddd'
 
     print("- testing verification (22.0)", flush=True)
     _220 = run_verify("--json", "pub", "22.0")

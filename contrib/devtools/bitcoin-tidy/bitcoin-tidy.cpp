@@ -17,6 +17,6 @@ public:
 };
 
 static clang::tidy::ClangTidyModuleRegistry::Add<BitcoinModule>
-    X("bitcoin-module", "Adds bitcoin checks.");
+    X("bitcoin-module", "Adds groestlcoin checks.");
 
 volatile int BitcoinModuleAnchorSource = 0;
