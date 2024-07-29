@@ -8,27 +8,14 @@ to a hash that has been compiled into bitcoind.
 
 The assumeutxo value generated and used here is committed to in
 `CRegTestParams::m_assumeutxo_data` in `src/kernel/chainparams.cpp`.
-
-## Possible test improvements
-
-Interesting test cases could be loading an assumeutxo snapshot file with:
-
-- TODO: Valid snapshot file, but referencing a snapshot block that turns out to be
-      invalid, or has an invalid parent
-- TODO: Valid snapshot file and snapshot block, but the block is not on the
-      most-work chain
-
-Interesting starting states could be loading a snapshot when the current chain tip is:
-
-- TODO: An ancestor of snapshot block
-- TODO: The snapshot block
-- TODO: A descendant of the snapshot block
-- TODO: Not an ancestor or a descendant of the snapshot block and has more work
-
 """
 from shutil import rmtree
 
 from dataclasses import dataclass
+from test_framework.blocktools import (
+        create_block,
+        create_coinbase
+)
 from test_framework.messages import tx_from_hex
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import (
@@ -201,7 +188,6 @@ class AssumeutxoTest(BitcoinTestFramework):
     def test_snapshot_with_less_work(self, dump_output_path):
         self.log.info("Test bitcoind should fail when snapshot has less accumulated work than this node.")
         node = self.nodes[0]
-        assert_equal(node.getblockcount(), FINAL_HEIGHT)
         with node.assert_debug_log(expected_msgs=["[snapshot] activation failed - work does not exceed active chainstate"]):
             assert_raises_rpc_error(-32603, "Unable to load UTXO snapshot", node.loadtxoutset, dump_output_path)
 
@@ -240,6 +226,30 @@ class AssumeutxoTest(BitcoinTestFramework):
         self.connect_nodes(0, 3)
         self.sync_blocks(nodes=(n0, n3))
         self.wait_until(lambda: len(n3.getchainstates()['chainstates']) == 1)
+
+    def test_snapshot_not_on_most_work_chain(self, dump_output_path):
+        self.log.info("Test snapshot is not loaded when the node knows the headers of another chain with more work.")
+        node0 = self.nodes[0]
+        node1 = self.nodes[1]
+        # Create an alternative chain of 2 new blocks, forking off the main chain at the block before the snapshot block.
+        # This simulates a longer chain than the main chain when submitting these two block headers to node 1 because it is only aware of
+        # the main chain headers up to the snapshot height.
+        parent_block_hash = node0.getblockhash(SNAPSHOT_BASE_HEIGHT - 1)
+        block_time = node0.getblock(node0.getbestblockhash())['time'] + 1
+        fork_block1 = create_block(int(parent_block_hash, 16), create_coinbase(SNAPSHOT_BASE_HEIGHT), block_time)
+        fork_block1.solve()
+        fork_block2 = create_block(fork_block1.sha256, create_coinbase(SNAPSHOT_BASE_HEIGHT + 1), block_time + 1)
+        fork_block2.solve()
+        node1.submitheader(fork_block1.serialize().hex())
+        node1.submitheader(fork_block2.serialize().hex())
+        msg = "A forked headers-chain with more work than the chain with the snapshot base block header exists. Please proceed to sync without AssumeUtxo."
+        assert_raises_rpc_error(-32603, msg, node1.loadtxoutset, dump_output_path)
+        # Cleanup: submit two more headers of the snapshot chain to node 1, so that it is the most-work chain again and loading
+        # the snapshot in future subtests succeeds
+        main_block1 = node0.getblock(node0.getblockhash(SNAPSHOT_BASE_HEIGHT + 1), 0)
+        main_block2 = node0.getblock(node0.getblockhash(SNAPSHOT_BASE_HEIGHT + 2), 0)
+        node1.submitheader(main_block1)
+        node1.submitheader(main_block2)
 
     def run_test(self):
         """
@@ -291,6 +301,11 @@ class AssumeutxoTest(BitcoinTestFramework):
         self.log.info(f"Creating a UTXO snapshot at height {SNAPSHOT_BASE_HEIGHT}")
         dump_output = n0.dumptxoutset('utxos.dat')
 
+        self.log.info("Test loading snapshot when the node tip is on the same block as the snapshot")
+        assert_equal(n0.getblockcount(), SNAPSHOT_BASE_HEIGHT)
+        assert_equal(n0.getblockchaininfo()["blocks"], SNAPSHOT_BASE_HEIGHT)
+        self.test_snapshot_with_less_work(dump_output['path'])
+
         self.log.info("Test loading snapshot when headers are not synced")
         self.test_headers_not_synced(dump_output['path'])
 
@@ -330,8 +345,11 @@ class AssumeutxoTest(BitcoinTestFramework):
         self.test_invalid_chainstate_scenarios()
         self.test_invalid_file_path()
         self.test_snapshot_block_invalidated(dump_output['path'])
+        self.test_snapshot_not_on_most_work_chain(dump_output['path'])
 
         self.log.info(f"Loading snapshot into second node from {dump_output['path']}")
+        # This node's tip is on an ancestor block of the snapshot, which should
+        # be the normal case
         loaded = n1.loadtxoutset(dump_output['path'])
         assert_equal(loaded['coins_loaded'], SNAPSHOT_BASE_HEIGHT)
         assert_equal(loaded['base_height'], SNAPSHOT_BASE_HEIGHT)
@@ -555,4 +573,4 @@ class Block:
     chain_tx: int
 
 if __name__ == '__main__':
-    AssumeutxoTest().main()
+    AssumeutxoTest(__file__).main()

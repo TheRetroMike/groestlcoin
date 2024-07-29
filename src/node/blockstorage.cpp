@@ -588,7 +588,7 @@ const CBlockIndex* BlockManager::GetLastCheckpoint(const CCheckpointData& data)
     return nullptr;
 }
 
-bool BlockManager::IsBlockPruned(const CBlockIndex& block)
+bool BlockManager::IsBlockPruned(const CBlockIndex& block) const
 {
     AssertLockHeld(::cs_main);
     return m_have_pruned && !(block.nStatus & BLOCK_HAVE_DATA) && (block.nTx > 0);
@@ -703,15 +703,10 @@ bool BlockManager::UndoReadFromDisk(CBlockUndo& blockundo, const CBlockIndex& in
 {
     const FlatFilePos pos{WITH_LOCK(::cs_main, return index.GetUndoPos())};
 
-    if (pos.IsNull()) {
-        LogError("%s: no undo data available\n", __func__);
-        return false;
-    }
-
     // Open history file to read
     AutoFile filein{OpenUndoFile(pos, true)};
     if (filein.IsNull()) {
-        LogError("%s: OpenUndoFile failed\n", __func__);
+        LogError("%s: OpenUndoFile failed for %s\n", __func__, pos.ToString());
         return false;
     }
 
@@ -723,13 +718,13 @@ bool BlockManager::UndoReadFromDisk(CBlockUndo& blockundo, const CBlockIndex& in
         verifier >> blockundo;
         filein >> hashChecksum;
     } catch (const std::exception& e) {
-        LogError("%s: Deserialize or I/O error - %s\n", __func__, e.what());
+        LogError("%s: Deserialize or I/O error - %s at %s\n", __func__, e.what(), pos.ToString());
         return false;
     }
 
     // Verify checksum
     if (hashChecksum != verifier.GetHash()) {
-        LogError("%s: Checksum mismatch\n", __func__);
+        LogError("%s: Checksum mismatch at %s\n", __func__, pos.ToString());
         return false;
     }
 
@@ -739,7 +734,7 @@ bool BlockManager::UndoReadFromDisk(CBlockUndo& blockundo, const CBlockIndex& in
 bool BlockManager::FlushUndoFile(int block_file, bool finalize)
 {
     FlatFilePos undo_pos_old(block_file, m_blockfile_info[block_file].nUndoSize);
-    if (!UndoFileSeq().Flush(undo_pos_old, finalize)) {
+    if (!m_undo_file_seq.Flush(undo_pos_old, finalize)) {
         m_opts.notifications.flushError(_("Flushing undo file to disk failed. This is likely the result of an I/O error."));
         return false;
     }
@@ -761,7 +756,7 @@ bool BlockManager::FlushBlockFile(int blockfile_num, bool fFinalize, bool finali
     assert(static_cast<int>(m_blockfile_info.size()) > blockfile_num);
 
     FlatFilePos block_pos_old(blockfile_num, m_blockfile_info[blockfile_num].nSize);
-    if (!BlockFileSeq().Flush(block_pos_old, fFinalize)) {
+    if (!m_block_file_seq.Flush(block_pos_old, fFinalize)) {
         m_opts.notifications.flushError(_("Flushing block file to disk failed. This is likely the result of an I/O error."));
         success = false;
     }
@@ -813,38 +808,28 @@ void BlockManager::UnlinkPrunedFiles(const std::set<int>& setFilesToPrune) const
     std::error_code ec;
     for (std::set<int>::iterator it = setFilesToPrune.begin(); it != setFilesToPrune.end(); ++it) {
         FlatFilePos pos(*it, 0);
-        const bool removed_blockfile{fs::remove(BlockFileSeq().FileName(pos), ec)};
-        const bool removed_undofile{fs::remove(UndoFileSeq().FileName(pos), ec)};
+        const bool removed_blockfile{fs::remove(m_block_file_seq.FileName(pos), ec)};
+        const bool removed_undofile{fs::remove(m_undo_file_seq.FileName(pos), ec)};
         if (removed_blockfile || removed_undofile) {
             LogPrint(BCLog::BLOCKSTORAGE, "Prune: %s deleted blk/rev (%05u)\n", __func__, *it);
         }
     }
 }
 
-FlatFileSeq BlockManager::BlockFileSeq() const
-{
-    return FlatFileSeq(m_opts.blocks_dir, "blk", m_opts.fast_prune ? 0x4000 /* 16kb */ : BLOCKFILE_CHUNK_SIZE);
-}
-
-FlatFileSeq BlockManager::UndoFileSeq() const
-{
-    return FlatFileSeq(m_opts.blocks_dir, "rev", UNDOFILE_CHUNK_SIZE);
-}
-
 AutoFile BlockManager::OpenBlockFile(const FlatFilePos& pos, bool fReadOnly) const
 {
-    return AutoFile{BlockFileSeq().Open(pos, fReadOnly)};
+    return AutoFile{m_block_file_seq.Open(pos, fReadOnly)};
 }
 
 /** Open an undo file (rev?????.dat) */
 AutoFile BlockManager::OpenUndoFile(const FlatFilePos& pos, bool fReadOnly) const
 {
-    return AutoFile{UndoFileSeq().Open(pos, fReadOnly)};
+    return AutoFile{m_undo_file_seq.Open(pos, fReadOnly)};
 }
 
 fs::path BlockManager::GetBlockPosFilename(const FlatFilePos& pos) const
 {
-    return BlockFileSeq().FileName(pos);
+    return m_block_file_seq.FileName(pos);
 }
 
 FlatFilePos BlockManager::FindNextBlockPos(unsigned int nAddSize, unsigned int nHeight, uint64_t nTime)
@@ -924,7 +909,7 @@ FlatFilePos BlockManager::FindNextBlockPos(unsigned int nAddSize, unsigned int n
     m_blockfile_info[nFile].nSize += nAddSize;
 
     bool out_of_space;
-    size_t bytes_allocated = BlockFileSeq().Allocate(pos, nAddSize, out_of_space);
+    size_t bytes_allocated = m_block_file_seq.Allocate(pos, nAddSize, out_of_space);
     if (out_of_space) {
         m_opts.notifications.fatalError(_("Disk space is too low!"));
         return {};
@@ -970,7 +955,7 @@ bool BlockManager::FindUndoPos(BlockValidationState& state, int nFile, FlatFileP
     m_dirty_fileinfo.insert(nFile);
 
     bool out_of_space;
-    size_t bytes_allocated = UndoFileSeq().Allocate(pos, nAddSize, out_of_space);
+    size_t bytes_allocated = m_undo_file_seq.Allocate(pos, nAddSize, out_of_space);
     if (out_of_space) {
         return FatalError(m_opts.notifications, state, _("Disk space is too low!"));
     }
@@ -986,7 +971,7 @@ bool BlockManager::WriteBlockToDisk(const CBlock& block, FlatFilePos& pos) const
     // Open history file to append
     AutoFile fileout{OpenBlockFile(pos)};
     if (fileout.IsNull()) {
-        LogError("WriteBlockToDisk: OpenBlockFile failed\n");
+        LogError("%s: OpenBlockFile failed\n", __func__);
         return false;
     }
 
@@ -997,7 +982,7 @@ bool BlockManager::WriteBlockToDisk(const CBlock& block, FlatFilePos& pos) const
     // Write block
     long fileOutPos = ftell(fileout.Get());
     if (fileOutPos < 0) {
-        LogError("WriteBlockToDisk: ftell failed\n");
+        LogError("%s: ftell failed\n", __func__);
         return false;
     }
     pos.nPos = (unsigned int)fileOutPos;
@@ -1016,7 +1001,7 @@ bool BlockManager::WriteUndoDataForBlock(const CBlockUndo& blockundo, BlockValid
     if (block.GetUndoPos().IsNull()) {
         FlatFilePos _pos;
         if (!FindUndoPos(state, block.nFile, _pos, ::GetSerializeSize(blockundo) + 40)) {
-            LogError("ConnectBlock(): FindUndoPos failed\n");
+            LogError("%s: FindUndoPos failed\n", __func__);
             return false;
         }
         if (!UndoWriteToDisk(blockundo, _pos, block.pprev->GetBlockHash())) {
@@ -1055,7 +1040,7 @@ bool BlockManager::ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos) cons
     // Open history file to read
     AutoFile filein{OpenBlockFile(pos, true)};
     if (filein.IsNull()) {
-        LogError("ReadBlockFromDisk: OpenBlockFile failed for %s\n", pos.ToString());
+        LogError("%s: OpenBlockFile failed for %s\n", __func__, pos.ToString());
         return false;
     }
 
@@ -1069,13 +1054,13 @@ bool BlockManager::ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos) cons
 
     // Check the header
     if (!CheckProofOfWork(block.GetHash(), block.nBits, GetConsensus())) {
-        LogError("ReadBlockFromDisk: Errors in block header at %s\n", pos.ToString());
+        LogError("%s: Errors in block header at %s\n", __func__, pos.ToString());
         return false;
     }
 
     // Signet only: check block solution
     if (GetConsensus().signet_blocks && !CheckSignetBlockSolution(block, GetConsensus())) {
-        LogError("ReadBlockFromDisk: Errors in block solution at %s\n", pos.ToString());
+        LogError("%s: Errors in block solution at %s\n", __func__, pos.ToString());
         return false;
     }
 
@@ -1090,8 +1075,7 @@ bool BlockManager::ReadBlockFromDisk(CBlock& block, const CBlockIndex& index) co
         return false;
     }
     if (block.GetHash() != index.GetBlockHash()) {
-        LogError("ReadBlockFromDisk(CBlock&, CBlockIndex*): GetHash() doesn't match index for %s at %s\n",
-                     index.ToString(), block_pos.ToString());
+        LogError("%s: GetHash() doesn't match index for %s at %s\n", __func__, index.ToString(), block_pos.ToString());
         return false;
     }
     return true;
