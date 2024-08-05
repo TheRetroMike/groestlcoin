@@ -33,7 +33,6 @@
 #include <cstring>
 #include <type_traits>
 
-#include <assert.h>
 #include <memory>
 
 #include <boost/algorithm/string/classification.hpp>
