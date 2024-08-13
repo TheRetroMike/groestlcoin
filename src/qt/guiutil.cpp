@@ -115,6 +115,7 @@ static std::string DummyAddress(const CChainParams &params)
         break;
     case ChainType::SIGNET:
     case ChainType::TESTNET:
+    case ChainType::TESTNET4:
         addr = "tb1p35yvjel7srp783ztf8v6jdra7dhfzk5jaun8xz2qp6ws7z80n4tqa6qnlg";
         break;
     case ChainType::REGTEST:
@@ -404,19 +405,26 @@ bool isObscured(QWidget *w)
 
 void bringToFront(QWidget* w)
 {
-#ifdef Q_OS_MACOS
-    ForceActivation();
-#endif
-
     if (w) {
-        // activateWindow() (sometimes) helps with keyboard focus on Windows
-        if (w->isMinimized()) {
-            w->showNormal();
-        } else {
+        if (QGuiApplication::platformName() == "wayland") {
+            auto flags = w->windowFlags();
+            w->setWindowFlags(flags|Qt::WindowStaysOnTopHint);
             w->show();
+            w->setWindowFlags(flags);
+            w->show();
+        } else {
+#ifdef Q_OS_MACOS
+            ForceActivation();
+#endif
+            // activateWindow() (sometimes) helps with keyboard focus on Windows
+            if (w->isMinimized()) {
+                w->showNormal();
+            } else {
+                w->show();
+            }
+            w->activateWindow();
+            w->raise();
         }
-        w->activateWindow();
-        w->raise();
     }
 }
 
