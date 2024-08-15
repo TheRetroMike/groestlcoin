@@ -185,7 +185,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -217,17 +217,17 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
     </message>
     <message>
         <location line="+12"/>
-        <location line="+54"/>
+        <location line="+58"/>
         <source>Wallet encrypted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-147"/>
+        <location line="-152"/>
         <source>Enter the new passphrase for the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Enter the old passphrase and new passphrase for the wallet.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,23 +269,23 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
     <message>
         <location line="+6"/>
         <location line="+8"/>
-        <location line="+58"/>
+        <location line="+62"/>
         <source>Wallet encryption failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-65"/>
+        <location line="-69"/>
         <source>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+8"/>
-        <location line="+58"/>
+        <location line="+62"/>
         <source>The supplied passphrases do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-49"/>
+        <location line="-53"/>
         <location line="+3"/>
         <location line="+15"/>
         <source>Wallet unlock failed</source>
@@ -293,17 +293,17 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
     </message>
     <message>
         <location line="-17"/>
-        <location line="+34"/>
+        <location line="+38"/>
         <source>The passphrase entered for the wallet decryption was incorrect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-35"/>
         <source>The passphrase entered for the wallet decryption is incorrect. It contains a null character (ie - a zero byte). If the passphrase was set with a version of this software prior to 25.0, please try again with only the characters up to — but not including — the first null character. If this is successful, please set a new passphrase to avoid this issue in the future.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+27"/>
         <source>Wallet passphrase was successfully changed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -319,7 +319,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <location line="+33"/>
         <source>Warning: The Caps Lock key is on!</source>
         <translation type="unfinished"></translation>
@@ -429,7 +429,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+162"/>
+        <location line="+184"/>
         <source>&amp;Minimize</source>
         <translation type="unfinished"></translation>
     </message>
@@ -450,7 +450,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1199"/>
+        <location line="-1221"/>
         <source>Send coins to a Bitcoin address</source>
         <translation>Send coins to a Bitcoin address</translation>
     </message>
@@ -545,7 +545,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="+142"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
@@ -590,7 +590,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-857"/>
+        <location line="-879"/>
         <source>Request payments (generates QR codes and bitcoin: URIs)</source>
         <translation>Request payments (generates QR codes and bitcoin: URIs)</translation>
     </message>
@@ -605,12 +605,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+31"/>
         <source>&amp;Command-line options</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location line="+769"/>
+        <location line="+790"/>
         <source>Processed %n block(s) of transaction history.</source>
         <translation>
             <numerusform>Processed %n block of transaction history.</numerusform>
@@ -658,7 +658,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation>Up to date</translation>
     </message>
     <message>
-        <location line="-842"/>
+        <location line="-864"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
@@ -745,7 +745,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
         <translation>Show the %1 help message to get a list with possible Bitcoin command-line options</translation>
     </message>
@@ -760,17 +760,13 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
-        <source>default wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
+        <location line="+51"/>
+        <location line="+59"/>
         <source>No wallets available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-53"/>
         <source>Wallet Data</source>
         <extracomment>Name of the wallet data file format.</extracomment>
         <translation type="unfinished"></translation>
@@ -794,7 +790,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+90"/>
         <source>&amp;Window</source>
         <translation type="unfinished">&amp;Window</translation>
     </message>
@@ -1106,7 +1102,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+298"/>
+        <location line="+294"/>
         <source>(%1 locked)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1135,7 +1131,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</transla
 <context>
     <name>CreateWalletActivity</name>
     <message>
-        <location filename="../walletcontroller.cpp" line="+247"/>
+        <location filename="../walletcontroller.cpp" line="+248"/>
         <source>Create Wallet</source>
         <extracomment>Title of window indicating the progress of creation of a new wallet.</extracomment>
         <translation type="unfinished"></translation>
@@ -1533,7 +1529,7 @@ The migration process will create a backup of the wallet before migrating. This 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+17"/>
         <source>Migrate Wallet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1671,7 +1667,7 @@ The migration process will create a backup of the wallet before migrating. This 
 <context>
     <name>OpenWalletActivity</name>
     <message>
-        <location filename="../walletcontroller.cpp" line="-161"/>
+        <location filename="../walletcontroller.cpp" line="-155"/>
         <source>Open wallet failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1681,12 +1677,7 @@ The migration process will create a backup of the wallet before migrating. This 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>default wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+14"/>
         <source>Open Wallet</source>
         <extracomment>Title of window indicating the progress of opening of a wallet.</extracomment>
         <translation type="unfinished"></translation>
@@ -2557,12 +2548,12 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished">Amount</translation>
     </message>
     <message>
-        <location filename="../guiutil.cpp" line="+139"/>
+        <location filename="../guiutil.cpp" line="+138"/>
         <source>Enter a Bitcoin address (e.g. %1)</source>
         <translation>Enter a Bitcoin address (e.g. %1)</translation>
     </message>
     <message>
-        <location line="+288"/>
+        <location line="+295"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2749,7 +2740,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../rpcconsole.cpp" line="+1008"/>
+        <location filename="../rpcconsole.cpp" line="+1021"/>
         <source>%1 kB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2763,6 +2754,11 @@ If you are receiving this error you should request the merchant provide a BIP21 
     <message>
         <location line="+2"/>
         <source>%1 GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+180"/>
+        <source>default wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2857,11 +2853,11 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <location line="+26"/>
         <location line="+36"/>
         <location line="+23"/>
-        <location line="+36"/>
+        <location line="+71"/>
         <location line="+23"/>
         <location line="+36"/>
         <location line="+23"/>
-        <location line="+692"/>
+        <location line="+767"/>
         <location line="+26"/>
         <location line="+26"/>
         <location line="+26"/>
@@ -2894,7 +2890,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation>N/A</translation>
     </message>
     <message>
-        <location line="-1649"/>
+        <location line="-1759"/>
         <source>Client version</source>
         <translation>Client version</translation>
     </message>
@@ -2935,12 +2931,12 @@ If you are receiving this error you should request the merchant provide a BIP21 
     </message>
     <message>
         <location line="+29"/>
-        <location line="+944"/>
+        <location line="+1054"/>
         <source>Network</source>
         <translation>Network</translation>
     </message>
     <message>
-        <location line="-937"/>
+        <location line="-1047"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2950,7 +2946,17 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation>Number of connections</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+23"/>
+        <source>Local Addresses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>Network addresses that your Bitcoin node is currently using to communicate with other nodes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Block chain</source>
         <translation>Block chain</translation>
     </message>
@@ -2986,18 +2992,18 @@ If you are receiving this error you should request the merchant provide a BIP21 
     </message>
     <message>
         <location line="+80"/>
-        <location line="+760"/>
+        <location line="+835"/>
         <source>Received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-680"/>
-        <location line="+657"/>
+        <location line="-755"/>
+        <location line="+732"/>
         <source>Sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-616"/>
+        <location line="-691"/>
         <source>&amp;Peers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3007,13 +3013,23 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+76"/>
         <location filename="../rpcconsole.cpp" line="+166"/>
         <source>Select a peer to view detailed information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+52"/>
+        <source>Hide Peers Detail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Ctrl+X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+74"/>
         <source>The transport layer version: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3109,18 +3125,18 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1616"/>
-        <location line="+1103"/>
+        <location line="-1726"/>
+        <location line="+1213"/>
         <source>User Agent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1177"/>
+        <location line="-1287"/>
         <source>Node window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+253"/>
+        <location line="+288"/>
         <source>Current block height</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3140,7 +3156,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+546"/>
+        <location line="+621"/>
         <source>Permissions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3236,7 +3252,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1310"/>
+        <location line="-1385"/>
         <source>Last block time</source>
         <translation>Last block time</translation>
     </message>
@@ -3261,7 +3277,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rpcconsole.cpp" line="-204"/>
+        <location filename="../rpcconsole.cpp" line="-216"/>
         <source>In:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3311,7 +3327,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rpcconsole.cpp" line="-476"/>
+        <location filename="../rpcconsole.cpp" line="-477"/>
         <source>Inbound: initiated by peer</source>
         <extracomment>Explanatory text for an inbound peer connection.</extracomment>
         <translation type="unfinished"></translation>
@@ -3404,7 +3420,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+154"/>
         <source>&amp;Copy address</source>
         <extracomment>Context menu action to copy the address of a peer.</extracomment>
         <translation type="unfinished"></translation>
@@ -3451,12 +3467,17 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+13"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+79"/>
         <source>Executing command without any wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+325"/>
+        <location line="+326"/>
         <source>Ctrl+I</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3481,12 +3502,12 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-348"/>
+        <location line="-349"/>
         <source>Executing command using &quot;%1&quot; wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-149"/>
+        <location line="-161"/>
         <source>Welcome to the %1 RPC console.
 Use up and down arrows to navigate history, and %2 to clear screen.
 Use %3 and %4 to increase or decrease the font size.
@@ -3498,7 +3519,7 @@ For more information on using this console, type %6.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+159"/>
+        <location line="+171"/>
         <source>Executing…</source>
         <extracomment>A console message indicating an entered command is currently being executed.</extracomment>
         <translation type="unfinished"></translation>
@@ -5181,7 +5202,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
 <context>
     <name>WalletController</name>
     <message>
-        <location filename="../walletcontroller.cpp" line="-346"/>
+        <location filename="../walletcontroller.cpp" line="-347"/>
         <source>Close wallet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5340,11 +5361,6 @@ Go to File &gt; Open Wallet to load a wallet.
         <source>Can&apos;t display address</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location line="+17"/>
-        <source>default wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>WalletView</name>
@@ -5418,7 +5434,7 @@ Go to File &gt; Open Wallet to load a wallet.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+4"/>
         <source>Cannot downgrade wallet from version %i to version %i. Wallet version unchanged.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5663,17 +5679,12 @@ Go to File &gt; Open Wallet to load a wallet.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-255"/>
+        <location line="-252"/>
         <source>%s is set very high! Fees this large could be paid on a single transaction.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>A forked headers-chain with more work than the chain with the snapshot base block header exists. Please proceed to sync without AssumeUtxo.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location line="+11"/>
         <source>Cannot provide specific connections and have addrman find outgoing connections at the same time.</source>
         <translation type="unfinished"></translation>
     </message>
