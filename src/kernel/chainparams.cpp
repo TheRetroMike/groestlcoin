@@ -524,7 +524,7 @@ public:
         consensus.nPowTargetSpacing = 1;
         consensus.fPowAllowMinDifficultyBlocks = true;
         // GRS consensus.fPowNoRetargeting = true;
-        consensus.enforce_BIP94 = false;
+        consensus.enforce_BIP94 = false; // GRS
         consensus.fPowNoRetargeting = true;
         consensus.nRuleChangeActivationThreshold = 108; // 75% for testchains
         consensus.nMinerConfirmationWindow = 144; // Faster than normal for regtest (144 instead of 2016)
