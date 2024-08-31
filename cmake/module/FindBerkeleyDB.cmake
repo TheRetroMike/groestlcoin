@@ -36,7 +36,7 @@ if(CMAKE_HOST_APPLE)
     # To find such a package, the find_path() and find_library() commands
     # need additional path hints that are computed by Homebrew itself.
     execute_process(
-      COMMAND ${HOMEBREW_EXECUTABLE} --prefix berkeley-db@4
+      COMMAND ${HOMEBREW_EXECUTABLE} --prefix berkeley-db@5.3
       OUTPUT_VARIABLE _BerkeleyDB_homebrew_prefix
       ERROR_QUIET
       OUTPUT_STRIP_TRAILING_WHITESPACE

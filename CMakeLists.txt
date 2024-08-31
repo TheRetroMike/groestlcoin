@@ -22,7 +22,7 @@ endif()
 #=============================
 # Project / Package metadata
 #=============================
-set(PACKAGE_NAME "Bitcoin Core")
+set(PACKAGE_NAME "Groestlcoin Core")
 set(CLIENT_VERSION_MAJOR 28)
 set(CLIENT_VERSION_MINOR 99)
 set(CLIENT_VERSION_BUILD 0)
@@ -48,8 +48,8 @@ set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
 
 project(BitcoinCore
   VERSION ${CLIENT_VERSION_MAJOR}.${CLIENT_VERSION_MINOR}.${CLIENT_VERSION_BUILD}
-  DESCRIPTION "Bitcoin client software"
-  HOMEPAGE_URL "https://bitcoincore.org/"
+  DESCRIPTION "Groestlcoin client software"
+  HOMEPAGE_URL "https://groestlcoin.org/"
   LANGUAGES NONE
 )
 
@@ -60,7 +60,7 @@ endif()
 
 set(COPYRIGHT_HOLDERS "The %s developers")
 set(COPYRIGHT_HOLDERS_FINAL "The ${PACKAGE_NAME} developers")
-set(PACKAGE_BUGREPORT "https://github.com/bitcoin/bitcoin/issues")
+set(PACKAGE_BUGREPORT "https://github.com/groestlcoin/groestlcoin/issues")
 
 #=============================
 # Language setup
@@ -82,16 +82,16 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/module)
 #=============================
 include(CMakeDependentOption)
 # When adding a new option, end the <help_text> with a full stop for consistency.
-option(BUILD_DAEMON "Build bitcoind executable." ON)
-option(BUILD_GUI "Build bitcoin-qt executable." OFF)
-option(BUILD_CLI "Build bitcoin-cli executable." ON)
+option(BUILD_DAEMON "Build groestlcoind executable." ON)
+option(BUILD_GUI "Build groestlcoin-qt executable." OFF)
+option(BUILD_CLI "Build groestlcoin-cli executable." ON)
 
-option(BUILD_TESTS "Build test_bitcoin executable." ON)
-option(BUILD_TX "Build bitcoin-tx executable." ${BUILD_TESTS})
-option(BUILD_UTIL "Build bitcoin-util executable." ${BUILD_TESTS})
+option(BUILD_TESTS "Build test_groestlcoin executable." ON)
+option(BUILD_TX "Build groestlcoin-tx executable." ${BUILD_TESTS})
+option(BUILD_UTIL "Build groestlcoin-util executable." ${BUILD_TESTS})
 
-option(BUILD_UTIL_CHAINSTATE "Build experimental bitcoin-chainstate executable." OFF)
-option(BUILD_KERNEL_LIB "Build experimental bitcoinkernel library." ${BUILD_UTIL_CHAINSTATE})
+option(BUILD_UTIL_CHAINSTATE "Build experimental groestlcoin-chainstate executable." OFF)
+option(BUILD_KERNEL_LIB "Build experimental groestlcoinkernel library." ${BUILD_UTIL_CHAINSTATE})
 
 option(ENABLE_WALLET "Enable wallet." ON)
 option(WITH_SQLITE "Enable SQLite wallet support." ${ENABLE_WALLET})
@@ -106,13 +106,13 @@ if(WITH_SQLITE)
   set(ENABLE_WALLET ON)
 endif()
 option(WITH_BDB "Enable Berkeley DB (BDB) wallet support." OFF)
-cmake_dependent_option(WARN_INCOMPATIBLE_BDB "Warn when using a Berkeley DB (BDB) version other than 4.8." ON "WITH_BDB" OFF)
+cmake_dependent_option(WARN_INCOMPATIBLE_BDB "Warn when using a Berkeley DB (BDB) version other than 5.3." ON "WITH_BDB" OFF)
 if(WITH_BDB)
-  find_package(BerkeleyDB 4.8 MODULE REQUIRED)
+  find_package(BerkeleyDB 5.3 MODULE REQUIRED)
   set(USE_BDB ON)
   set(ENABLE_WALLET ON)
-  if(NOT BerkeleyDB_VERSION VERSION_EQUAL 4.8)
-    message(WARNING "Found Berkeley DB (BDB) other than 4.8.\n"
+  if(NOT BerkeleyDB_VERSION VERSION_EQUAL 5.3)
+    message(WARNING "Found Berkeley DB (BDB) other than 5.3.\n"
                     "BDB (legacy) wallets opened by this build will not be portable!"
     )
     if(WARN_INCOMPATIBLE_BDB)
@@ -122,7 +122,7 @@ if(WITH_BDB)
     endif()
   endif()
 endif()
-cmake_dependent_option(BUILD_WALLET_TOOL "Build bitcoin-wallet tool." ${BUILD_TESTS} "ENABLE_WALLET" OFF)
+cmake_dependent_option(BUILD_WALLET_TOOL "Build groestlcoin-wallet tool." ${BUILD_TESTS} "ENABLE_WALLET" OFF)
 
 option(ENABLE_HARDENING "Attempt to harden the resulting executables." ON)
 option(REDUCE_EXPORTS "Attempt to reduce exported symbols in the resulting executables." OFF)
@@ -172,7 +172,7 @@ endif()
 
 cmake_dependent_option(WITH_DBUS "Enable DBus support." ON "CMAKE_SYSTEM_NAME STREQUAL \"Linux\" AND BUILD_GUI" OFF)
 
-option(WITH_MULTIPROCESS "Build multiprocess bitcoin-node and bitcoin-gui executables in addition to monolithic bitcoind and bitcoin-qt executables. Requires libmultiprocess library. Experimental." OFF)
+option(WITH_MULTIPROCESS "Build multiprocess groestlcoin-node and groestlcoin-gui executables in addition to monolithic groestlcoind and groestlcoin-qt executables. Requires libmultiprocess library. Experimental." OFF)
 if(WITH_MULTIPROCESS)
   find_package(Libmultiprocess COMPONENTS Lib)
   find_package(LibmultiprocessNative COMPONENTS Bin
@@ -180,7 +180,7 @@ if(WITH_MULTIPROCESS)
   )
 endif()
 
-cmake_dependent_option(BUILD_GUI_TESTS "Build test_bitcoin-qt executable." ON "BUILD_GUI;BUILD_TESTS" OFF)
+cmake_dependent_option(BUILD_GUI_TESTS "Build test_groestlcoin-qt executable." ON "BUILD_GUI;BUILD_TESTS" OFF)
 if(BUILD_GUI)
   set(qt_components Core Gui Widgets LinguistTools)
   if(ENABLE_WALLET)
@@ -199,7 +199,7 @@ if(BUILD_GUI)
   unset(qt_components)
 endif()
 
-option(BUILD_BENCH "Build bench_bitcoin executable." OFF)
+option(BUILD_BENCH "Build bench_groestlcoin executable." OFF)
 option(BUILD_FUZZ_BINARY "Build fuzz binary." OFF)
 cmake_dependent_option(BUILD_FOR_FUZZING "Build for fuzzing. Enabling this will disable all other targets and override BUILD_FUZZ_BINARY." OFF "NOT MSVC" OFF)
 
@@ -602,21 +602,21 @@ message("\n")
 message("Configure summary")
 message("=================")
 message("Executables:")
-message("  bitcoind ............................ ${BUILD_DAEMON}")
-message("  bitcoin-node (multiprocess) ......... ${WITH_MULTIPROCESS}")
-message("  bitcoin-qt (GUI) .................... ${BUILD_GUI}")
+message("  groestlcoind ............................ ${BUILD_DAEMON}")
+message("  groestlcoin-node (multiprocess) ......... ${WITH_MULTIPROCESS}")
+message("  groestlcoin-qt (GUI) .................... ${BUILD_GUI}")
 if(BUILD_GUI AND WITH_MULTIPROCESS)
   set(bitcoin_gui_status ON)
 else()
   set(bitcoin_gui_status OFF)
 endif()
-message("  bitcoin-gui (GUI, multiprocess) ..... ${bitcoin_gui_status}")
-message("  bitcoin-cli ......................... ${BUILD_CLI}")
-message("  bitcoin-tx .......................... ${BUILD_TX}")
-message("  bitcoin-util ........................ ${BUILD_UTIL}")
-message("  bitcoin-wallet ...................... ${BUILD_WALLET_TOOL}")
-message("  bitcoin-chainstate (experimental) ... ${BUILD_UTIL_CHAINSTATE}")
-message("  libbitcoinkernel (experimental) ..... ${BUILD_KERNEL_LIB}")
+message("  groestlcoin-gui (GUI, multiprocess) ..... ${bitcoin_gui_status}")
+message("  groestlcoin-cli ......................... ${BUILD_CLI}")
+message("  groestlcoin-tx .......................... ${BUILD_TX}")
+message("  groestlcoin-util ........................ ${BUILD_UTIL}")
+message("  groestlcoin-wallet ...................... ${BUILD_WALLET_TOOL}")
+message("  groestlcoin-chainstate (experimental) ... ${BUILD_UTIL_CHAINSTATE}")
+message("  libgroestlcoinkernel (experimental) ..... ${BUILD_KERNEL_LIB}")
 message("Optional features:")
 message("  wallet support ...................... ${ENABLE_WALLET}")
 if(ENABLE_WALLET)
@@ -632,9 +632,9 @@ message("  USDT tracing ........................ ${WITH_USDT}")
 message("  QR code (GUI) ....................... ${WITH_QRENCODE}")
 message("  DBus (GUI, Linux only) .............. ${WITH_DBUS}")
 message("Tests:")
-message("  test_bitcoin ........................ ${BUILD_TESTS}")
-message("  test_bitcoin-qt ..................... ${BUILD_GUI_TESTS}")
-message("  bench_bitcoin ....................... ${BUILD_BENCH}")
+message("  test_groestlcoin ........................ ${BUILD_TESTS}")
+message("  test_groestlcoin-qt ..................... ${BUILD_GUI_TESTS}")
+message("  bench_groestlcoin ....................... ${BUILD_BENCH}")
 message("  fuzz binary ......................... ${BUILD_FUZZ_BINARY}")
 message("")
 if(CMAKE_CROSSCOMPILING)
