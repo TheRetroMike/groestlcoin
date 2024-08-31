@@ -12,6 +12,11 @@ export CI_IMAGE_NAME_TAG="docker.io/amd64/ubuntu:24.04"
 export PACKAGES="llvm clang g++-multilib"
 export DEP_OPTS="DEBUG=1 MULTIPROCESS=1"
 export GOAL="install"
-export GROESTLCOIN_CONFIG="--enable-debug CC='clang -m32' CXX='clang++ -m32' \
-CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE' CXXFLAGS='-Wno-error=documentation'"
+export GROESTLCOIN_CONFIG="\
+ -DCMAKE_BUILD_TYPE=Debug \
+ -DCMAKE_C_COMPILER='clang;-m32' \
+ -DCMAKE_CXX_COMPILER='clang++;-m32' \
+ -DCMAKE_CXX_FLAGS='-Wno-error=documentation' \
+ -DAPPEND_CPPFLAGS='-DBOOST_MULTI_INDEX_ENABLE_SAFE_MODE' \
+"
 export GROESTLCOIND=groestlcoin-node  # Used in functional tests

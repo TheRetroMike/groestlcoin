@@ -84,50 +84,87 @@ if [ "$DOWNLOAD_PREVIOUS_RELEASES" = "true" ]; then
   test/get_previous_releases.py -b -t "$PREVIOUS_RELEASES_DIR"
 fi
 
-GROESTLCOIN_CONFIG_ALL="--disable-dependency-tracking"
+GROESTLCOIN_CONFIG_ALL="-DBUILD_BENCH=ON -DBUILD_FUZZ_BINARY=ON"
 if [ -z "$NO_DEPENDS" ]; then
-  GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} CONFIG_SITE=$DEPENDS_DIR/$HOST/share/config.site"
+  GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} -DCMAKE_TOOLCHAIN_FILE=$DEPENDS_DIR/$HOST/toolchain.cmake"
 fi
 if [ -z "$NO_WERROR" ]; then
-  GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} --enable-werror"
+  GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} -DWERROR=ON"
 fi
 
 ccache --zero-stats
 PRINT_CCACHE_STATISTICS="ccache --version | head -n 1 && ccache --show-stats"
 
-GROESTLCOIN_CONFIG_ALL="${GROESTLCOIN_CONFIG_ALL} --enable-external-signer --prefix=$BASE_OUTDIR"
-
-if [ -n "$CONFIG_SHELL" ]; then
-  "$CONFIG_SHELL" -c "./autogen.sh"
-else
-  ./autogen.sh
-fi
-
+# Folder where the build is done.
+BASE_BUILD_DIR=${BASE_BUILD_DIR:-$BASE_SCRATCH_DIR/build-$HOST}
 mkdir -p "${BASE_BUILD_DIR}"
 cd "${BASE_BUILD_DIR}"
 
-bash -c "${BASE_ROOT_DIR}/configure --cache-file=config.cache $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
-
-make distdir VERSION="$HOST"
-
-cd "${BASE_BUILD_DIR}/groestlcoin-$HOST"
-
-bash -c "./configure --cache-file=../config.cache $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG" || ( (cat config.log) && false)
+GROESTLCOIN_CONFIG_ALL="$GROESTLCOIN_CONFIG_ALL -DENABLE_EXTERNAL_SIGNER=ON -DCMAKE_INSTALL_PREFIX=$BASE_OUTDIR"
 
 if [[ "${RUN_TIDY}" == "true" ]]; then
-  MAYBE_BEAR="bear --config src/.bear-tidy-config"
-  MAYBE_TOKEN="--"
+  GROESTLCOIN_CONFIG_ALL="$GROESTLCOIN_CONFIG_ALL -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 fi
 
-bash -c "${MAYBE_BEAR} ${MAYBE_TOKEN} make $MAKEJOBS $GOAL" || ( echo "Build failure. Verbose build follows." && make "$GOAL" V=1 ; false )
+bash -c "cmake -S $BASE_ROOT_DIR $GROESTLCOIN_CONFIG_ALL $GROESTLCOIN_CONFIG || ( (cat CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log) && false)"
+
+bash -c "make $MAKEJOBS all $GOAL" || ( echo "Build failure. Verbose build follows." && make all "$GOAL" V=1 ; false )
 
 bash -c "${PRINT_CCACHE_STATISTICS}"
 du -sh "${DEPENDS_DIR}"/*/
 du -sh "${PREVIOUS_RELEASES_DIR}"
 
 if [[ $HOST = *-mingw32 ]]; then
-  # Generate all binaries, so that they can be wrapped
-  make "$MAKEJOBS" -C src/secp256k1 VERBOSE=1
-  #make "$MAKEJOBS" -C src minisketch/test.exe VERBOSE=1
   "${BASE_ROOT_DIR}/ci/test/wrap-wine.sh"
+fi
+
+if [ -n "$USE_VALGRIND" ]; then
+  "${BASE_ROOT_DIR}/ci/test/wrap-valgrind.sh"
+fi
+
+if [ "$RUN_UNIT_TESTS" = "true" ]; then
+  DIR_UNIT_TEST_DATA="${DIR_UNIT_TEST_DATA}" LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" CTEST_OUTPUT_ON_FAILURE=ON ctest "${MAKEJOBS}"
+fi
+
+if [ "$RUN_UNIT_TESTS_SEQUENTIAL" = "true" ]; then
+  DIR_UNIT_TEST_DATA="${DIR_UNIT_TEST_DATA}" LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" "${BASE_OUTDIR}"/bin/test_groestlcoin --catch_system_errors=no -l test_suite
+fi
+
+if [ "$RUN_FUNCTIONAL_TESTS" = "true" ]; then
+  # shellcheck disable=SC2086
+  LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" test/functional/test_runner.py --ci "${MAKEJOBS}" --tmpdirprefix "${BASE_SCRATCH_DIR}"/test_runner/ --ansi --combinedlogslen=99999999 --timeout-factor="${TEST_RUNNER_TIMEOUT_FACTOR}" ${TEST_RUNNER_EXTRA} --quiet --failfast
+fi
+
+if [ "${RUN_TIDY}" = "true" ]; then
+  cmake -B /tidy-build -DLLVM_DIR=/usr/lib/llvm-"${TIDY_LLVM_V}"/cmake -DCMAKE_BUILD_TYPE=Release -S "${BASE_ROOT_DIR}"/contrib/devtools/groestlcoin-tidy
+  cmake --build /tidy-build "$MAKEJOBS"
+  cmake --build /tidy-build --target groestlcoin-tidy-tests "$MAKEJOBS"
+
+  set -eo pipefail
+  cd "${BASE_BUILD_DIR}/src/"
+  if ! ( run-clang-tidy-"${TIDY_LLVM_V}" -quiet -load="/tidy-build/libgroestlcoin-tidy.so" "${MAKEJOBS}" | tee tmp.tidy-out.txt ); then
+    grep -C5 "error: " tmp.tidy-out.txt
+    echo "^^^ ⚠️ Failure generated from clang-tidy"
+    false
+  fi
+  # Filter out files by regex here, because regex may not be
+  # accepted in src/.bear-tidy-config
+  # Filter out:
+  # * qt qrc and moc generated files
+  jq 'map(select(.file | test("src/qt/qrc_.*\\.cpp$|/moc_.*\\.cpp$") | not))' "${BASE_BUILD_DIR}/compile_commands.json" > tmp.json
+  mv tmp.json "${BASE_BUILD_DIR}/compile_commands.json"
+  cd "${BASE_ROOT_DIR}"
+  python3 "/include-what-you-use/iwyu_tool.py" \
+           -p "${BASE_BUILD_DIR}" "${MAKEJOBS}" \
+           -- -Xiwyu --cxx17ns -Xiwyu --mapping_file="${BASE_ROOT_DIR}/contrib/devtools/iwyu/groestlcoin.core.imp" \
+           -Xiwyu --max_line_length=160 \
+           2>&1 | tee /tmp/iwyu_ci.out
+  cd "${BASE_ROOT_DIR}/src"
+  python3 "/include-what-you-use/fix_includes.py" --nosafe_headers < /tmp/iwyu_ci.out
+  git --no-pager diff
+fi
+
+if [ "$RUN_FUZZ_TESTS" = "true" ]; then
+  # shellcheck disable=SC2086
+  LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" test/fuzz/test_runner.py ${FUZZ_TESTS_CONFIG} "${MAKEJOBS}" -l DEBUG "${DIR_FUZZ_IN}" --empty_min_time=60
 fi

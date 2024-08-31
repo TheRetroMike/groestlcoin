@@ -11,4 +11,4 @@ export PACKAGES="python3-zmq"
 export CONTAINER_NAME=ci_s390x
 export CI_IMAGE_NAME_TAG="docker.io/s390x/ubuntu:24.04"
 export GOAL="install"
-export GROESTLCOIN_CONFIG="--enable-reduce-exports"
+export GROESTLCOIN_CONFIG="-DREDUCE_EXPORTS=ON"

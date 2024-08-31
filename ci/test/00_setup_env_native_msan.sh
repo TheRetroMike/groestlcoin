@@ -18,6 +18,6 @@ export PACKAGES="ninja-build"
 export DEP_OPTS="DEBUG=1 NO_BDB=1 NO_QT=1 CC=clang CXX=clang++ CFLAGS='${MSAN_FLAGS}' CXXFLAGS='${MSAN_AND_LIBCXX_FLAGS}'"
 export GOAL="install"
 # _FORTIFY_SOURCE is not compatible with MSAN.
-export GROESTLCOIN_CONFIG="--with-sanitizers=memory CPPFLAGS='-U_FORTIFY_SOURCE'"
+export GROESTLCOIN_CONFIG="-DSANITIZERS=memory -DAPPEND_CPPFLAGS='-U_FORTIFY_SOURCE'"
 export USE_MEMORY_SANITIZER="true"
 export CCACHE_MAXSIZE=250M

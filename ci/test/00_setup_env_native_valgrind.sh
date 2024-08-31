@@ -11,4 +11,9 @@ export CONTAINER_NAME=ci_native_valgrind
 export PACKAGES="valgrind clang-16 llvm-16 libclang-rt-16-dev python3-zmq libevent-dev libboost-dev libdb5.3++-dev libminiupnpc-dev libnatpmp-dev libzmq3-dev libsqlite3-dev"
 export NO_DEPENDS=1
 export GOAL="install"
-export GROESTLCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no CC=clang-16 CXX=clang++-16" # TODO enable GUI
+# TODO enable GUI
+export GROESTLCOIN_CONFIG="\
+ -DWITH_ZMQ=ON -DWARN_INCOMPATIBLE_BDB=OFF -DBUILD_GUI=OFF \
+ -DCMAKE_C_COMPILER=clang-16 \
+ -DCMAKE_CXX_COMPILER=clang++-16 \
+"
