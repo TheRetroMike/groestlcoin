@@ -34,7 +34,7 @@ For the default build type `RelWithDebInfo`, the default compile flags are
 
 Finally, clang (often less resource hungry) can be used instead of gcc, which is used by default:
 
-    cmake -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CC_COMPILER=clang
+    cmake -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
 
 ## Linux Distribution Specific Instructions
 
@@ -44,7 +44,7 @@ Finally, clang (often less resource hungry) can be used instead of gcc, which is
 
 Build requirements:
 
-    sudo apt-get install build-essential cmake pkg-config bsdmainutils python3
+    sudo apt-get install build-essential cmake pkg-config python3
 
 Now, you can either build from self-compiled [depends](#dependencies) or install the required dependencies:
 

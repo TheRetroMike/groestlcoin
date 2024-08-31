@@ -23,12 +23,13 @@ export PACKAGES="systemtap-sdt-dev clang-18 llvm-18 libclang-rt-18-dev python3-z
 export NO_DEPENDS=1
 export GOAL="install"
 export GROESTLCOIN_CONFIG="\
- -DWITH_USDT=ON -DWITH_ZMQ=ON -DWARN_INCOMPATIBLE_BDB=OFF -DBUILD_GUI=ON \
+ -DWITH_USDT=ON -DWITH_ZMQ=ON -DWITH_BDB=ON -DWARN_INCOMPATIBLE_BDB=OFF -DBUILD_GUI=ON \
  -DSANITIZERS=address,float-divide-by-zero,integer,undefined \
  -DCMAKE_C_COMPILER=clang-18 \
  -DCMAKE_CXX_COMPILER=clang++-18 \
  -DCMAKE_C_FLAGS='-ftrivial-auto-var-init=pattern' \
- -DCMAKE_CXX_FLAGS='-ftrivial-auto-var-init=pattern' \
+ -DCMAKE_CXX_FLAGS='-ftrivial-auto-var-init=pattern -Wno-error=deprecated-declarations' \
+ -DAPPEND_CXXFLAGS='-std=c++23' \
  -DAPPEND_CPPFLAGS='-DARENA_DEBUG -DDEBUG_LOCKORDER' \
 "
 export CCACHE_MAXSIZE=300M
