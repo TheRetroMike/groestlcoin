@@ -96,7 +96,7 @@ Otherwise, if you don't need QR encoding support, use the `-DWITH_QRENCODE=OFF` 
 
 Build requirements:
 
-    sudo dnf install gcc-c++ libtool make autoconf automake python3
+    sudo dnf install gcc-c++ cmake make python3
 
 Now, you can either build from self-compiled [depends](#dependencies) or install the required dependencies:
 
@@ -160,7 +160,7 @@ and configure using the following:
 ```bash
 export BDB_PREFIX="/path/to/groestlcoin/depends/x86_64-pc-linux-gnu"
 
-cmake -B build -DBerkeleyDB_INCLUDE_DIR:PATH="${BDB_PREFIX}/include"
+cmake -B build -DBerkeleyDB_INCLUDE_DIR:PATH="${BDB_PREFIX}/include" -DWITH_BDB=ON
 ```
 
 **Note**: Make sure that `BDB_PREFIX` is an absolute path.
