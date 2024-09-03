@@ -183,8 +183,7 @@ jobs:
 
       - name: Build Groestlcoin
         run: |
-          ./autogen.sh
-          ./configure --prefix=`pwd`/depends/${{ matrix.host }} ${{ matrix.config-opts }} --enable-reduce-exports || ( cat config.log && false)
+          cmake -B build --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake
           make $MAKEJOBS ${{ matrix.goal }} || ( echo "Build failure. Verbose build follows." && make ${{ matrix.goal }} V=1 ; false )
 
       - name: Check security
