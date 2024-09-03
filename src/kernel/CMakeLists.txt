@@ -2,12 +2,12 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit/.
 
-# TODO: libbitcoinkernel is a work in progress consensus engine
+# TODO: libgroestlcoinkernel is a work in progress consensus engine
 #       library, as more and more modules are decoupled from the
 #       consensus engine, this list will shrink to only those
 #       which are absolutely necessary.
-add_library(bitcoinkernel
-  bitcoinkernel.cpp
+add_library(groestlcoinkernel
+  groestlcoinkernel.cpp
   chain.cpp
   checks.cpp
   chainparams.cpp
@@ -77,7 +77,7 @@ add_library(bitcoinkernel
   ../validationinterface.cpp
   ../versionbits.cpp
 )
-target_link_libraries(bitcoinkernel
+target_link_libraries(groestlcoinkernel
   PRIVATE
     core_interface
     bitcoin_clientversion
@@ -88,18 +88,18 @@ target_link_libraries(bitcoinkernel
     Boost::headers
 )
 
-# libbitcoinkernel requires default symbol visibility, explicitly
+# libgroestlcoinkernel requires default symbol visibility, explicitly
 # specify that here so that things still work even when user
 # configures with -DREDUCE_EXPORTS=ON
 #
 # Note this is a quick hack that will be removed as we
 # incrementally define what to export from the library.
-set_target_properties(bitcoinkernel PROPERTIES
+set_target_properties(groestlcoinkernel PROPERTIES
   CXX_VISIBILITY_PRESET default
 )
 
 include(GNUInstallDirs)
-install(TARGETS bitcoinkernel
+install(TARGETS groestlcoinkernel
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

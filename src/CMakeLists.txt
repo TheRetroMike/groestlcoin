@@ -101,7 +101,7 @@ if(WITH_ZMQ)
 endif()
 
 # Home for common functionality shared by different executables and libraries.
-# Similar to `bitcoin_util` library, but higher-level.
+# Similar to `groestlcoin_util` library, but higher-level.
 add_library(bitcoin_common STATIC EXCLUDE_FROM_ALL
   addresstype.cpp
   base58.cpp
@@ -125,6 +125,7 @@ add_library(bitcoin_common STATIC EXCLUDE_FROM_ALL
   core_write.cpp
   deploymentinfo.cpp
   external_signer.cpp
+  groestlcoin.cpp
   init/common.cpp
   kernel/chainparams.cpp
   key.cpp
@@ -169,25 +170,25 @@ if(ENABLE_WALLET)
   add_subdirectory(wallet)
 
   if(BUILD_WALLET_TOOL)
-    add_executable(bitcoin-wallet
-      bitcoin-wallet.cpp
-      init/bitcoin-wallet.cpp
+    add_executable(groestlcoin-wallet
+      groestlcoin-wallet.cpp
+      init/groestlcoin-wallet.cpp
       wallet/wallettool.cpp
     )
-    add_windows_resources(bitcoin-wallet bitcoin-wallet-res.rc)
-    target_link_libraries(bitcoin-wallet
+    add_windows_resources(groestlcoin-wallet groestlcoin-wallet-res.rc)
+    target_link_libraries(groestlcoin-wallet
       core_interface
       bitcoin_wallet
       bitcoin_common
       bitcoin_util
       Boost::headers
     )
-    list(APPEND installable_targets bitcoin-wallet)
+    list(APPEND installable_targets groestlcoin-wallet)
   endif()
 endif()
 
 
-# P2P and RPC server functionality used by `bitcoind` and `bitcoin-qt` executables.
+# P2P and RPC server functionality used by `groestlcoind` and `groestlcoin-qt` executables.
 add_library(bitcoin_node STATIC EXCLUDE_FROM_ALL
   addrdb.cpp
   addrman.cpp
@@ -200,6 +201,7 @@ add_library(bitcoin_node STATIC EXCLUDE_FROM_ALL
   dbwrapper.cpp
   deploymentstatus.cpp
   flatfile.cpp
+  groestlcoin.cpp
   headerssync.cpp
   httprpc.cpp
   httpserver.cpp
@@ -300,32 +302,32 @@ target_link_libraries(bitcoin_node
 )
 
 
-# Bitcoin Core bitcoind.
+# Groestlcoin Core groestlcoind.
 if(BUILD_DAEMON)
-  add_executable(bitcoind
-    bitcoind.cpp
-    init/bitcoind.cpp
+  add_executable(groestlcoind
+    groestlcoind.cpp
+    init/groestlcoind.cpp
   )
-  add_windows_resources(bitcoind bitcoind-res.rc)
-  target_link_libraries(bitcoind
+  add_windows_resources(groestlcoind groestlcoind-res.rc)
+  target_link_libraries(groestlcoind
     core_interface
     bitcoin_node
     $<TARGET_NAME_IF_EXISTS:bitcoin_wallet>
   )
-  list(APPEND installable_targets bitcoind)
+  list(APPEND installable_targets groestlcoind)
 endif()
 if(WITH_MULTIPROCESS)
-  add_executable(bitcoin-node
-    bitcoind.cpp
-    init/bitcoin-node.cpp
+  add_executable(groestlcoin-node
+    groestlcoind.cpp
+    init/groestlcoin-node.cpp
   )
-  target_link_libraries(bitcoin-node
+  target_link_libraries(groestlcoin-node
     core_interface
     bitcoin_node
     bitcoin_ipc
     $<TARGET_NAME_IF_EXISTS:bitcoin_wallet>
   )
-  list(APPEND installable_targets bitcoin-node)
+  list(APPEND installable_targets groestlcoin-node)
 endif()
 
 
@@ -340,43 +342,43 @@ target_link_libraries(bitcoin_cli
 )
 
 
-# Bitcoin Core RPC client
+# Groestlcoin Core RPC client
 if(BUILD_CLI)
-  add_executable(bitcoin-cli bitcoin-cli.cpp)
-  add_windows_resources(bitcoin-cli bitcoin-cli-res.rc)
-  target_link_libraries(bitcoin-cli
+  add_executable(groestlcoin-cli groestlcoin-cli.cpp)
+  add_windows_resources(groestlcoin-cli groestlcoin-cli-res.rc)
+  target_link_libraries(groestlcoin-cli
     core_interface
     bitcoin_cli
     bitcoin_common
     bitcoin_util
     $<TARGET_NAME_IF_EXISTS:libevent::libevent>
   )
-  list(APPEND installable_targets bitcoin-cli)
+  list(APPEND installable_targets groestlcoin-cli)
 endif()
 
 
 if(BUILD_TX)
-  add_executable(bitcoin-tx bitcoin-tx.cpp)
-  add_windows_resources(bitcoin-tx bitcoin-tx-res.rc)
-  target_link_libraries(bitcoin-tx
+  add_executable(groestlcoin-tx groestlcoin-tx.cpp)
+  add_windows_resources(groestlcoin-tx groestlcoin-tx-res.rc)
+  target_link_libraries(groestlcoin-tx
     core_interface
     bitcoin_common
     bitcoin_util
     univalue
   )
-  list(APPEND installable_targets bitcoin-tx)
+  list(APPEND installable_targets groestlcoin-tx)
 endif()
 
 
 if(BUILD_UTIL)
-  add_executable(bitcoin-util bitcoin-util.cpp)
-  add_windows_resources(bitcoin-util bitcoin-util-res.rc)
-  target_link_libraries(bitcoin-util
+  add_executable(groestlcoin-util groestlcoin-util.cpp)
+  add_windows_resources(groestlcoin-util groestlcoin-util-res.rc)
+  target_link_libraries(groestlcoin-util
     core_interface
     bitcoin_common
     bitcoin_util
   )
-  list(APPEND installable_targets bitcoin-util)
+  list(APPEND installable_targets groestlcoin-util)
 endif()
 
 
@@ -390,8 +392,8 @@ if(BUILD_KERNEL_LIB)
 endif()
 
 if(BUILD_UTIL_CHAINSTATE)
-  add_executable(bitcoin-chainstate
-    bitcoin-chainstate.cpp
+  add_executable(groestlcoin-chainstate
+    groestlcoin-chainstate.cpp
   )
   # TODO: The `SKIP_BUILD_RPATH` property setting can be deleted
   #       in the future after reordering Guix script commands to
@@ -399,13 +401,13 @@ if(BUILD_UTIL_CHAINSTATE)
   # Relevant discussions:
   # - https://github.com/hebasto/bitcoin/pull/236#issuecomment-2183120953
   # - https://github.com/bitcoin/bitcoin/pull/30312#issuecomment-2191235833
-  set_target_properties(bitcoin-chainstate PROPERTIES
+  set_target_properties(groestlcoin-chainstate PROPERTIES
     SKIP_BUILD_RPATH OFF
   )
-  target_link_libraries(bitcoin-chainstate
+  target_link_libraries(groestlcoin-chainstate
     PRIVATE
       core_interface
-      bitcoinkernel
+      groestlcoinkernel
   )
 endif()
 

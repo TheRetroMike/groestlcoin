@@ -15,8 +15,7 @@ jobs:
     name: ${{ matrix.name }}
 
     env:
-      MAKEJOBS: "-j4"
-      CHECK_DOC: "0"
+      MAKEJOBS: "4"
       SDK_URL: https://bitcoincore.org/depends-sources/sdks
 
     strategy:
@@ -42,7 +41,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: linux-64-bit
             host: x86_64-pc-linux-gnu
             os: ubuntu-24.04
@@ -51,7 +50,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: windows-64-bit
             host: x86_64-w64-mingw32
             arch: "i386"
@@ -65,7 +64,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libgcc"
-            goal: install
+            goal: build
           - name: macos-64-bit
             host: x86_64-apple-darwin
             os: ubuntu-24.04
@@ -84,7 +83,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: linux-arm-64-bit
             host: aarch64-linux-gnu
             os: ubuntu-24.04
@@ -93,7 +92,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: linux-power-64-bit
             host: powerpc64-linux-gnu
             os: ubuntu-24.04
@@ -102,7 +101,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: linux-power-le-64-bit
             host: powerpc64le-linux-gnu
             os: ubuntu-24.04
@@ -111,7 +110,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: linux-riscv-64-bit
             host: riscv64-linux-gnu
             os: ubuntu-24.04
@@ -120,7 +119,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
           - name: linux-s390x
             host: s390x-linux-gnu
             os: ubuntu-24.04
@@ -129,7 +128,7 @@ jobs:
             check-symbols: false
             dep-opts: ""
             config-opts: "LDFLAGS=-static-libstdc++"
-            goal: install
+            goal: build
 
     runs-on: ${{ matrix.os }}
 
@@ -183,16 +182,15 @@ jobs:
 
       - name: Build Groestlcoin
         run: |
-          cmake -B build --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake
-          make $MAKEJOBS ${{ matrix.goal }} || ( echo "Build failure. Verbose build follows." && make ${{ matrix.goal }} V=1 ; false )
+          cmake -j $MAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON || ( echo "Build failure. Verbose build follows." && cmake -j $MAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON --verbose ; false )
 
       - name: Check security
         if: ${{ matrix.check-security }}
-        run: make -C src check-security
+        run: cmake --build build --target check-security
 
       - name: Check symbols
         if: ${{ matrix.check-symbols }}
-        run: make -C src check-symbols
+        run: cmake --build build --target check-symbols
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
