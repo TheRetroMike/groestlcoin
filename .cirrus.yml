@@ -132,7 +132,7 @@ task:
   << : *GLOBAL_TASK_TEMPLATE
   container:
     docker_arguments:
-      CI_IMAGE_NAME_TAG: "docker.io/debian:bullseye"
+      CI_IMAGE_NAME_TAG: "docker.io/debian:bookworm"
       FILE_ENV: "./ci/test/00_setup_env_native_nowallet_libgroestlcoinkernel.sh"
   env:
     << : *CIRRUS_EPHEMERAL_WORKER_TEMPLATE_ENV

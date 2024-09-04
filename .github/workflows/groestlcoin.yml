@@ -184,7 +184,6 @@ jobs:
       - name: Build Groestlcoin
         run: |
           cmake -B build --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON
-          cmake -j $CMAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON || ( echo "Build failure. Verbose build follows." && cmake -j $CMAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON --verbose ; false )
 
       - name: Check security
         if: ${{ matrix.check-security }}
