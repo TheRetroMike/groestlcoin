@@ -40,7 +40,7 @@
       "dependencies": [ "zeromq" ]
     },
     "tests": {
-      "description": "Build test_bitcoin.exe executable",
+      "description": "Build test_groestlcoin.exe executable",
       "dependencies": [ "boost-test" ]
     },
     "qt5": {
