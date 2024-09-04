@@ -89,6 +89,7 @@ add_library(bitcoin_consensus STATIC EXCLUDE_FROM_ALL
   script/interpreter.cpp
   script/script.cpp
   script/script_error.cpp
+  sphlib/groestl.cpp
   uint256.cpp
 )
 target_link_libraries(bitcoin_consensus
@@ -154,6 +155,7 @@ add_library(bitcoin_common STATIC EXCLUDE_FROM_ALL
   script/sign.cpp
   script/signingprovider.cpp
   script/solver.cpp
+  sphlib/groestl.cpp
 )
 target_link_libraries(bitcoin_common
   PRIVATE
@@ -277,6 +279,7 @@ add_library(bitcoin_node STATIC EXCLUDE_FROM_ALL
   rpc/txoutproof.cpp
   script/sigcache.cpp
   signet.cpp
+  sphlib/groestl.cpp
   torcontrol.cpp
   txdb.cpp
   txmempool.cpp

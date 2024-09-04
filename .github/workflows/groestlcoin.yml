@@ -56,7 +56,7 @@ jobs:
             host: x86_64-w64-mingw32
             arch: "i386"
             os: ubuntu-24.04
-            packages: build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis g++-mingw-w64-x86-64-posix wine-binfmt binfmt-support wine64 wine32
+            packages: cmake curl g++ git make pkg-config nsis g++-mingw-w64-x86-64-posix build-essential bsdmainutils wine-binfmt binfmt-support wine64 wine32
             postinstall: |
               sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
               sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
@@ -69,7 +69,7 @@ jobs:
           - name: macos-64-bit
             host: x86_64-apple-darwin
             os: ubuntu-24.04
-            packages: curl bsdmainutils cmake libz-dev python3-setuptools libtinfo6 xorriso clang lld llvm
+            packages: clang lld llvm g++ zip curl bsdmainutils cmake libz-dev python3-setuptools libtinfo6 xorriso
             check-security: false
             check-symbols: false
             dep-opts: ""
@@ -142,7 +142,7 @@ jobs:
       - name: Install packages
         run: |
           sudo apt-get update
-          sudo apt-get install make automake cmake curl g++-multilib libtool binutils bsdmainutils pkg-config python3 patch bison
+          sudo apt-get install automake bison cmake curl libtool make patch pkg-config python3 xz-utils g++-multilib binutils bsdmainutils
           sudo apt-get install ${{ matrix.packages }}
 
       - name: Post install
