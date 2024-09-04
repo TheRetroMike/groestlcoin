@@ -183,7 +183,9 @@ jobs:
 
       - name: Build Groestlcoin
         run: |
-          cmake -B build --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON
+          cmake -B ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON
+          cmake --build ${{ matrix.goal }} -j $CMAKEJOBS
+          cmake --install ${{ matrix.goal }} --prefix `pwd`/depends/${{ matrix.host }}
 
       - name: Check security
         if: ${{ matrix.check-security }}
