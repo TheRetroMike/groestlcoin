@@ -80,6 +80,8 @@ add_library(bitcoin_consensus STATIC EXCLUDE_FROM_ALL
   arith_uint256.cpp
   consensus/merkle.cpp
   consensus/tx_check.cpp
+  groestlcoin-hash.cpp
+  groestlcoin.cpp
   hash.cpp
   primitives/block.cpp
   primitives/transaction.cpp
@@ -125,6 +127,7 @@ add_library(bitcoin_common STATIC EXCLUDE_FROM_ALL
   core_write.cpp
   deploymentinfo.cpp
   external_signer.cpp
+  groestlcoin-hash.cpp
   groestlcoin.cpp
   init/common.cpp
   kernel/chainparams.cpp
@@ -201,6 +204,7 @@ add_library(bitcoin_node STATIC EXCLUDE_FROM_ALL
   dbwrapper.cpp
   deploymentstatus.cpp
   flatfile.cpp
+  groestlcoin-hash.cpp
   groestlcoin.cpp
   headerssync.cpp
   httprpc.cpp
