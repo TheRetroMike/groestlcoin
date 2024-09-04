@@ -15,7 +15,8 @@ jobs:
     name: ${{ matrix.name }}
 
     env:
-      MAKEJOBS: "4"
+      CMAKEJOBS: "4"
+      MAKEJOBS: "-j4"
       SDK_URL: https://bitcoincore.org/depends-sources/sdks
 
     strategy:
@@ -182,7 +183,7 @@ jobs:
 
       - name: Build Groestlcoin
         run: |
-          cmake -j $MAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON || ( echo "Build failure. Verbose build follows." && cmake -j $MAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON --verbose ; false )
+          cmake -j $CMAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON || ( echo "Build failure. Verbose build follows." && cmake -j $CMAKEJOBS --install ${{ matrix.goal }} --toolchain `pwd`/depends/${{ matrix.host }}/toolchain.cmake -DREDUCE_EXPORTS=ON --verbose ; false )
 
       - name: Check security
         if: ${{ matrix.check-security }}
