@@ -21,26 +21,32 @@ execute_process(
 execute_process(
   COMMAND ${LCOV_COMMAND} --capture --directory src --test-name test_groestlcoin --output-file test_groestlcoin.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_COMMAND} --zerocounters --directory src
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_FILTER_COMMAND} test_groestlcoin.info test_groestlcoin_filtered.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_COMMAND} --add-tracefile test_groestlcoin_filtered.info --output-file test_groestlcoin_filtered.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_COMMAND} --add-tracefile baseline_filtered.info --add-tracefile test_groestlcoin_filtered.info --output-file test_groestlcoin_coverage.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${GENHTML_COMMAND} test_groestlcoin_coverage.info --output-directory test_groestlcoin.coverage
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 
 execute_process(
@@ -51,18 +57,22 @@ execute_process(
 execute_process(
   COMMAND ${LCOV_COMMAND} --capture --directory src --test-name functional-tests --output-file functional_test.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_COMMAND} --zerocounters --directory src
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_FILTER_COMMAND} functional_test.info functional_test_filtered.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_COMMAND} --add-tracefile functional_test_filtered.info --output-file functional_test_filtered.info
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${LCOV_COMMAND} --add-tracefile baseline_filtered.info --add-tracefile test_groestlcoin_filtered.info --add-tracefile functional_test_filtered.info --output-file total_coverage.info
@@ -70,8 +80,10 @@ execute_process(
   COMMAND ${AWK_EXECUTABLE} "{ print substr($3,2,50) \"/\" $5 }"
   OUTPUT_FILE coverage_percent.txt
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
 execute_process(
   COMMAND ${GENHTML_COMMAND} total_coverage.info --output-directory total.coverage
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  COMMAND_ERROR_IS_FATAL ANY
 )
