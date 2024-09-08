@@ -4,7 +4,7 @@ RUN apt-get install unzip wget build-essential libssl-dev libdb++-dev libboost-a
 WORKDIR /opt/
 RUN wget https://github.com/Groestlcoin/groestlcoin/releases/download/v27.0/groestlcoin-27.0-x86_64-linux-gnu.tar.gz
 RUN tar zxvf groestlcoin-27.0-x86_64-linux-gnu.tar.gz
-COPY groestlcoin-27.0/bin/groestlcoind /groestlcoind
-COPY groestlcoin-27.0/bin/groestlcoin-cli /groestlcoin-cli
+RUN cp groestlcoin-27.0/bin/groestlcoind /usr/local/bin/groestlcoind
+RUN cp groestlcoin-27.0/bin/groestlcoin-cli /usr/local/bin/groestlcoin-cli
 RUN rm groestlcoin-27.0-x86_64-linux-gnu.tar.gz
-CMD ./groestlcoind -daemon;tail -f /root/.groestlcoin/debug.log
+CMD /usr/local/bin/groestlcoind -daemon;tail -f /root/.groestlcoin/debug.log
