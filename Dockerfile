@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 RUN apt-get update -y
 RUN apt-get install wget build-essential -y
 WORKDIR /opt/
